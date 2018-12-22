@@ -1,6 +1,6 @@
 # Routes
 
-## Posts
+## Profiles
 
 ## Projects
 

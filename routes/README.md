@@ -1,0 +1,7 @@
+# Routes
+
+## Posts
+
+## Projects
+
+## Communities

@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const routes = require('./routes/routes');
+const testRoutes = require('./routes/test_routes');
+const profileRoutes = require('./routes/profile_routes');
+const projectRoutes = require('./routes/project_routes');
+const communityRoutes = require('./routes/community_routes');
 
 const app = express();
 
@@ -36,7 +39,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-routes(app);
+// expand routes
+testRoutes(app);
+profileRoutes(app);
+projectRoutes(app);
+communityRoutes(app);
 
 app.listen(port, () => {
   console.log("API SERVER");

@@ -1,3 +1,7 @@
+// Dependencies
+
+// Models
+
 module.exports = {
   getProfileList(req, res, next) {
     res.send({ function: 'getProfileList' });

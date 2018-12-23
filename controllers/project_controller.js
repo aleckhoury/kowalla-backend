@@ -1,3 +1,7 @@
+// Dependencies
+
+// Models
+
 module.exports = {
   getProjectList(req, res, next) {
     res.send({ function: 'getProjectList' });

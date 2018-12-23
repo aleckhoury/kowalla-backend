@@ -1,3 +1,7 @@
+// Dependencies
+
+// Models
+
 module.exports = {
   getCommunityList(req, res, next) {
     res.send({ function: 'getCommunityList' });

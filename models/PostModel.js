@@ -21,22 +21,3 @@ const PostSchema = new Schema({
 const Post = mongoose.model('post', PostSchema);
 
 module.exports = Post;
-
-/*
-Potentially set up separate collections for different post types
-
-profileId of poster
-
-projectId of host project
-
-content
-
-communityId of where it was posted
-
-Array of emojis
-
-postDuration
-  For live posts and open metrics
-
-Views
-*/

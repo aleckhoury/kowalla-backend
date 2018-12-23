@@ -17,12 +17,3 @@ const ProjectSchema = new Schema({
 const Project = mongoose.model('project', ProjectSchema);
 
 module.exports = Project;
-
-/*
-Array of team ids - with the creator profile Id by default
-We just identify creator as index zero on this array of admins
-projectId
-Profile Image
-Header Image
-Description
-*/

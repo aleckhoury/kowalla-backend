@@ -17,11 +17,3 @@ const UpdateSchema = new Schema({
 const Update = mongoose.model('update', UpdateSchema);
 
 module.exports = Update;
-
-/*
-profileId of poster
-projectId of host project
-content
-Views
-
-*/

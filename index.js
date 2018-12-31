@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const mongoose = require('mongoose');
 const testRoutes = require('./routes/test_routes');
 const profileRoutes = require('./routes/profile_routes');
 const projectRoutes = require('./routes/project_routes');
@@ -15,10 +15,12 @@ app.set('port', port);
 
 // setup mongodb connection
 
-/*
+
 
 // need to fix server info and database names
-const mLabPath = "mongodb://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@ds155461.mlab.com:55461/mvp";
+//const mLabPath = "mongodb://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@ds145694.mlab.com:45694/kow-prd";
+
+const mLabPath = "mongodb://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@" + process.env.MLAB_SERVER + ".mlab.com:" + process.env.MLAB_PORT_AND_DB;
 mongoose.connect(mLabPath);
 mongoose.connection
   .once('open', () => {
@@ -28,7 +30,7 @@ mongoose.connection
     console.log('this is the warning to the warning!');
     console.warn('Warning', error);
   });
-*/
+
 
 // setup app
 app.use(bodyParser.json());

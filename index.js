@@ -14,13 +14,7 @@ const port = process.env.PORT || 8080
 app.set('port', port);
 
 // setup mongodb connection
-
-
-
-// need to fix server info and database names
-//const mLabPath = "mongodb://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@ds145694.mlab.com:45694/kow-prd";
-
-const mLabPath = "mongodb://" + process.env.MONGO_USERNAME + ":" + process.env.MONGO_PASSWORD + "@" + process.env.MLAB_SERVER + ".mlab.com:" + process.env.MLAB_PORT_AND_DB;
+const mLabPath = "mongodb://" + process.env.MONGO_USERNAME.toString() + ":" + process.env.MONGO_PASSWORD.toString() + "@" + process.env.MLAB_SERVER.toString() + ".mlab.com:" + process.env.MLAB_PORT_AND_DB.toString();
 mongoose.connect(mLabPath);
 mongoose.connection
   .once('open', () => {

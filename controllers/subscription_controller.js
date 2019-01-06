@@ -49,7 +49,7 @@ module.exports = {
       const subscription = await Subscription.create({profileId, communityId});
     }
 
-    else if { // add Project Sub
+    else if (communityId === null) { // add Project Sub
       const subscription = await Subscription.create({profileId, projectId});
     }
 

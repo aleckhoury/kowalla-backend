@@ -40,7 +40,7 @@ module.exports = (app) => {
   | Delete: DELETE /projects/-/updates/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/projects/:projectId/updates', UpdateController.getUpdateList;
+  app.get('/api/v1/projects/:projectId/updates', UpdateController.getUpdateList);
   app.get('/api/v1/projects/:projectId/updates/:updateId', UpdateController.getUpdate);
   app.post('/api/v1/projects/:projectId/updates', UpdateController.createUpdate);
   //app.put('/api/v1/projects/:projects/updates/:postId', UpdateController.updateUpdate);

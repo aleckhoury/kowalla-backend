@@ -31,7 +31,7 @@ module.exports = (app) => {
   | Delete: DELETE /communities/-/posts/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/communities/:communityId/posts', PostController.getCommunityPostList;
+  app.get('/api/v1/communities/:communityId/posts', PostController.getCommunityPostList);
   app.get('/api/v1/communities/:communityId/posts/:postId', PostController.getPost);
   app.post('/api/v1/communities/:communityId/posts', PostController.createPost);
   //app.put('/api/v1/communities/:communityId/posts/:postId', PostController.updatePost);
@@ -48,7 +48,7 @@ module.exports = (app) => {
   | Delete: DELETE /communities/-/posts/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.getCommentList;
+  app.get('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.getCommentList);
   app.get('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.getComment);
   app.post('/api/v1/communities/:communityId/posts:postId/comments', CommentController.createComment);
   //app.put('/api/v1/communities/:communityId/posts/:postId', CommentController.updatePost);

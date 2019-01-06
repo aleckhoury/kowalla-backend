@@ -34,9 +34,7 @@ module.exports = {
     const profileProps = req.body;
 
     // Act
-    const profile = await Profile.create(profileProps)
-      .then(profile => res.send(profile))
-      .catch(err => console.log(err));
+    const profile = await Profile.create(profileProps);
 
     // Send
     await profile.save();
@@ -78,7 +76,6 @@ module.exports = {
     const profile = await Profile.findOne({_id: profileId});
 
     // Send
-    await profile.save();
     res.status(204).send(profile);
   },
 }

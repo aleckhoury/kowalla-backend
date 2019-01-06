@@ -1,5 +1,6 @@
 const CommunityController = require('../controllers/community_controller');
 const PostController = require('../controllers/post_controller');
+const CommentController = require('../controllers/comment_controller');
 
 module.exports = (app) => {
   // ##########################################################################
@@ -33,7 +34,24 @@ module.exports = (app) => {
   app.get('/api/v1/communities/:communityId/posts', PostController.getCommunityPostList;
   app.get('/api/v1/communities/:communityId/posts/:postId', PostController.getPost);
   app.post('/api/v1/communities/:communityId/posts', PostController.createPost);
-  //app.put('/api/v1/communities/:communityId/posts/:postId', PostController.updateCommunity);
+  //app.put('/api/v1/communities/:communityId/posts/:postId', PostController.updatePost);
   app.delete('/api/v1/communities/:communityId/posts/:postId', PostController.deletePost);
+
+  // ##########################################################################
+  // Comment Routes
+  // ##########################################################################
+  /*
+  | List: GET /communities/-/posts : sent [n/a]; response [object]
+  | Get: GET /communities/-/posts/-/ : sent [n/a]; response [object]
+  | Create: POST /communities/-/posts
+  | Update: PUT /communities/-/posts/-/ : sent [object]; response [object]
+  | Delete: DELETE /communities/-/posts/-/ : sent [n/a]; response [?]
+  */
+
+  app.get('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.getCommentList;
+  app.get('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.getComment);
+  app.post('/api/v1/communities/:communityId/posts:postId/comments', CommentController.createComment);
+  //app.put('/api/v1/communities/:communityId/posts/:postId', CommentController.updatePost);
+  app.delete('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.deleteComment);
 
 }

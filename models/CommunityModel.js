@@ -5,12 +5,7 @@ const CommunitySchema = new Schema({
   name: String,
   description: String,
   headerPicture: String, // TODO: change to actual image storage
-  admins: [{ // creator at index 0
-    id: {
-      type: Schema.Types.ObjectId,
-      ref: 'profile'
-    }
-  }],
+  admins: [String],
 });
 
 const Community = mongoose.model('community', CommunitySchema);

@@ -1,25 +1,101 @@
 // Dependencies
 
 // Models
+const Community = require('../models/CommunityModel');
+
+/*
+1) Create -- first pass done
+2) Delete -- first pass done
+3) Get list -- first pass done
+4) Get specific -- first pass done
+5) update -- first pass done
+*/
+
+/*
+{
+  name: String,
+  description: String,
+  headerPicture: String, // TODO: change to actual image storage
+  admins: [String],
+}
+*/
+
+async function getProfileIdsFromUsernames(usernames) {
+  let idArray = [];
+
+  for (let i=0; i<usernames.length; i++) {
+    let profileObj = await Profile.findOne({username: usernames[i]});
+    idArray.push(profileObj._id)
+  }
+
+  return idArray;
+}
 
 module.exports = {
-  getCommunityList(req, res, next) {
-    res.send({ function: 'getCommunityList' });
+  async getCommunityList(req, res, next) {
+      // Init
+      communities = await Community.find({});
+
+      // Send
+      res.send({communities});
   },
 
-  getCommunity(req, res, next) {
-    res.send({ function: 'getCommunity' });
+  async getCommunity(req, res, next) {
+      // Init
+      const { id } = req.params;
+
+      // Act
+      const community = await Community.findOne({_id: id});
+
+      // Send
+      res.status(200).send(community);
   },
 
-  createCommunity(req, res, next) {
-    res.send({ function: 'createCommunity' });
+  async createCommunity(req, res, next) {
+      // Init
+      const {
+        name,
+        description,
+        headerPicture,
+        admins,
+      } = req.body;
+
+      // Act
+      const adminIds = await getProfileIdsFromUsernames(admins);
+      const community = await Community.create({
+        name,
+        description,
+        headerPicture,
+        admins,
+      });
+
+      // Send
+      await community.save();
+      res.status(201).send(community);
   },
 
-  updateCommunity(req, res, next) {
-    res.send({ function: 'updateCommunity' });
+  async updateCommunity(req, res, next) {
+      // Init
+      const { id } = req.params;
+      const updateParams = req.body;
+
+      // Act
+      await Community.findOneAndUpdate({_id: id}, updateParams);
+      const community = await Community.findOne({_id: id});
+
+      // Send
+      res.status(200).send(community);
   },
 
-  deleteCommunity(req, res, next) {
-    res.send({ function: 'deleteCommunity' });
+  async deleteCommunity(req, res, next) {
+      // Init
+      const { id } = req.params;
+
+      // Act
+      await Community.findOneAndDelete({_id: id});
+      const community = await Community.findOne({_id: id});
+
+      // Send
+      res.status(204).send(community);
   },
 }

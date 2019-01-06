@@ -6,7 +6,7 @@ module.exports = {
     const { profileId } = req.params;
 
     // Act
-    const upvotes = await Upvote.find({_id: profileId});
+    const upvotes = await Upvote.find({profileId});
 
     // Send
     res.status(200).send({upvotes});
@@ -37,7 +37,7 @@ module.exports = {
     const upvote = await Upvote.create({profileId, commentId});
 
     // Send
-    res.status(201).send(subscription);
+    res.status(201).send(upvote);
   },
 
   async deleteUpvote(req, res, next) {
@@ -52,6 +52,6 @@ module.exports = {
     const upvote = await Upvote.findOne({profileId, commentId});
 
     // Send
-    res.status(204).send(subscription);
+    res.status(204).send(upvote);
   },
 }

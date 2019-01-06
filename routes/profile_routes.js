@@ -2,6 +2,7 @@ const ProfileController = require('../controllers/profile_controller');
 const SubscriptionController = require('../controllers/subscription_controller');
 const UpvoteController = require('../controllers/upvote_controller');
 const ReactionController = require('../controllers/reaction_controller');
+const PostController = require('../controllers/post_controller');
 
 module.exports = (app) => {
   // ##########################################################################
@@ -70,4 +71,12 @@ module.exports = (app) => {
   app.post('/api/v1/profiles/:profileId/reactions', ReactionController.createReaction);
   app.delete('/api/v1/profiles/:profileId/reactions/:postId', ReactionController.deleteReaction);
 
+  // ##########################################################################
+  // Post Routes
+  // ##########################################################################
+  /*
+  | List: GET /profiles/-/posts : sent [n/a]; response [object]
+  */
+
+  app.get('/api/v1/profiles/:profileId/posts', PostController.getProfilePostList);
 }

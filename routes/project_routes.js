@@ -1,4 +1,5 @@
 const ProjectController = require('../controllers/project_controller');
+const PostController = require('../controllers/post_controller');
 
 module.exports = (app) => {
   // ##########################################################################
@@ -17,4 +18,14 @@ module.exports = (app) => {
   app.post('/api/v1/projects', ProjectController.createProject);
   app.put('/api/v1/projects/:id', ProjectController.updateProject);
   app.delete('/api/v1/projects/:id', ProjectController.deleteProject);
+
+  // ##########################################################################
+  // Post Routes
+  // ##########################################################################
+  /*
+  | List: GET /projects/-/posts : sent [n/a]; response [object]
+  */
+
+  app.get('/api/v1/projects/:projectId/posts', PostController.getProjectPostList);
+
 }

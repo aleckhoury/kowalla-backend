@@ -42,10 +42,10 @@ module.exports = {
 
   async getCommunity(req, res, next) {
       // Init
-      const { id } = req.params;
+      const { communityId } = req.params;
 
       // Act
-      const community = await Community.findOne({_id: id});
+      const community = await Community.findOne({_id: communityId});
 
       // Send
       res.status(200).send(community);
@@ -76,12 +76,12 @@ module.exports = {
 
   async updateCommunity(req, res, next) {
       // Init
-      const { id } = req.params;
+      const { communityId } = req.params;
       const updateParams = req.body;
 
       // Act
-      await Community.findOneAndUpdate({_id: id}, updateParams);
-      const community = await Community.findOne({_id: id});
+      await Community.findOneAndUpdate({_id: communityId}, updateParams);
+      const community = await Community.findOne({_id: communityId});
 
       // Send
       res.status(200).send(community);
@@ -89,11 +89,11 @@ module.exports = {
 
   async deleteCommunity(req, res, next) {
       // Init
-      const { id } = req.params;
+      const { communityId } = req.params;
 
       // Act
-      await Community.findOneAndDelete({_id: id});
-      const community = await Community.findOne({_id: id});
+      await Community.findOneAndDelete({_id: communityId});
+      const community = await Community.findOne({_id: communityId});
 
       // Send
       res.status(204).send(community);

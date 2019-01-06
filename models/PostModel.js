@@ -2,18 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-  profileId: {
-    type: Schema.Types.ObjectId,
-    ref: 'profile'
-  },
-  projectId: {
-    type: Schema.Types.ObjectId,
-    ref: 'project'
-  },
-  communityId: {
-    type: Schema.Types.ObjectId,
-    ref: 'community'
-  },
+  profileId: String,
+  projectId: String,
+  communityId: String,
   content: String, // TODO: figure out how to store tiptaps
   views: Number,
 });

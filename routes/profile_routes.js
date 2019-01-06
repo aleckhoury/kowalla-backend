@@ -1,8 +1,9 @@
 const ProfileController = require('../controllers/profile_controller');
+const SubscriptionController = require('../controllers/subscription_controller');
 
 module.exports = (app) => {
   // ##########################################################################
-  // Profile Routes
+  // General Profile Routes
   // ##########################################################################
   /*
   | List: GET /profiles/ : sent [n/a]; response [object]
@@ -17,4 +18,24 @@ module.exports = (app) => {
   app.post('/api/v1/profiles', ProfileController.createProfile);
   app.put('/api/v1/profiles/:id', ProfileController.updateProfile);
   app.delete('/api/v1/profiles/:id', ProfileController.deleteProfile);
+
+  // ##########################################################################
+  // Subscription Routes
+  // ##########################################################################
+  /*
+  | List: GET /profiles/-/subs : sent [n/a]; response [object]
+  | Get: GET /profiles/-/subs/-/ : sent [n/a]; response [object]
+  | Create: POST /profiles/-/subs/-/
+  | Delete: DELETE /profiles/-/subs/-/ : sent [n/a]; response [?]
+
+  profileId: the id of the user
+  type: either 'communities' or 'projects'
+  typeId: is the id of the community or the project
+  */
+
+  app.get('/api/v1/profiles/:profileId/subs', SubscriptionController.getSubscriptionList);
+  app.get('/api/v1/profiles/:profileId/subs/:type/:typeId', SubscriptionController.getSubscription);
+  app.post('/api/v1/profiles/:profileId/subs', SubscriptionController.createSubscription);
+  app.delete('/api/v1/profiles/:profileId/subs/:type/:typeId', SubscriptionController.deleteSubscription);
+
 }

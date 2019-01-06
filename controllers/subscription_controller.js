@@ -64,12 +64,12 @@ module.exports = {
 
     // Act
     if (type === 'communities') {
-      const subscription = await Subscription.findOneAndDelete({profileId, communityId: typeId});
+      await Subscription.findOneAndDelete({profileId, communityId: typeId});
       const subscription = await Subscription.findOne({profileId, communityId: typeId});
     }
 
     else if (type === 'projects') {
-      const subscription = await Subscription.findOneAndDelete({profileId, projectId: typeId});
+      await Subscription.findOneAndDelete({profileId, projectId: typeId});
       const subscription = await Subscription.findOne({profileId, communityId: typeId});
     }
 

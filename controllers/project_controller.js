@@ -6,8 +6,8 @@ const Profile = require('../models/ProfileModel');
 
 /*
 1) Create -- first pass done
-2) Delete
-3) Get list
+2) Delete -- first pass done
+3) Get list -- first pass done
 4) Get specific -- first pass done
 5) update -- first pass done
 */

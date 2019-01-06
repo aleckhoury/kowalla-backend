@@ -12,30 +12,73 @@ ProfileProps = {
   uiColor: String, // string #XXXXXX
 }
 */
+
+/*
+1) Create -- first pass done
+2) Delete -- first pass done
+3) Get list -- first pass done -> needs sorting
+4) Get specific -- first pass done
+5) update -- first pass done
+*/
 module.exports = {
-  getProfileList(req, res, next) {
-    res.send({ function: 'getProfileList' });
+  async getProfileList(req, res, next) {
+    // Init
+    profiles = await Profile.find({}); // TODO: Add sorting
+
+    // Send
+    res.send({profiles});
   },
 
-  createProfile(req, res, next) {
-    //res.send({ function: 'createProfile' });
+  async createProfile(req, res, next) {
+    // Init
     const profileProps = req.body;
 
-    Profile.create(profileProps)
+    // Act
+    const profile = await Profile.create(profileProps)
       .then(profile => res.send(profile))
       .catch(err => console.log(err));
 
+    // Send
+    await profile.save();
+    res.status(201).send(profile);
   },
 
-  getProfile(req, res, next) {
-    res.send({ function: 'getProfile' });
+  async getProfile(req, res, next) {
+    // Init
+    const { id } = req.params;
+
+    // Act
+    const profile = await Profile.findOne({_id: id});
+
+    // Send
+    res.status(200).send(profile)
   },
 
-  updateProfile(req, res, next) {
-    res.send({ function: 'updateProfile' });
+  async updateProfile(req, res, next) {
+    // Init
+    const { id } = req.params;
+    const updateParams = req.body;
+
+    // Act
+    await Profile.findOneAndUpdate({_id: id}, updateParams);
+    const profile = await Profile.findOne({_id: id});
+
+    // Send
+    await profile.save();
+    res.status(200).send(profile);
+
   },
 
-  deleteProfile(req, res, next) {
-    res.send({ function: 'deleteProfile' });
+  async deleteProfile(req, res, next) {
+    // Init
+    const { id } = req.params;
+
+    // Act
+    await Profile.findOneAndDelete({_id: id});
+    const profile = await Profile.findOne({_id: id});
+
+    // Send
+    await profile.save();
+    res.status(204).send(profile);
   },
 }

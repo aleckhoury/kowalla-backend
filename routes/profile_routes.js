@@ -25,7 +25,7 @@ module.exports = (app) => {
   /*
   | List: GET /profiles/-/subs : sent [n/a]; response [object]
   | Get: GET /profiles/-/subs/-/ : sent [n/a]; response [object]
-  | Create: POST /profiles/-/subs/-/
+  | Create: POST /profiles/-/subs/
   | Delete: DELETE /profiles/-/subs/-/ : sent [n/a]; response [?]
 
   profileId: the id of the user
@@ -38,4 +38,19 @@ module.exports = (app) => {
   app.post('/api/v1/profiles/:profileId/subs', SubscriptionController.createSubscription);
   app.delete('/api/v1/profiles/:profileId/subs/:type/:typeId', SubscriptionController.deleteSubscription);
 
+  // ##########################################################################
+  // Upvote Routes
+  // ##########################################################################
+  /*
+  | List: GET /profiles/-/upvotes : sent [n/a]; response [object]
+  | Get: GET /profiles/-/upvotes/-/ : sent [n/a]; response [object]
+  | Create: POST /profiles/-/upvotes/
+  | Delete: DELETE /profiles/-/upvotes/-/ : sent [n/a]; response [?]
+  */
+
+  app.get('/api/v1/profiles/:profileId/upvotes/', UpvoteController.getUpvoteList);
+  app.get('/api/v1/profiles/:profileId/upvotes/:commentId', UpvoteController.getUpvote);
+  //app.get('/api/v1/profiles/:profileId/upvotes/:postId', UpvoteController.getUpvoteListForPost);
+  app.post('/api/v1/profiles/:profileId/upvotes', UpvoteController.createUpvote);
+  app.delete('/api/v1/profiles/:profileId/upvotes/:commentId', UpvoteController.deleteUpvote);
 }

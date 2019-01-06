@@ -1,3 +1,6 @@
+// Dependencies
+
+// Models
 const Upvote = require('../models/UpvoteModel');
 
 module.exports = {

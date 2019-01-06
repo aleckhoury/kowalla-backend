@@ -1,3 +1,6 @@
+// Dependencies
+
+// Models
 const Post = require('../models/PostModel');
 
 module.exports = {

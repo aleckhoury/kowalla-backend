@@ -1,3 +1,6 @@
+// Dependencies
+
+// Models
 const Subscription = require('../models/SubscriptionModel');
 
 module.exports = {

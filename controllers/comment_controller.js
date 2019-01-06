@@ -1,3 +1,6 @@
+// Dependencies
+
+// Models
 const Comment = require('../models/CommentModel');
 
 module.exports = {

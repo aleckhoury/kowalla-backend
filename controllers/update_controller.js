@@ -1,3 +1,6 @@
+// Dependencies
+
+// Models
 const Update = require('../models/UpdateModel');
 
 module.exports = {

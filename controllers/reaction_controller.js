@@ -1,3 +1,6 @@
+// Dependencies
+
+// Models
 const Reaction = require('../models/ReactionModel');
 
 module.exports = {

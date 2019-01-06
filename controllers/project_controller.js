@@ -99,6 +99,7 @@ module.exports = {
     const project = await Project.findOne({_id: id});
 
     // Send
+    await project.save();
     res.status(200).send(project);
   },
 

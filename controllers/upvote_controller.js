@@ -37,6 +37,7 @@ module.exports = {
     const upvote = await Upvote.create({profileId, commentId});
 
     // Send
+    upvote.save();
     res.status(201).send(upvote);
   },
 

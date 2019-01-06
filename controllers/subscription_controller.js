@@ -51,6 +51,7 @@ module.exports = {
     }
 
     // Send
+    await subscription.save();
     res.status(201).send(subscription);
   },
 

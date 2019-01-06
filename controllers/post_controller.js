@@ -52,7 +52,7 @@ module.exports = {
       projectId,
       content,
     } = req.body;
-    
+
     const { communityId } = req.params;
     const views = 0;
 
@@ -60,6 +60,7 @@ module.exports = {
     const post = await Post.create({profileId, projectId, communityId, content, views})
 
     // Send
+    await post.save();
     res.status(201).send(post);
   },
 

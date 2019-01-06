@@ -37,6 +37,7 @@ module.exports = {
     const reaction = await Reaction.create({profileId, postId});
 
     // Send
+    await reaction.save();
     res.status(201).send(reaction);
   },
 

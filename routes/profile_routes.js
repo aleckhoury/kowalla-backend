@@ -1,6 +1,7 @@
 const ProfileController = require('../controllers/profile_controller');
 const SubscriptionController = require('../controllers/subscription_controller');
 const UpvoteController = require('../controllers/upvote_controller');
+const ReactionController = require('../controllers/reaction_controller');
 
 module.exports = (app) => {
   // ##########################################################################
@@ -49,9 +50,24 @@ module.exports = (app) => {
   | Delete: DELETE /profiles/-/upvotes/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/profiles/:profileId/upvotes/', UpvoteController.getUpvoteList);
+  app.get('/api/v1/profiles/:profileId/upvotes', UpvoteController.getUpvoteList);
   app.get('/api/v1/profiles/:profileId/upvotes/:commentId', UpvoteController.getUpvote);
-  //app.get('/api/v1/profiles/:profileId/upvotes/:postId', UpvoteController.getUpvoteListForPost);
+  //app.get('/api/v1/profiles/:profileId/upvotes/:postId', UpvoteController.getUpvoteListForPost); // would get us all the upvotes within a post, which lessens call volume
   app.post('/api/v1/profiles/:profileId/upvotes', UpvoteController.createUpvote);
   app.delete('/api/v1/profiles/:profileId/upvotes/:commentId', UpvoteController.deleteUpvote);
+
+  // ##########################################################################
+  // Reaction Routes
+  // ##########################################################################
+  /*
+  | List: GET /profiles/-/reactions : sent [n/a]; response [object]
+  | Get: GET /profiles/-/reactions/-/ : sent [n/a]; response [object]
+  | Create: POST /profiles/-/reactions/
+  | Delete: DELETE /profiles/-/reactions/-/ : sent [n/a]; response [?]
+  */
+  app.get('/api/v1/profiles/:profileId/reactions', ReactionController.getReactionList);
+  app.get('/api/v1/profiles/:profileId/reactions/:postId', ReactionController.getReaction);
+  app.post('/api/v1/profiles/:profileId/reactions', ReactionController.createReaction);
+  app.delete('/api/v1/profiles/:profileId/reactions/:postId', ReactionController.deleteReaction);
+
 }

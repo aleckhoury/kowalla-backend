@@ -1,5 +1,6 @@
 const ProfileController = require('../controllers/profile_controller');
 const SubscriptionController = require('../controllers/subscription_controller');
+const UpvoteController = require('../controllers/upvote_controller');
 
 module.exports = (app) => {
   // ##########################################################################

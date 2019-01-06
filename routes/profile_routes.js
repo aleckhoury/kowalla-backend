@@ -16,10 +16,10 @@ module.exports = (app) => {
   */
 
   app.get('/api/v1/profiles', ProfileController.getProfileList);
-  app.get('/api/v1/profiles/:id', ProfileController.getProfile);
+  app.get('/api/v1/profiles/:profileId', ProfileController.getProfile);
   app.post('/api/v1/profiles', ProfileController.createProfile);
-  app.put('/api/v1/profiles/:id', ProfileController.updateProfile);
-  app.delete('/api/v1/profiles/:id', ProfileController.deleteProfile);
+  app.put('/api/v1/profiles/:profileId', ProfileController.updateProfile);
+  app.delete('/api/v1/profiles/:profileId', ProfileController.deleteProfile);
 
   // ##########################################################################
   // Subscription Routes

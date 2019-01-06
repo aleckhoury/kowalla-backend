@@ -45,10 +45,10 @@ module.exports = {
 
   async getProfile(req, res, next) {
     // Init
-    const { id } = req.params;
+    const { profileId } = req.params;
 
     // Act
-    const profile = await Profile.findOne({_id: id});
+    const profile = await Profile.findOne({_id: profileId});
 
     // Send
     res.status(200).send(profile)
@@ -56,12 +56,12 @@ module.exports = {
 
   async updateProfile(req, res, next) {
     // Init
-    const { id } = req.params;
+    const { profileId } = req.params;
     const updateParams = req.body;
 
     // Act
-    await Profile.findOneAndUpdate({_id: id}, updateParams);
-    const profile = await Profile.findOne({_id: id});
+    await Profile.findOneAndUpdate({_id: profileId}, updateParams);
+    const profile = await Profile.findOne({_id: profileId});
 
     // Send
     await profile.save();
@@ -71,11 +71,11 @@ module.exports = {
 
   async deleteProfile(req, res, next) {
     // Init
-    const { id } = req.params;
+    const { profileId } = req.params;
 
     // Act
-    await Profile.findOneAndDelete({_id: id});
-    const profile = await Profile.findOne({_id: id});
+    await Profile.findOneAndDelete({_id: profileId});
+    const profile = await Profile.findOne({_id: profileId});
 
     // Send
     await profile.save();

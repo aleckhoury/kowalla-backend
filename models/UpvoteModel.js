@@ -2,14 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UpvoteSchema = new Schema({
-  profileId: {
-    type: Schema.Types.ObjectId,
-    ref: 'profile'
-  },
-  commentId: {
-    type: Schema.Types.ObjectId,
-    ref: 'comment'
-  },
+  profileId: String,
+  commentId: String,
 });
 
 const Upvote = mongoose.model('upvote', UpvoteSchema);

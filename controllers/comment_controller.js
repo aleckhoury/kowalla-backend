@@ -39,7 +39,7 @@ module.exports = {
 
     const { postId } = req.params;
     const views = 0;
-    
+
     // Act
     const comment = await Comment.create({profileId, commentId, content, postId, views});
 

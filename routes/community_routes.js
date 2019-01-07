@@ -50,7 +50,7 @@ module.exports = (app) => {
 
   app.get('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.getCommentList);
   app.get('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.getComment);
-  app.post('/api/v1/communities/:communityId/posts:postId/comments', CommentController.createComment);
+  app.post('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.createComment);
   //app.put('/api/v1/communities/:communityId/posts/:postId', CommentController.updatePost);
   app.delete('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.deleteComment);
 

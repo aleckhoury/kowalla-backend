@@ -31,10 +31,9 @@ module.exports = {
 
   async createUpvote(req, res, next) {
     // Init
-    const { // these need to be null'd if they're not being used
-      profileId,
-      commentId
-    } = req.params;
+    const { profileId } = req.params;
+
+    const { commentId } = req.body;
 
     // Act
     const upvote = await Upvote.create({profileId, commentId});

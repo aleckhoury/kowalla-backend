@@ -42,7 +42,7 @@ module.exports = {
     const views = 0;
     // Act
     const comment = await Comment.create({profileId, commentId, content, postId, views});
-
+    
     // Send
     await comment.save();
     res.status(201).send(comment);

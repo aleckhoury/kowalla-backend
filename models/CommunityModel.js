@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const CommunitySchema = new Schema({
+const CommunitySchema = new Schema({ // TODO: add username
   name: String,
   description: String,
   headerPicture: String, // TODO: change to actual image storage

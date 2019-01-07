@@ -2,6 +2,7 @@
 
 // Models
 const Community = require('../models/CommunityModel');
+const Profile = require('../models/ProfileModel');
 
 /*
 1) Create -- first pass done
@@ -66,7 +67,7 @@ module.exports = {
         name,
         description,
         headerPicture,
-        admins,
+        admins: adminIds,
       });
 
       // Send

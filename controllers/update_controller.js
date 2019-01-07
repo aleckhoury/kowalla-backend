@@ -9,7 +9,7 @@ module.exports = {
     const { projectId } = req.params;
 
     // Act
-    const updates = Update.find({projectId});
+    const updates = await Update.find({projectId});
 
     // Send
     res.status(200).send({updates});
@@ -20,7 +20,7 @@ module.exports = {
     const { updateId } = req.params;
 
     // Act
-    const update = await Update.findOne({_id: id});
+    const update = await Update.findOne({_id: updateId});
 
     // Send
     res.status(200).send(update);
@@ -51,7 +51,7 @@ module.exports = {
 
     // Act
     await Update.findOneAndDelete({_id: updateId});
-    const update = Update.findOne({_id: updateId});
+    const update = await Update.findOne({_id: updateId});
 
     // Send
     res.status(204).send(update);

@@ -33,11 +33,15 @@ module.exports = {
     // Init
     const {
       profileId,
-      postId,
     } = req.params;
 
+    const {
+      emoji,
+      postId
+     } = req.body;
+
     // Act
-    const reaction = await Reaction.create({profileId, postId});
+    const reaction = await Reaction.create({profileId, postId, emoji});
 
     // Send
     await reaction.save();

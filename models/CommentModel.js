@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const CommentSchema = new Schema({
   profileId: String,
   postId: String,
+  updateId: String,
   commentId: String,
   content: String, // initially just a string, no tiptaps
   views: Number,

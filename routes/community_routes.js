@@ -48,10 +48,10 @@ module.exports = (app) => {
   | Delete: DELETE /communities/-/posts/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.getCommentList);
-  app.get('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.getComment);
-  app.post('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.createComment);
-  //app.put('/api/v1/communities/:communityId/posts/:postId', CommentController.updatePost);
-  app.delete('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.deleteComment);
+  app.get('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.getPostCommentList);
+  app.get('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.getPostComment);
+  app.post('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.createPostComment);
+  //app.put('/api/v1/communities/:communityId/posts/:postId', CommentController.updatePostComment);
+  app.delete('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.deletePostComment);
 
 }

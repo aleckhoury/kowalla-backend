@@ -46,4 +46,21 @@ module.exports = (app) => {
   //app.put('/api/v1/projects/:projects/updates/:postId', UpdateController.updateUpdate);
   app.delete('/api/v1/projects/:projectId/updates/:updateId', UpdateController.deleteUpdate);
 
+  // ##########################################################################
+  // Comment Routes
+  // ##########################################################################
+  /*
+  | List: GET /projects/-/updates : sent [n/a]; response [object]
+  | Get: GET /projects/-/updates/-/ : sent [n/a]; response [object]
+  | Create: POST /projects/-/updates
+  | Update: PUT /projects/-/updates/-/ : sent [object]; response [object]
+  | Delete: DELETE /projects/-/updates/-/ : sent [n/a]; response [?]
+  */
+
+  app.get('/api/v1/projects/:projectId/updates/:updateId/comments', CommentController.getUpdateCommentList);
+  app.get('/api/v1/projects/:projectId/updates/:updateId/comments/:commentId', CommentController.getUpdateComment);
+  app.post('/api/v1/projects/:projectId/updates/:updateId/comments', CommentController.createUpdateComment);
+  //app.put('/api/v1/projects/:projectId/updates/:updateId', CommentController.updateUpdateComment);
+  app.delete('/api/v1/projects/:projectId/updates/:updateId/comments/:commentId', CommentController.deleteUpdateComment);
+
 }

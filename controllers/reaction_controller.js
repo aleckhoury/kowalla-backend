@@ -19,14 +19,24 @@ module.exports = {
     // Init
     const {
       profileId,
-      postId,
+      type,
+      typeId,
     } = req.params;
 
     // Act
-    const reaction = await Reaction.findOne({profileId, postId});
+    if (type === 'posts') {
+      const reaction = await Reaction.findOne({profileId, postId: typeId});
 
-    // Send
-    res.status(200).send(reaction);
+      // Send
+      res.status(200).send(reaction);
+    }
+
+    else if (type === 'updates') {
+      const reaction = await Reaction.findOne({profileId, updateId: postId});
+
+      // Send
+      res.status(200).send(reaction);
+    }
   },
 
   async createReaction(req, res, next) {

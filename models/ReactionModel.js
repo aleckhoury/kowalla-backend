@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const ReactionSchema = new Schema({
   profileId: String,
   postId: String,
+  updateId: String,
   emoji: String, // TODO: change to whatever value we need to sort by
 
 });

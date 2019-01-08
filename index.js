@@ -5,6 +5,7 @@ const testRoutes = require('./routes/test_routes');
 const profileRoutes = require('./routes/profile_routes');
 const projectRoutes = require('./routes/project_routes');
 const communityRoutes = require('./routes/community_routes');
+const userRoutes = require('./routes/user_routes');
 
 const app = express();
 
@@ -40,6 +41,7 @@ testRoutes(app);
 profileRoutes(app);
 projectRoutes(app);
 communityRoutes(app);
+userRoutes(app);
 
 app.listen(port, () => {
   console.log("API SERVER");

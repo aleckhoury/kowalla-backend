@@ -94,29 +94,43 @@ module.exports = {
     //         }
     //     });
     // },
-    createUser(req, res, next) {
-        let password;
-        bcrypt.hash(req.body.password, 10, function(err, hash) {
-            console.log(hash);
-            password = hash;
+    async createUser(req, res, next) {
+        await bcrypt.hash(req.body.password, 10,async function(err, hash) {
+                try {
+                    let newUser = await User.create({
+                        email: req.body.email,
+                        username: req.body.username,
+                        password: hash,
+                    });
+                    await newUser.save();
+                    return res.status(200).json({
+                        status: 'success'
+                    });
+                } catch {
+                    return res.status(400).json({
+                        status: 'error',
+                        message: 'There was some kind of error, my dude.'
+                    })
+                }
         });
+    },
 
-        try {
-            console.log(password);
-            let newUser = new User({
-                email: req.body.email,
-                username: req.body.username,
-                password: password,
-            });
-            newUser.save();
-            return res.json({
-                status: 'success',
-            })
-        } catch (error) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'There was a problem creating the user, please try again later.'
-            })
-        }
+     async authUser(req, res, next) {
+
+        const user = await User.findOne({username: req.body.username});
+        await bcrypt.compare(req.body.password, user.password,function(err, res) {
+            if (res) {
+                console.log(res);
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Successfully authorized user'
+                });
+            } else {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Incorrect Password'
+                })
+            }
+        });
     }
 };

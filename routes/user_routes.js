@@ -15,7 +15,7 @@ module.exports = (app) => {
     // app.get('/api/v1/users', UserController.getUserList);
     // app.get('/api/v1/users/:id', UserController.getUser);
     // app.post('/api/v1/users/register', UserController.register);
-    // app.post('/api/v1/users/login', UserController.login);
+    app.post('/api/v1/users/login', UserController.authUser);
     // app.get('/api/v1/users/me', UserController.me);
     app.post('/api/v1/users', UserController.createUser);
     // app.put('/api/v1/users/:id', UserController.updateUser);

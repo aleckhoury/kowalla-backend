@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const CommunitySchema = new Schema({
+const CommunitySchema = new Schema({ // TODO: add username
   name: String,
   description: String,
   headerPicture: String, // TODO: change to actual image storage
-  admins: [{ // creator at index 0
-    id: {
-      type: Schema.Types.ObjectId,
-      ref: 'profile'
-    }
-  }],
+  admins: [String],
 });
 
 const Community = mongoose.model('community', CommunitySchema);

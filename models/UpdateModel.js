@@ -2,14 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UpdateSchema = new Schema({
-  profileId: {
-    type: Schema.Types.ObjectId,
-    ref: 'profile'
-  },
-  projectId: {
-    type: Schema.Types.ObjectId,
-    ref: 'project'
-  },
+  profileId: String,
+  projectId: String,
   content: String, // TODO: figure out how to store tiptaps
   views: Number,
 });

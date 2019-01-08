@@ -1,8 +1,10 @@
 const CommunityController = require('../controllers/community_controller');
+const PostController = require('../controllers/post_controller');
+const CommentController = require('../controllers/comment_controller');
 
 module.exports = (app) => {
   // ##########################################################################
-  // Community Routes
+  // General Community Routes
   // ##########################################################################
   /*
   | List: GET /communities/ : sent [n/a]; response [object]
@@ -13,8 +15,43 @@ module.exports = (app) => {
   */
 
   app.get('/api/v1/communities', CommunityController.getCommunityList);
-  app.get('/api/v1/communities/:id', CommunityController.getCommunity);
+  app.get('/api/v1/communities/:communityId', CommunityController.getCommunity);
   app.post('/api/v1/communities', CommunityController.createCommunity);
-  app.put('/api/v1/communities/:id', CommunityController.updateCommunity);
-  app.delete('/api/v1/communities/:id', CommunityController.deleteCommunity);
+  app.put('/api/v1/communities/:communityId', CommunityController.updateCommunity);
+  app.delete('/api/v1/communities/:communityId', CommunityController.deleteCommunity);
+
+  // ##########################################################################
+  // Post Routes
+  // ##########################################################################
+  /*
+  | List: GET /communities/-/posts : sent [n/a]; response [object]
+  | Get: GET /communities/-/posts/-/ : sent [n/a]; response [object]
+  | Create: POST /communities/-/posts
+  | Update: PUT /communities/-/posts/-/ : sent [object]; response [object]
+  | Delete: DELETE /communities/-/posts/-/ : sent [n/a]; response [?]
+  */
+
+  app.get('/api/v1/communities/:communityId/posts', PostController.getCommunityPostList);
+  app.get('/api/v1/communities/:communityId/posts/:postId', PostController.getPost);
+  app.post('/api/v1/communities/:communityId/posts', PostController.createPost);
+  //app.put('/api/v1/communities/:communityId/posts/:postId', PostController.updatePost);
+  app.delete('/api/v1/communities/:communityId/posts/:postId', PostController.deletePost);
+
+  // ##########################################################################
+  // Comment Routes
+  // ##########################################################################
+  /*
+  | List: GET /communities/-/posts : sent [n/a]; response [object]
+  | Get: GET /communities/-/posts/-/ : sent [n/a]; response [object]
+  | Create: POST /communities/-/posts
+  | Update: PUT /communities/-/posts/-/ : sent [object]; response [object]
+  | Delete: DELETE /communities/-/posts/-/ : sent [n/a]; response [?]
+  */
+
+  app.get('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.getPostCommentList);
+  app.get('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.getPostComment);
+  app.post('/api/v1/communities/:communityId/posts/:postId/comments', CommentController.createPostComment);
+  //app.put('/api/v1/communities/:communityId/posts/:postId', CommentController.updatePostComment);
+  app.delete('/api/v1/communities/:communityId/posts/:postId/comments/:commentId', CommentController.deletePostComment);
+
 }

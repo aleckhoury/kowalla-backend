@@ -116,17 +116,18 @@ module.exports = {
     },
 
      async authUser(req, res, next) {
+        const globalRes = res;
 
         const user = await User.findOne({username: req.body.username});
         await bcrypt.compare(req.body.password, user.password,function(err, res) {
             if (res) {
                 console.log(res);
-                return res.status(200).json({
+                return globalRes.status(200).jsonp({
                     status: 'success',
                     message: 'Successfully authorized user'
                 });
             } else {
-                return res.status(400).json({
+                return globalRes.status(400).jsonp({
                     status: 'error',
                     message: 'Incorrect Password'
                 })

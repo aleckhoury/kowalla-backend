@@ -62,3 +62,6 @@ typings/
 
 # webstorm configs
 .idea
+
+# secrets
+config.json

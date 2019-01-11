@@ -5,6 +5,8 @@ const testRoutes = require('./routes/test_routes');
 const profileRoutes = require('./routes/profile_routes');
 const projectRoutes = require('./routes/project_routes');
 const communityRoutes = require('./routes/community_routes');
+const userRoutes = require('./routes/user_routes');
+const jwt = require('./helpers/jwt');
 
 const app = express();
 
@@ -25,6 +27,7 @@ mongoose.connection
     console.warn('Warning', error);
   });
 
+app.use(jwt());
 
 // setup app
 app.use(bodyParser.json());
@@ -40,6 +43,7 @@ testRoutes(app);
 profileRoutes(app);
 projectRoutes(app);
 communityRoutes(app);
+userRoutes(app);
 
 app.listen(port, () => {
   console.log("API SERVER");

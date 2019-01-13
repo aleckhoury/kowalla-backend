@@ -27,7 +27,9 @@ mongoose.connection
     console.warn('Warning', error);
   });
 
-app.use(jwt());
+// Require authentication to access API routes
+// Disabled for ease of development until we have auth fully setup
+// app.use(jwt());
 
 // setup app
 app.use(bodyParser.json());

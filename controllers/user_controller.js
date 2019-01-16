@@ -7,11 +7,21 @@ const config = require('../config.json');
 // Models
 
 module.exports = {
+    async getUser(req, res, next) {
+        // Init
+        console.log(req.body);
+        const { username } = req.body;
+        // Act
+        const user = await User.findOne({ username });
+
+        // Send
+        res.status(200).send({ data: { user }});
+    },
     async createUser(req, res, next) {
+        console.log('test if it makes it');
         await bcrypt.hash(req.body.password, 10,async function(err, hash) {
                 try {
                     let newUser = await User.create({
-                        email: req.body.email,
                         username: req.body.username,
                         password: hash,
                     });
@@ -19,9 +29,11 @@ module.exports = {
                     const token = await jwt.sign({ sub: newUser._id }, config.secret);
                     const { _doc: { _id, username, password }, ...userWithoutPassword } = await newUser;
                     return res.status(200).json({
-                        _id,
-                        username,
-                        token
+                        data: {
+                            _id,
+                            username,
+                            token
+                        }
                     });
                 } catch {
                     return res.status(400).json({
@@ -40,8 +52,6 @@ module.exports = {
                 const token = jwt.sign({ sub: user._id }, config.secret);
                 const { _doc: { _id, username, password }, ...userWithoutPassword } = user;
                 return globalRes.status(200).json({
-                    _id,
-                    username,
                     token
                 });
             } else {

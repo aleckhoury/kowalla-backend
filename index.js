@@ -11,7 +11,7 @@ const cors = require('cors');
 
 const app = express();
 
-const host = process.env.HOST || 'localhost'
+const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 8080
 
 app.set('port', port);
@@ -35,11 +35,6 @@ mongoose.connection
 // setup app
 app.use(bodyParser.json());
 app.use(cors());
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
 
 // expand routes
 testRoutes(app);

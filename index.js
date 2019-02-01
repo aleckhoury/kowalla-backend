@@ -6,7 +6,9 @@ const profileRoutes = require('./routes/profile_routes');
 const projectRoutes = require('./routes/project_routes');
 const communityRoutes = require('./routes/community_routes');
 const userRoutes = require('./routes/user_routes');
+const postRoutes = require('./routes/post_routes');
 const jwt = require('./helpers/jwt');
+const cors = require('cors');
 
 const app = express();
 
@@ -33,12 +35,7 @@ mongoose.connection
 
 // setup app
 app.use(bodyParser.json());
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(cors());
 
 // expand routes
 testRoutes(app);
@@ -46,6 +43,7 @@ profileRoutes(app);
 projectRoutes(app);
 communityRoutes(app);
 userRoutes(app);
+postRoutes(app);
 
 app.listen(port, () => {
   console.log("API SERVER");

@@ -39,11 +39,10 @@ module.exports = {
 
   async getPost(req, res, next) {
     // Init
-    const { postId } = req.params;
+    const { id } = req.params;
 
     // Act
-    const post = await Post.findOne({_id: postId});
-
+    const post = await Post.findOne({_id: id});
     // Send
     res.status(200).send(post);
   },

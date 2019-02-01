@@ -49,7 +49,6 @@ module.exports = {
       // Send
       res.status(200).send(user)
     } catch(err) {
-      console.log(err);
     }
   },
   async getProfile(req, res, next) {

@@ -13,7 +13,7 @@ module.exports = (app) => {
 | Delete: DELETE /communities/-/ : sent [n/a]; response [?]
 */
 
-// app.get('/api/v1/posts', PostController.getPost);
+app.get('/api/v1/posts', PostController.getPosts);
 app.get('/api/v1/posts/:id', PostController.getPost);
 // app.post('/api/v1/posts', PostController.createPost);
 // app.put('/api/v1/posts/:postId', PostController.updatePost);

@@ -37,6 +37,15 @@ module.exports = {
     res.status(200).send({posts});
   },
 
+  async getPosts(req, res, next) {
+    // Init
+
+    // Act
+    const posts = await Post.find({});
+    // Send
+    res.status(200).send(posts);
+  },
+
   async getPost(req, res, next) {
     // Init
     const { id } = req.params;

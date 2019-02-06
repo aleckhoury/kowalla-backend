@@ -6,10 +6,10 @@ const Reaction = require('../models/ReactionModel');
 module.exports = {
   async getReactionList(req, res, next) {
     // Init
-    const { profileId } = req.params;
+    const { postId } = req.params;
 
     // Act
-    const reactions = await Reaction.find({profileId});
+    const reactions = await Reaction.find({postId});
 
     // Send
     res.status(200).send({reactions});

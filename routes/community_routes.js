@@ -20,6 +20,8 @@ module.exports = (app) => {
   app.put('/api/v1/communities/:communityId', CommunityController.updateCommunity);
   app.delete('/api/v1/communities/:communityId', CommunityController.deleteCommunity);
 
+
+  app.get('/api/v1/communities/c/:communityName', CommunityController.getCommunityByName);
   // ##########################################################################
   // Post Routes
   // ##########################################################################

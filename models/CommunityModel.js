@@ -6,6 +6,7 @@ const CommunitySchema = new Schema({ // TODO: add username
   _id: { type: String, default: shortid.generate },
   name: String,
   description: String,
+  profilePicture: String, // TODO: this doesn't exist in our current designs
   headerPicture: String, // TODO: change to actual image storage
   admins: [String],
 },

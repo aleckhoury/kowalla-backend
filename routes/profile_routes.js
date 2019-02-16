@@ -22,6 +22,9 @@ module.exports = (app) => {
   app.put('/api/v1/profiles/:profileId', ProfileController.updateProfile);
   app.delete('/api/v1/profiles/:profileId', ProfileController.deleteProfile);
 
+  // by username
+  app.get('/api/v1/profiles/u/:username', ProfileController.getProfileByUsername);
+
   // ##########################################################################
   // Subscription Routes
   // ##########################################################################
@@ -35,6 +38,7 @@ module.exports = (app) => {
   type: either 'communities' or 'projects'
   typeId: is the id of the community or the project
   */
+  app.get('/api/v1/profiles/u/:username/subs', SubscriptionController.getSubscriptionList);
 
   app.get('/api/v1/profiles/:profileId/subs', SubscriptionController.getSubscriptionList);
   app.get('/api/v1/profiles/:profileId/subs/:type/:typeId', SubscriptionController.getSubscription);

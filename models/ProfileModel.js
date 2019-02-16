@@ -4,7 +4,8 @@ const shortid = require('shortid');
 
 const ProfileSchema = new Schema({
   _id: { type: String, default: shortid.generate },
-  name: String,
+  firstName: String,
+  lastName: String,
   username: String,
   description: String,
   profilePicture: String, // TODO: update to have image upload

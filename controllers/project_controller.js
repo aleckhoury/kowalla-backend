@@ -77,6 +77,17 @@ module.exports = {
   },
 
   // Read
+  async getProjectByName(req, res, next) {
+    // Init
+    const { projectName } = req.params;
+
+    // Act
+    const project = await Project.findOne({name: projectName});
+
+    // Send
+    res.status(200).send(project);
+  },
+
   async getProject(req, res, next) {
     // Init
     const { id } = req.params;

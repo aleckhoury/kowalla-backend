@@ -42,7 +42,7 @@ module.exports = {
   },
   async getProfileByUsername(req, res, next) {
     // Init
-    const { username } = req.query;
+    const { username } = req.params;
     try {
       // Act
       const user = await Profile.findOne({ username });
@@ -88,4 +88,5 @@ module.exports = {
     // Send
     res.status(204).send(profile);
   },
+
 }

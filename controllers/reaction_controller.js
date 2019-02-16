@@ -12,7 +12,7 @@ module.exports = {
     const reactions = await Reaction.find({postId});
 
     // Send
-    res.status(200).send({reactions});
+    res.status(200).send(reactions);
   },
 
   async getReaction(req, res, next) {
@@ -65,12 +65,16 @@ module.exports = {
       postId,
     } = req.params;
 
+    const {
+      emoji
+    } = req.body;
+
     // Act
-    await Reaction.findOneAndDelete({profileId, postId});
-    const reaction = await Reaction.findOne({profileId, postId});
+    await Reaction.findOneAndDelete({profileId, postId, emoji});
+    // const reaction = await Reaction.findOne({profileId, postId, emoji});
 
     // Send
-    res.status(204).send(reaction);
+    res.status(201).send('Successfully deleted reaction');
   },
 
 }

@@ -73,7 +73,7 @@ module.exports = (app) => {
   app.get('/api/v1/profiles/:profileId/reactions', ReactionController.getReactionList);
   app.get('/api/v1/profiles/:profileId/reactions/:type/:typeId', ReactionController.getReaction);
   app.post('/api/v1/profiles/:profileId/reactions', ReactionController.createReaction);
-  app.delete('/api/v1/profiles/:profileId/reactions/:type/:typeId', ReactionController.deleteReaction);
+  app.delete('/api/v1/profiles/:profileId/reactions/:postId', ReactionController.deleteReaction);
 
   // ##########################################################################
   // Post Routes

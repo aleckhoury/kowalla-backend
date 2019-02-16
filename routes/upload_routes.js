@@ -4,14 +4,13 @@ const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 const aws = require('aws-sdk');
+const Config = require('../models/ConfigModel');
 
-module.exports = (app) => {
+module.exports = async (app) => {
     app.use('/static', express.static(path.join(__dirname, 'static')));
 
-    aws.config.update({
-        accessKeyId: 'AKIAITK7CNILZWWFVOWA',
-        secretAccessKey: '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'
-    });
+    const { options } = await Config.findOne({name: 'awsKeys'});
+    await aws.config.update(options);
 
     const fileFilter = (req, file, cb) => {
         const allowedTypes = ["image/jpeg", "image/png", "image/gif"];

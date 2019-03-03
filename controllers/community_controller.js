@@ -70,6 +70,7 @@ module.exports = {
         name,
         description,
         headerPicture,
+        profilePicture,
         admins,
       } = req.body;
 
@@ -79,6 +80,7 @@ module.exports = {
         name,
         description,
         headerPicture,
+        profilePicture,
         admins: adminIds,
       });
 

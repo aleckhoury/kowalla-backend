@@ -1,5 +1,4 @@
-const UserController = require('../controllers/user_controller');
-const ProfileController = require('../controllers/profile_controller');
+const ConfigController = require('../controllers/config_controller');
 
 module.exports = (app) => {
     // ##########################################################################
@@ -15,9 +14,7 @@ module.exports = (app) => {
 
     // app.get('/api/v1/users', UserController.getUserList);
     // app.get('/api/v1/users/:id', UserController.getUser);
-    app.get('/api/v1/users/me', ProfileController.getProfileByUsername);
-    app.post('/api/v1/users/login', UserController.authUser);
-    app.post('/api/v1/users', UserController.createUser);
+    app.post('/api/v1/config', ConfigController.createConfig);
     // app.put('/api/v1/users/:id', UserController.updateUser);
     // app.delete('/api/v1/users/:id', UserController.deleteUser);
-}
+};

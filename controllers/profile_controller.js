@@ -40,7 +40,17 @@ module.exports = {
     await profile.save();
     res.status(201).send(profile);
   },
-
+  async getProfileByUsername(req, res, next) {
+    // Init
+    const { username } = req.params;
+    try {
+      // Act
+      const user = await Profile.findOne({ username });
+      // Send
+      res.status(200).send(user)
+    } catch(err) {
+    }
+  },
   async getProfile(req, res, next) {
     // Init
     const { profileId } = req.params;
@@ -78,4 +88,5 @@ module.exports = {
     // Send
     res.status(204).send(profile);
   },
+
 }

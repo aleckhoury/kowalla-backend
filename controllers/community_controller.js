@@ -41,6 +41,18 @@ module.exports = {
       res.send({communities});
   },
 
+  async getCommunityByName(req, res, next) {
+
+    // Init
+    const { communityName } = req.params;
+
+    // Act
+    const community = await Community.findOne({name: communityName});
+
+    // Send
+    res.status(200).send(community);
+  },
+
   async getCommunity(req, res, next) {
       // Init
       const { communityId } = req.params;
@@ -58,6 +70,7 @@ module.exports = {
         name,
         description,
         headerPicture,
+        profilePicture,
         admins,
       } = req.body;
 
@@ -67,6 +80,7 @@ module.exports = {
         name,
         description,
         headerPicture,
+        profilePicture,
         admins: adminIds,
       });
 

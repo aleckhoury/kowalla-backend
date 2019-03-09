@@ -2,17 +2,99 @@
 
 // Models
 const Subscription = require('../models/SubscriptionModel');
+const Project = require('../models/ProjectModel');
+const Community = require('../models/CommunityModel');
+const Profile = require('../models/ProfileModel');
 
 module.exports = {
   async getSubscriptionList(req, res, next) {
     // Init
     const { profileId } = req.params;
+    console.log(profileId);
+    //const profileObj = await Profile.findOne({_id: profileId});
 
+    //onsole.log(profileObj);
     // Act
-    const subscriptions = await Subscription.find({profileId});
+
+    let owned = [];
+    let subscriptions = [];
+
+    const subscriptionsArray = await Subscription.find({profileId});
+
+
+    for (let i=0; i < subscriptionsArray.length; i++) {
+
+      let sub = subscriptionsArray[i];
+
+
+      if (sub['projectId'] !== undefined) {
+
+        let projectObj = await Project.findOne({ _id: sub.projectId });
+
+
+        if (projectObj !== null) {
+          let subObj = {
+            profileId: sub.profileId,
+            projectId: sub.projectId,
+            name: projectObj.name,
+            pictureURL: projectObj.profilePicture,
+            numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
+          };
+
+          // does profileId match admin of project?
+          console.log(projectObj);
+          if (projectObj.admins.includes(profileId)) {
+            owned.push(subObj);
+          } else {
+            subscriptions.push(subObj);
+          }
+        }
+
+      } // end project if statement
+
+      if (sub['communityId'] !== undefined) {
+
+        let communityObj = await Community.findOne({ _id: sub.communityId });
+
+        if (communityObj !== null) {
+          let subObj = {
+            profileId: sub.profileId,
+            communityId: sub.communityId,
+            name: communityObj.name,
+            pictureURL: communityObj.profilePicture,
+            numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
+          };
+
+          console.log(communityObj);
+          if (communityObj.admins.includes(profileId)) {
+            owned.push(subObj);
+          } else {
+            subscriptions.push(subObj);
+          }
+        }
+      } // end community if statement
+    }
+
+    let profileSubscriptions = {
+      owned,
+      subscriptions,
+    };
+    /*
+    const profileSubscriptions = {
+      subscriptions: [
+        {name: "TestProject1", pictureURL: 'aaa', projectId: "1111", numSubs: 1000},
+        {name: "TestCommunity1", pictureURL: 'bbb', communityId: "2222", numSubs: 10},
+      ],
+      owned: [
+        {name: "TestProject2", pictureURL: 'aaa', projectId: "1111", numSubs: 1000},
+        {name: "TestCommunity2", pictureURL: 'bbb', communityId: "2222", numSubs: 10},
+      ]
+    };
+    */
 
     // Send
-    res.status(200).send({subscriptions});
+    res.status(200).send({profileSubscriptions});
+    //res.status(200).send({subscriptions});
   },
 
   async getSubscription(req, res, next) {
@@ -26,7 +108,7 @@ module.exports = {
     // Act
     if (type === 'communities') {
       const subscription = await Subscription.findOne({profileId, communityId: typeId});
-      
+
       // Send
       res.status(200).send(subscription);
     }

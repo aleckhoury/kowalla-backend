@@ -23,10 +23,14 @@ module.exports = {
     } = req.params;
 
     // Act
-    const upvote = await Upvote.findOne({profileId, commentId});
-
+    const count = await Upvote.countDocuments({commentId});
+    const userUpvoted = await Upvote.findOne({ commentId, profileId }).countDocuments().exec();
+    const upvoteRes = {
+      count,
+      userUpvoted,
+    };
     // Send
-    res.status(200).send(upvote);
+    res.status(200).send(upvoteRes);
   },
 
   async createUpvote(req, res, next) {

@@ -37,13 +37,21 @@ module.exports = {
     res.status(200).send({posts});
   },
 
-  async getPost(req, res, next) {
+  async getPosts(req, res, next) {
     // Init
-    const { postId } = req.params;
 
     // Act
-    const post = await Post.findOne({_id: postId});
+    const posts = await Post.find({});
+    // Send
+    res.status(200).send(posts);
+  },
 
+  async getPost(req, res, next) {
+    // Init
+    const { id } = req.params;
+
+    // Act
+    const post = await Post.findOne({_id: id});
     // Send
     res.status(200).send(post);
   },

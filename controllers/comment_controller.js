@@ -7,12 +7,21 @@ module.exports = {
   async getPostCommentList(req, res, next) {
     // Init
     const { postId } = req.params;
-
     // Act
-    const comments = await Comment.find({postId});
+    const comments = await Comment.find({ postId, commentId: ''});
 
     // Send
-    res.status(200).send({comments});
+    res.status(200).send(comments);
+  },
+
+  async getCommentReplyList(req, res, next) {
+    // Init
+    const { commentId, postId } = req.params;
+    // Act
+    const comments = await Comment.find({commentId, postId});
+
+    // Send
+    res.status(200).send(comments);
   },
 
   async getPostComment(req, res, next) {
@@ -33,15 +42,15 @@ module.exports = {
     // Init
     const {
       profileId,
+      postId,
       commentId,
       content,
     } = req.body;
 
-    const { postId } = req.params;
     const views = 0;
 
     // Act
-    const comment = await Comment.create({profileId, commentId, content, postId, views});
+    const comment = await Comment.create({profileId, content, postId, commentId, views});
 
     // Send
     await comment.save();

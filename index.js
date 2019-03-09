@@ -22,18 +22,18 @@ const port = process.env.PORT || 8080
 
 app.set('port', port);
 
-app.use(function(req, res, next) {
-  let allowedOrigins = ['http://127.0.0.1:8020', 'http://localhost:8020', 'http://127.0.0.1:9000', 'http://localhost:9000'];
-  let origin = req.headers.origin;
-  if(allowedOrigins.indexOf(origin) > -1){
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
-  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', true);
-  return next();
-});
+// app.use(function(req, res, next) {
+//   let allowedOrigins = ['http://127.0.0.1:8020', 'http://localhost:8020', 'http://127.0.0.1:9000', 'http://localhost:9000'];
+//   let origin = req.headers.origin;
+//   if(allowedOrigins.indexOf(origin) > -1){
+//     res.setHeader('Access-Control-Allow-Origin', origin);
+//   }
+//   //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
+//   res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   res.header('Access-Control-Allow-Credentials', true);
+//   return next();
+// });
 
 // setup mongodb connection
 const mLabPath = "mongodb://" + process.env.MONGO_USERNAME.toString() + ":" + process.env.MONGO_PASSWORD.toString() + "@" + process.env.MLAB_SERVER.toString() + ".mlab.com:" + process.env.MLAB_PORT_AND_DB.toString();

@@ -12,6 +12,7 @@ const reactionRoutes = require('./routes/reaction_routes');
 const configRoutes = require('./routes/config_routes');
 const commentRoutes = require('./routes/comment_routes');
 const upvoteRoutes = require('./routes/upvote_routes');
+const searchRoutes = require('./routes/search_routes');
 const jwt = require('./helpers/jwt');
 const cors = require('cors');
 
@@ -67,6 +68,7 @@ uploadRoutes(app);
 configRoutes(app);
 commentRoutes(app);
 upvoteRoutes(app);
+searchRoutes(app);
 
 app.listen(port, () => {
   console.log("API SERVER");

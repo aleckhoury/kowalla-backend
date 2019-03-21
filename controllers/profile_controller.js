@@ -23,7 +23,7 @@ ProfileProps = {
 module.exports = {
   async getProfileList(req, res, next) {
     // Init
-    profiles = await Profile.find({}); // TODO: Add sorting
+    const profiles = await Profile.find({}); // TODO: Add sorting
 
     // Send
     res.send({profiles});

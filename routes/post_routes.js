@@ -16,6 +16,7 @@ module.exports = (app) => {
 app.get('/api/v1/posts', PostController.getPosts);
 app.get('/api/v1/posts/:id', PostController.getPost);
 app.get('/api/v1/posts/active/:profileId', PostController.getActivePostByUser);
+app.put('/api/v1/posts/:postId', PostController.updatePost);
 app.get('/api/v1/posts/blog', PostController.getBlogPosts);
 
 // app.post('/api/v1/posts', PostController.createPost);

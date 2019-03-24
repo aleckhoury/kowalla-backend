@@ -7,12 +7,11 @@ module.exports = {
   async getActivePostByUser(req, res, next) {
     // Init
     const { profileId } = req.params;
-
     // Act
-    const posts = await Post.find({profileId, isActive: true});
+    const posts = await Post.findOne({profileId, isActive: true});
 
     // Send
-    res.status(200).send({posts});
+    res.status(200).send(posts);
   },
 
   async getBlogPosts(req, res, next) {
@@ -45,7 +44,17 @@ module.exports = {
     // Send
     res.status(200).send({posts});
   },
-
+  async updatePost(req, res, next) {
+      // Init
+      const { postId } = req.params;
+      const updateParams = req.body;
+      // Act
+      await Post.findOneAndUpdate({_id: postId}, updateParams);
+      const post = await Post.findOne({_id: postId});
+      // Send
+      await post.save();
+      res.status(200).send(post);
+    },
   async getCommunityPostList(req, res, next) { // add sorting
     // Init
     const { communityId } = req.params;
@@ -87,7 +96,6 @@ module.exports = {
       isActive,
       userCompleted,
     } = req.body;
-    console.log(req.body);
 
     const { communityId } = req.params;
     const views = 0;

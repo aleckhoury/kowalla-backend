@@ -7,8 +7,12 @@ const PostSchema = new Schema({
   profileId: String,
   projectId: String,
   communityId: String,
-  content: String, // TODO: figure out how to store tiptaps
+  content: String,
   views: Number,
+  duration: String,
+  expiration: Date,
+  isActive: Boolean,
+  userCompleted: Boolean
 },
 {
   timestamps: true

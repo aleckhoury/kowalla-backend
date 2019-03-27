@@ -4,6 +4,25 @@
 const Post = require('../models/PostModel');
 
 module.exports = {
+  async getActivePostByUser(req, res, next) {
+    // Init
+    const { profileId } = req.params;
+    // Act
+    const posts = await Post.findOne({profileId, isActive: true});
+
+    // Send
+    res.status(200).send(posts);
+  },
+
+  async getBlogPosts(req, res, next) {
+    // Act
+    // Fetch hardcoded list of our blog posts so we don't need to add extra properties to posts
+    const posts = await Post.find({_id: ['bOVESikDy', 'uxWP0nd_C']});
+
+    // Send
+    res.status(200).send({posts});
+  },
+
   async getProfilePostList(req, res, next) { // add sorting
     // Init
     const { profileId } = req.params;
@@ -25,7 +44,17 @@ module.exports = {
     // Send
     res.status(200).send({posts});
   },
-
+  async updatePost(req, res, next) {
+      // Init
+      const { postId } = req.params;
+      const updateParams = req.body;
+      // Act
+      await Post.findOneAndUpdate({_id: postId}, updateParams);
+      const post = await Post.findOne({_id: postId});
+      // Send
+      await post.save();
+      res.status(200).send(post);
+    },
   async getCommunityPostList(req, res, next) { // add sorting
     // Init
     const { communityId } = req.params;
@@ -62,13 +91,26 @@ module.exports = {
       profileId,
       projectId,
       content,
+      duration,
+      expiration,
+      isActive,
+      userCompleted,
     } = req.body;
 
     const { communityId } = req.params;
     const views = 0;
 
     // Act
-    const post = await Post.create({profileId, projectId, communityId, content, views})
+    const post = await Post.create({
+      profileId,
+      projectId,
+      communityId,
+      content,
+      views,
+      duration,
+      expiration,
+      isActive,
+      userCompleted});
 
     // Send
     await post.save();

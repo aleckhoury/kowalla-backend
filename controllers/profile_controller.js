@@ -23,10 +23,13 @@ ProfileProps = {
 module.exports = {
   async getProfileList(req, res, next) {
     // Init
-    const profiles = await Profile.find({}); // TODO: Add sorting
+    const profiles = await Profile.find({})
+      .populate('postCount')
+      .exec(); // TODO: Add sorting
 
     // Send
     res.send({profiles});
+    console.log('test');
   },
 
   async createProfile(req, res, next) {
@@ -34,18 +37,26 @@ module.exports = {
     const profileProps = req.body;
 
     // Act
-    const profile = await Profile.create(profileProps);
+    const profile = await Profile.create(profileProps)
+    await profile.save();
 
     // Send
-    await profile.save();
-    res.status(201).send(profile);
+    const populatedProfile = await Profile.findOne({ _id: profile._id })
+      .populate('postCount')
+      .exec(); // TODO: Add sorting
+  ;
+;
+    res.status(201).send(populatedProfile);
   },
   async getProfileByUsername(req, res, next) {
     // Init
     const { username } = req.params;
     try {
       // Act
-      const user = await Profile.findOne({ username });
+      const user = await Profile.findOne({ username })
+        .populate('postCount')
+        .exec();
+
       // Send
       res.status(200).send(user)
     } catch(err) {
@@ -56,7 +67,9 @@ module.exports = {
     const { profileId } = req.params;
 
     // Act
-    const profile = await Profile.findOne({_id: profileId});
+    const profile = await Profile.findOne({_id: profileId})
+      .populate('postCount')
+      .exec();
 
     // Send
     res.status(200).send(profile)
@@ -69,7 +82,9 @@ module.exports = {
 
     // Act
     await Profile.findOneAndUpdate({_id: profileId}, updateParams);
-    const profile = await Profile.findOne({_id: profileId});
+    const profile = await Profile.findOne({_id: profileId})
+      .populate('postCount')
+      .exec();
 
     // Send
     await profile.save();

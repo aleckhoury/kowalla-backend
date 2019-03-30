@@ -43,7 +43,10 @@ async function getProfileIdsFromUsernames(usernames) {
 module.exports = {
   async getProjectList(req, res, next) {
     // Act
-    projects = await Project.find({}); // TODO: Add sorting
+    projects = await Project.find({})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();// TODO: Add sorting
 
     // Send
     res.send({projects});
@@ -71,9 +74,15 @@ module.exports = {
       admins: adminIds
     });
 
-    // Send
     await project.save();
-    res.status(201).send(project);
+
+    // Send
+    const populatedProject = await Project.findOne({ _id: project._id })
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
+
+    res.status(201).send(populatedProject);
   },
 
   // Read
@@ -82,7 +91,10 @@ module.exports = {
     const { projectName } = req.params;
 
     // Act
-    const project = await Project.findOne({name: projectName});
+    const project = await Project.findOne({name: projectName})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
 
     // Send
     res.status(200).send(project);
@@ -93,7 +105,10 @@ module.exports = {
     const { id } = req.params;
 
     // Act
-    const project = await Project.findOne({_id: id});
+    const project = await Project.findOne({_id: id})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
 
     // Send
     res.status(200).send(project);
@@ -107,7 +122,10 @@ module.exports = {
 
     // Act
     await Project.findOneAndUpdate({_id: id}, updateParams);
-    const project = await Project.findOne({_id: id});
+    const project = await Project.findOne({_id: id})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
 
     // Send
     await project.save();

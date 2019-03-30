@@ -36,10 +36,16 @@ module.exports = {
 
   async getProjectPostList(req, res, next) { // add sorting
     // Init
-    const { projectId } = req.params;
+    const { projectId, sort } = req.params;
+
 
     // Act
-    const posts = await Post.find({projectId});
+    let posts;
+    if (sort === 'Newest') {
+      posts = await Post.find({ projectId }).sort('-createdAt');
+    } else if (sort === 'Oldest') {
+      posts = await Post.find({ projectId }).sort('createdAt');
+    }
 
     // Send
     res.status(200).send({posts});
@@ -52,15 +58,22 @@ module.exports = {
       await Post.findOneAndUpdate({_id: postId}, updateParams);
       const post = await Post.findOne({_id: postId});
       // Send
+    if (post !== null && post !== undefined) {
       await post.save();
+    }
       res.status(200).send(post);
     },
   async getCommunityPostList(req, res, next) { // add sorting
     // Init
-    const { communityId } = req.params;
+    const { communityId, sort } = req.params;
 
     // Act
-    const posts = await Post.find({communityId});
+    let posts;
+    if (sort === 'Newest') {
+      posts = await Post.find({communityId}).sort('-createdAt');
+    } else if (sort === 'Oldest') {
+      posts = await Post.find({communityId}).sort('createdAt');
+    }
 
     // Send
     res.status(200).send({posts});
@@ -68,9 +81,15 @@ module.exports = {
 
   async getPosts(req, res, next) {
     // Init
-
+    let { sort, skip } = req.params;
+    skip = Number(skip);
     // Act
-    const posts = await Post.find({});
+    let posts;
+    if (sort === 'Newest') {
+      posts = await Post.find({}).limit(5).sort('-createdAt').skip(skip);
+    } else if (sort === 'Oldest') {
+      posts = await Post.find({}).limit(5).sort('createdAt').skip(skip);
+    }
     // Send
     res.status(200).send(posts);
   },

@@ -38,7 +38,7 @@ app.set('port', port);
 
 // setup mongodb connection
 const mLabPath = "mongodb://" + process.env.MONGO_USERNAME.toString() + ":" + process.env.MONGO_PASSWORD.toString() + "@" + process.env.MLAB_SERVER.toString() + ".mlab.com:" + process.env.MLAB_PORT_AND_DB.toString();
-mongoose.connect(mLabPath);
+mongoose.connect(mLabPath, { useNewUrlParser: true });
 mongoose.connection
   .once('open', () => {
     console.log('mongoose connection is good to go')

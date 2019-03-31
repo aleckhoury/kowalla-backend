@@ -83,4 +83,9 @@ module.exports = (app) => {
   */
 
   app.get('/api/v1/profiles/:profileId/posts', PostController.getProfilePostList);
+
+
+  //app.get('/api/v1/profiles/:profileId/rep', ProfileController.getProfileReputation);
+
+
 }

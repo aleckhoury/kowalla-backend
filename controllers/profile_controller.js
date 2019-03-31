@@ -2,7 +2,10 @@
 
 // Models
 const Profile = require('../models/ProfileModel');
-
+const Comment = require('../models/CommentModel');
+const Post = require('../models/PostModel');
+const Reaction = require('../models/ReactionModel');
+const Upvote = require('../models/UpvoteModel');
 /*
 ProfileProps = {
   name: String,
@@ -20,11 +23,44 @@ ProfileProps = {
 4) Get specific -- first pass done
 5) update -- first pass done
 */
+
+async function getReputationByProfileId(profileId, username="") {
+
+  if (username !== "") {
+    console.log('using username');
+    profileObj = await Profile.findOne({username}, '_id');
+    console.log(profileObj);
+    profileId = profileObj._id;
+  }
+
+  // get array of post id values only
+  let postArrayWithKeyValuePairs = await Post.find({profileId: profileId}, '_id')
+  let postArrayWithValues = postArrayWithKeyValuePairs.map(function (object) { return object._id});
+
+  // count all reactions
+  let reactionCount = await Reaction.where({ 'postId': { $in: postArrayWithValues }}).countDocuments();
+
+  // get array of comment id values only
+  let commentArrayWithKeyValuePairs = await Comment.find({profileId: profileId}, '_id')
+  let commentArrayWithValues = commentArrayWithKeyValuePairs.map(function (object) { return object._id});
+
+  // count all upvotes
+  let upvoteCount = await Upvote.where({ '_id': { $in: commentArrayWithValues }}).countDocuments();
+
+  // how we set the value of each action
+  let upvoteModifier = 1;
+  let reactionModifier = 2;
+
+  // return reputation
+  return (upvoteModifier*upvoteCount + reactionModifier*reactionCount );
+
+}
 module.exports = {
   async getProfileList(req, res, next) {
     // Init
     const profiles = await Profile.find({})
       .populate('postCount')
+      .populate('commentCount')
       .exec(); // TODO: Add sorting
 
     // Send
@@ -43,6 +79,7 @@ module.exports = {
     // Send
     const populatedProfile = await Profile.findOne({ _id: profile._id })
       .populate('postCount')
+      .populate('commentCount')
       .exec(); // TODO: Add sorting
   ;
 ;
@@ -53,8 +90,13 @@ module.exports = {
     const { username } = req.params;
     try {
       // Act
+      const reputation = await getReputationByProfileId("", username);
+      console.log(`rep: ${reputation}`)
+      await Profile.findOneAndUpdate({ username }, { reputation })
+
       const user = await Profile.findOne({ username })
         .populate('postCount')
+        .populate('commentCount')
         .exec();
 
       // Send
@@ -66,13 +108,21 @@ module.exports = {
     // Init
     const { profileId } = req.params;
 
+    //let reputation = await getReputationByProfileId(profileId);
+    //await Profile.findOneAndUpdate({ _id: profileId }, {reputation})
+
     // Act
     const profile = await Profile.findOne({_id: profileId})
       .populate('postCount')
+      .populate('commentCount')
       .exec();
 
+    console.log(profile);
+
+    //profile.reputation =
     // Send
     res.status(200).send(profile)
+    profile.save();
   },
 
   async updateProfile(req, res, next) {
@@ -103,5 +153,33 @@ module.exports = {
     // Send
     res.status(204).send(profile);
   },
+
+  /*
+  async getProfileReputation(req, res, next) {
+    //const { profileId } = req.params;
+
+    let profileId = "C4xtgKOIu";
+
+    /*
+    // get array of post id values only
+    let postArrayWithKeyValuePairs = await Post.find({profileId: profileId}, '_id')
+    let postArrayWithValues = postArrayWithKeyValuePairs.map(function (object) { return object._id});
+
+    // count all reactions
+    let reactionCount = await Reaction.where({ '_id': { $in: postArrayWithValues }}).countDocuments();
+
+    // get array of post id values only
+    let commentArrayWithKeyValuePairs = await Comment.find({profileId: profileId}, '_id')
+    let commentArrayWithValues = commentArrayWithKeyValuePairs.map(function (object) { return object._id});
+
+    // count all reactions
+    let upvoteCount = await Upvote.where({ '_id': { $in: commentArrayWithValues }}).countDocuments();
+
+
+    let reputation = await getReputationByProfileId(profileId);
+
+    res.send({reputation});
+  }
+  */
 
 }

@@ -3,7 +3,8 @@
 // Models
 const Project = require('../models/ProjectModel');
 const Profile = require('../models/ProfileModel');
-
+const Post = require('../models/PostModel');
+const Reaction = require('../models/ReactionModel');
 /*
 1) Create -- first pass done
 2) Delete -- first pass done
@@ -36,6 +37,29 @@ async function getProfileIdsFromUsernames(usernames) {
   }
 
   return idArray;
+}
+
+async function getReputation(projectId, name="") {
+
+  if (name !== "") {
+    console.log('using name');
+    projectObj = await Project.findOne({name}, '_id');
+    projectId = profileObj._id;
+  }
+
+  // get array of post id values only
+  let postArrayWithKeyValuePairs = await Post.find({projectId: projectId}, '_id')
+  let postArrayWithValues = postArrayWithKeyValuePairs.map(function (object) { return object._id});
+
+  // count all reactions
+  let reactionCount = await Reaction.where({ 'postId': { $in: postArrayWithValues }}).countDocuments();
+
+  // how we set the value of each action
+  let reactionModifier = 2;
+
+
+  // return reputation
+  return (reactionCount*reactionModifier);
 }
 
 
@@ -91,6 +115,9 @@ module.exports = {
     const { projectName } = req.params;
 
     // Act
+    let reputation = await getReputation("", projectName);
+    await Project.findOneAndUpdate({ _id: id }, {reputation})
+
     const project = await Project.findOne({name: projectName})
       .populate('subscribers')
       .populate('postCount')
@@ -105,6 +132,10 @@ module.exports = {
     const { id } = req.params;
 
     // Act
+    let reputation = await getReputation(id);
+    await Project.findOneAndUpdate({ _id: id }, {reputation})
+
+
     const project = await Project.findOne({_id: id})
       .populate('subscribers')
       .populate('postCount')

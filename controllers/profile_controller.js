@@ -108,8 +108,8 @@ module.exports = {
     // Init
     const { profileId } = req.params;
 
-    //let reputation = await getReputationByProfileId(profileId);
-    //await Profile.findOneAndUpdate({ _id: profileId }, {reputation})
+    let reputation = await getReputationByProfileId(profileId);
+    await Profile.findOneAndUpdate({ _id: profileId }, {reputation})
 
     // Act
     const profile = await Profile.findOne({_id: profileId})

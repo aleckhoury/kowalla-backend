@@ -44,7 +44,7 @@ async function getReputation(projectId, name="") {
   if (name !== "") {
     console.log('using name');
     projectObj = await Project.findOne({name}, '_id');
-    projectId = profileObj._id;
+    projectId = projectObj._id;
   }
 
   // get array of post id values only
@@ -116,7 +116,7 @@ module.exports = {
 
     // Act
     let reputation = await getReputation("", projectName);
-    await Project.findOneAndUpdate({ _id: id }, {reputation})
+    await Project.findOneAndUpdate({ name: projectName }, {reputation})
 
     const project = await Project.findOne({name: projectName})
       .populate('subscribers')
@@ -124,6 +124,7 @@ module.exports = {
       .exec();
 
     // Send
+    
     res.status(200).send(project);
   },
 

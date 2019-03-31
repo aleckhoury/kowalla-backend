@@ -27,9 +27,7 @@ ProfileProps = {
 async function getReputationByProfileId(profileId, username="") {
 
   if (username !== "") {
-    console.log('using username');
     profileObj = await Profile.findOne({username}, '_id');
-    console.log(profileObj);
     profileId = profileObj._id;
   }
 
@@ -65,7 +63,6 @@ module.exports = {
 
     // Send
     res.send({profiles});
-    console.log('test');
   },
 
   async createProfile(req, res, next) {
@@ -122,7 +119,6 @@ module.exports = {
     //profile.reputation =
     // Send
     res.status(200).send(profile)
-    profile.save();
   },
 
   async updateProfile(req, res, next) {
@@ -137,9 +133,7 @@ module.exports = {
       .exec();
 
     // Send
-    await profile.save();
     res.status(200).send(profile);
-
   },
 
   async deleteProfile(req, res, next) {
@@ -153,33 +147,4 @@ module.exports = {
     // Send
     res.status(204).send(profile);
   },
-
-  /*
-  async getProfileReputation(req, res, next) {
-    //const { profileId } = req.params;
-
-    let profileId = "C4xtgKOIu";
-
-    /*
-    // get array of post id values only
-    let postArrayWithKeyValuePairs = await Post.find({profileId: profileId}, '_id')
-    let postArrayWithValues = postArrayWithKeyValuePairs.map(function (object) { return object._id});
-
-    // count all reactions
-    let reactionCount = await Reaction.where({ '_id': { $in: postArrayWithValues }}).countDocuments();
-
-    // get array of post id values only
-    let commentArrayWithKeyValuePairs = await Comment.find({profileId: profileId}, '_id')
-    let commentArrayWithValues = commentArrayWithKeyValuePairs.map(function (object) { return object._id});
-
-    // count all reactions
-    let upvoteCount = await Upvote.where({ '_id': { $in: commentArrayWithValues }}).countDocuments();
-
-
-    let reputation = await getReputationByProfileId(profileId);
-
-    res.send({reputation});
-  }
-  */
-
 }

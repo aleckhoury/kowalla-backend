@@ -42,7 +42,6 @@ async function getProfileIdsFromUsernames(usernames) {
 async function getReputation(projectId, name="") {
 
   if (name !== "") {
-    console.log('using name');
     projectObj = await Project.findOne({name}, '_id');
     projectId = projectObj._id;
   }
@@ -124,7 +123,6 @@ module.exports = {
       .exec();
 
     // Send
-    
     res.status(200).send(project);
   },
 
@@ -160,8 +158,8 @@ module.exports = {
       .exec();
 
     // Send
-    await project.save();
     res.status(200).send(project);
+    await project.save();
   },
 
   // Delete

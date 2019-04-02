@@ -4,7 +4,7 @@ const shortid = require('shortid');
 
 const UpvoteSchema = new Schema({
   _id: { type: String, default: shortid.generate },
-  profileId: String,
+  profileId: String, // is of the user who upvotes
   commentId: String,
 },
 {

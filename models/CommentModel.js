@@ -4,7 +4,7 @@ const shortid = require('shortid');
 
 const CommentSchema = new Schema({
   _id: { type: String, default: shortid.generate },
-  profileId: String,
+  profileId: String, // id of the poster
   postId: String,
   updateId: String,
   commentId: String,

@@ -14,21 +14,18 @@ module.exports = {
     res.status(200).send(posts);
   },
 
-  async getBlogPosts(req, res, next) {
-    // Act
-    // Fetch hardcoded list of our blog posts so we don't need to add extra properties to posts
-    const posts = await Post.find({_id: ['bOVESikDy', 'uxWP0nd_C']});
-
-    // Send
-    res.status(200).send({posts});
-  },
-
   async getProfilePostList(req, res, next) { // add sorting
     // Init
-    const { profileId } = req.params;
+    let { profileId, sort, skip } = req.params;
+    skip = Number(skip);
 
     // Act
-    const posts = await Post.find({profileId});
+    let posts;
+    if (sort === 'Newest') {
+      posts = await Post.find({ profileId }).sort('-createdAt').skip(skip);
+    } else if (sort === 'Oldest') {
+      posts = await Post.find({ profileId }).sort('createdAt').skip(skip);
+    }
 
     // Send
     res.status(200).send({posts});
@@ -36,15 +33,15 @@ module.exports = {
 
   async getProjectPostList(req, res, next) { // add sorting
     // Init
-    const { projectId, sort } = req.params;
-
+    let { projectId, sort, skip } = req.params;
+    skip = Number(skip);
 
     // Act
     let posts;
     if (sort === 'Newest') {
-      posts = await Post.find({ projectId }).sort('-createdAt');
+      posts = await Post.find({ projectId }).sort('-createdAt').skip(skip);
     } else if (sort === 'Oldest') {
-      posts = await Post.find({ projectId }).sort('createdAt');
+      posts = await Post.find({ projectId }).sort('createdAt').skip(skip);
     }
 
     // Send
@@ -65,14 +62,15 @@ module.exports = {
     },
   async getCommunityPostList(req, res, next) { // add sorting
     // Init
-    const { communityId, sort } = req.params;
+    let { communityId, sort, skip } = req.params;
+    skip = Number(skip);
 
     // Act
     let posts;
     if (sort === 'Newest') {
-      posts = await Post.find({communityId}).sort('-createdAt');
+      posts = await Post.find({communityId}).sort('-createdAt').skip(skip);
     } else if (sort === 'Oldest') {
-      posts = await Post.find({communityId}).sort('createdAt');
+      posts = await Post.find({communityId}).sort('createdAt').skip(skip);
     }
 
     // Send

@@ -3,6 +3,7 @@ const SubscriptionController = require('../controllers/subscription_controller')
 const UpvoteController = require('../controllers/upvote_controller');
 const ReactionController = require('../controllers/reaction_controller');
 const PostController = require('../controllers/post_controller');
+const NotificationController = require('../controllers/notification_controller');
 
 module.exports = (app) => {
   // ##########################################################################
@@ -83,6 +84,8 @@ module.exports = (app) => {
   */
 
   app.get('/api/v1/profiles/:profileId/posts', PostController.getProfilePostList);
+
+  app.get('/api/v1/profiles/:profileId/notifications', NotificationController.getNotificationsList);
 
 
   //app.get('/api/v1/profiles/:profileId/rep', ProfileController.getProfileReputation);

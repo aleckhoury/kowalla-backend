@@ -5,6 +5,7 @@ const Subscription = require('../models/SubscriptionModel');
 const Project = require('../models/ProjectModel');
 const Community = require('../models/CommunityModel');
 const Profile = require('../models/ProfileModel');
+const Notification = require('../models/NotificationModel');
 
 module.exports = {
   async getSubscriptionList(req, res, next) {

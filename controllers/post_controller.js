@@ -22,9 +22,9 @@ module.exports = {
     // Act
     let posts;
     if (sort === 'Newest') {
-      posts = await Post.find({ profileId }).sort('-createdAt').skip(skip);
+      posts = await Post.find({ profileId }).limit(5).sort('-createdAt').skip(skip);
     } else if (sort === 'Oldest') {
-      posts = await Post.find({ profileId }).sort('createdAt').skip(skip);
+      posts = await Post.find({ profileId }).limit(5).sort('createdAt').skip(skip);
     }
 
     // Send
@@ -39,9 +39,9 @@ module.exports = {
     // Act
     let posts;
     if (sort === 'Newest') {
-      posts = await Post.find({ projectId }).sort('-createdAt').skip(skip);
+      posts = await Post.find({ projectId }).limit(5).sort('-createdAt').skip(skip);
     } else if (sort === 'Oldest') {
-      posts = await Post.find({ projectId }).sort('createdAt').skip(skip);
+      posts = await Post.find({ projectId }).limit(5).sort('createdAt').skip(skip);
     }
 
     // Send
@@ -68,9 +68,9 @@ module.exports = {
     // Act
     let posts;
     if (sort === 'Newest') {
-      posts = await Post.find({communityId}).sort('-createdAt').skip(skip);
+      posts = await Post.find({communityId}).limit(5).sort('-createdAt').skip(skip);
     } else if (sort === 'Oldest') {
-      posts = await Post.find({communityId}).sort('createdAt').skip(skip);
+      posts = await Post.find({communityId}).limit(5).sort('createdAt').skip(skip);
     }
 
     // Send

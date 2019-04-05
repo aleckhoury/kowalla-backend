@@ -17,9 +17,9 @@ app.get('/api/v1/posts/:sort/:skip', PostController.getPosts);
 app.get('/api/v1/posts/:id', PostController.getPost);
 app.get('/api/v1/posts/active/:profileId', PostController.getActivePostByUser);
 app.put('/api/v1/posts/:postId', PostController.updatePost);
-app.get('/api/v1/posts/community/:id/:sort/:skip', PostController.getCommunityPostList);
-app.get('/api/v1/posts/project/:id/:sort/:skip', PostController.getProjectPostList);
-app.get('/api/v1/posts/profile/:id/:sort/:skip', PostController.getProfilePostList);
+app.get('/api/v1/posts/community/:communityId/:sort/:skip', PostController.getCommunityPostList);
+app.get('/api/v1/posts/project/:projectId/:sort/:skip', PostController.getProjectPostList);
+app.get('/api/v1/posts/profile/:profileId/:sort/:skip', PostController.getProfilePostList);
 
 // app.post('/api/v1/posts', PostController.createPost);
 // app.put('/api/v1/posts/:postId', PostController.updatePost);

@@ -3,7 +3,8 @@
 // Models
 const Project = require('../models/ProjectModel');
 const Profile = require('../models/ProfileModel');
-
+const Post = require('../models/PostModel');
+const Reaction = require('../models/ReactionModel');
 /*
 1) Create -- first pass done
 2) Delete -- first pass done
@@ -38,12 +39,37 @@ async function getProfileIdsFromUsernames(usernames) {
   return idArray;
 }
 
+async function getReputation(projectId, name="") {
+
+  if (name !== "") {
+    projectObj = await Project.findOne({name}, '_id');
+    projectId = projectObj._id;
+  }
+
+  // get array of post id values only
+  let postArrayWithKeyValuePairs = await Post.find({projectId: projectId}, '_id')
+  let postArrayWithValues = postArrayWithKeyValuePairs.map(function (object) { return object._id});
+
+  // count all reactions
+  let reactionCount = await Reaction.where({ 'postId': { $in: postArrayWithValues }}).countDocuments();
+
+  // how we set the value of each action
+  let reactionModifier = 2;
+
+
+  // return reputation
+  return (reactionCount*reactionModifier);
+}
+
 
 // TODO: add CRUD Headers
 module.exports = {
   async getProjectList(req, res, next) {
     // Act
-    projects = await Project.find({}); // TODO: Add sorting
+    projects = await Project.find({})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();// TODO: Add sorting
 
     // Send
     res.send({projects});
@@ -71,9 +97,15 @@ module.exports = {
       admins: adminIds
     });
 
-    // Send
     await project.save();
-    res.status(201).send(project);
+
+    // Send
+    const populatedProject = await Project.findOne({ _id: project._id })
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
+
+    res.status(201).send(populatedProject);
   },
 
   // Read
@@ -82,7 +114,13 @@ module.exports = {
     const { projectName } = req.params;
 
     // Act
-    const project = await Project.findOne({name: projectName});
+    let reputation = await getReputation("", projectName);
+    await Project.findOneAndUpdate({ name: projectName }, {reputation})
+
+    const project = await Project.findOne({name: projectName})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
 
     // Send
     res.status(200).send(project);
@@ -93,7 +131,14 @@ module.exports = {
     const { id } = req.params;
 
     // Act
-    const project = await Project.findOne({_id: id});
+    let reputation = await getReputation(id);
+    await Project.findOneAndUpdate({ _id: id }, {reputation})
+
+
+    const project = await Project.findOne({_id: id})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
 
     // Send
     res.status(200).send(project);
@@ -107,11 +152,14 @@ module.exports = {
 
     // Act
     await Project.findOneAndUpdate({_id: id}, updateParams);
-    const project = await Project.findOne({_id: id});
+    const project = await Project.findOne({_id: id})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
 
     // Send
-    await project.save();
     res.status(200).send(project);
+    await project.save();
   },
 
   // Delete

@@ -42,7 +42,7 @@ module.exports = {
           };
 
           // does profileId match admin of project?
-          console.log(projectObj);
+          //console.log(projectObj);
           if (projectObj.admins.includes(profileId)) {
             owned.push(subObj);
           } else {
@@ -65,7 +65,7 @@ module.exports = {
             numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
           };
 
-          console.log(communityObj);
+          //console.log(communityObj);
           if (communityObj.admins.includes(profileId)) {
             owned.push(subObj);
           } else {
@@ -79,22 +79,9 @@ module.exports = {
       owned,
       subscriptions,
     };
-    /*
-    const profileSubscriptions = {
-      subscriptions: [
-        {name: "TestProject1", pictureURL: 'aaa', projectId: "1111", numSubs: 1000},
-        {name: "TestCommunity1", pictureURL: 'bbb', communityId: "2222", numSubs: 10},
-      ],
-      owned: [
-        {name: "TestProject2", pictureURL: 'aaa', projectId: "1111", numSubs: 1000},
-        {name: "TestCommunity2", pictureURL: 'bbb', communityId: "2222", numSubs: 10},
-      ]
-    };
-    */
 
     // Send
     res.status(200).send({profileSubscriptions});
-    //res.status(200).send({subscriptions});
   },
 
   async getSubscription(req, res, next) {
@@ -141,6 +128,10 @@ module.exports = {
       // Send
       await subscription.save();
       res.status(201).send(subscription);
+
+      await Community.findOneAndUpdate({_id: communityId}, {$inc: { subscribers: 1}});
+
+
     }
 
     else if (communityId === undefined) { // add Project Sub
@@ -150,6 +141,9 @@ module.exports = {
       // Send
       await subscription.save();
       res.status(201).send(subscription);
+
+      // updates the amount of on the project
+      await Project.findOneAndUpdate({_id: projectId}, {$inc: {subscribers: 1}});
     }
   },
 

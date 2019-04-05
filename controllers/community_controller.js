@@ -35,7 +35,10 @@ async function getProfileIdsFromUsernames(usernames) {
 module.exports = {
   async getCommunityList(req, res, next) {
       // Init
-      communities = await Community.find({});
+      communities = await Community.find({})
+        .populate('subscribers')
+        .populate('postCount')
+        .exec();
 
       // Send
       res.send({communities});
@@ -47,7 +50,10 @@ module.exports = {
     const { communityName } = req.params;
 
     // Act
-    const community = await Community.findOne({name: communityName});
+    const community = await Community.findOne({name: communityName})
+      .populate('subscribers')
+      .populate('postCount')
+      .exec();
 
     // Send
     res.status(200).send(community);
@@ -58,7 +64,10 @@ module.exports = {
       const { communityId } = req.params;
 
       // Act
-      const community = await Community.findOne({_id: communityId});
+      const community = await Community.findOne({_id: communityId})
+        .populate('subscribers')
+        .populate('postCount')
+        .exec();
 
       // Send
       res.status(200).send(community);
@@ -84,9 +93,16 @@ module.exports = {
         admins: adminIds,
       });
 
-      // Send
       await community.save();
-      res.status(201).send(community);
+
+      // Send
+      const populatedCommunity = await Community.findOne({ _id: community._id })
+        .populate('subscribers')
+        .populate('postCount')
+        .exec();
+
+      res.status(201).send(populatedCommunity);
+
   },
 
   async updateCommunity(req, res, next) {
@@ -96,7 +112,10 @@ module.exports = {
 
       // Act
       await Community.findOneAndUpdate({_id: communityId}, updateParams);
-      const community = await Community.findOne({_id: communityId});
+      const community = await Community.findOne({_id: communityId})
+        .populate('subscribers')
+        .populate('postCount')
+        .exec();
 
       // Send
       res.status(200).send(community);

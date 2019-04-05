@@ -11,7 +11,24 @@ const CommunitySchema = new Schema({ // TODO: add username
   admins: [String],
 },
 {
+  toObject: { getters: true }, // these aren't working properly
+  toJSON: { getters: true },
   timestamps: true
+});
+
+
+CommunitySchema.virtual('subscribers', {
+  ref: 'subscription',
+  localField: '_id',
+  foreignField: 'communityId',
+  count: true,
+});
+
+CommunitySchema.virtual('postCount', {
+  ref: 'post',
+  localField: '_id',
+  foreignField: 'communityId',
+  count: true,
 });
 
 const Community = mongoose.model('community', CommunitySchema);

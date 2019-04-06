@@ -35,7 +35,7 @@ function combineExentions(ext1, ext2) {
 };
 
 function readablePostNotification(contentObj) {
-  let { communityName, commentCount, reactionCount } = contentObj;
+  let { communityName, commentCount, reactionCount, postId, notifIds } = contentObj;
 
   let title = `Your post in #${communityName} is getting attention!`;
   let commentExt = "";
@@ -51,16 +51,16 @@ function readablePostNotification(contentObj) {
 
   return {
     title,
-    message: combineExentions(commentExt, reactionExt)
+    message: combineExentions(commentExt, reactionExt),
+    postId,
+    notifIds,
+    communityName
   };
 };
 
-
 function readableCommentNotification(contentObj) {
-  console.log("contentObj");
-  console.log(contentObj);
 
-  let { communityName, replyCount, upvoteCount } = contentObj;
+  let { communityName, replyCount, upvoteCount, commentId, notifIds } = contentObj;
 
   let title = `New interactions on your comment in #${communityName}!`
   let replyExt = "";
@@ -70,19 +70,16 @@ function readableCommentNotification(contentObj) {
     replyExt = `${replyCount} new ` + pluralize("reply", replyCount, true);
   }
 
-  console.log("replyExt");
-  console.log(replyExt);
-
   if (upvoteCount > 0) {
     upvoteExt = `${upvoteCount} new ` + pluralize("upvote", upvoteCount);
   }
 
-  console.log("upvoteExt");
-  console.log(upvoteExt);
-
   return {
     title,
-    message: combineExentions(replyExt, upvoteExt)
+    message: combineExentions(replyExt, upvoteExt),
+    commentId,
+    notifIds,
+    communityName,
   };
 };
 
@@ -98,8 +95,6 @@ function readableSubscriptionNotification(contentObj) {
 
 module.exports = {
   async formalizeSubscriptionNotifs(subscriptionObj) {
-    //console.log("subscriptionObj")
-    //console.log(subscriptionObj)
     let subscriptionMessageArray = []; // holder for our subscription message objs
     let projectIdArray = []; // temporarily used for the query
 
@@ -113,21 +108,18 @@ module.exports = {
     // for each project found, match it with the corresponding notification
     // and build the notification message
     for (let i in projects) {
-      subscriptionMessageArray.push(readableSubscriptionNotification({
-        projectName: projects[i].name,
-        subCount: subscriptionObj[projects[i]._id].length
-      }));
-      /*subscriptionMessageArray.push({
-        title: `@${projects[i].name} has new subscriptions!`,
-        message: `You've gained ${subscriptionObj[projects[i]._id].length} new followers!`
-      });*/
+      subscriptionMessageArray.push(
+        readableSubscriptionNotification({
+          projectName: projects[i].name,
+          subCount: subscriptionObj[projects[i]._id].length
+        })
+      );
     }
 
     return subscriptionMessageArray;
   },
 
   async formalizePostInteractionNotifs(postObject) {
-    //console.log(postObject);
     let postMessageArray = []; // holder for our post interaction message objs
     let countObj = {}; // temporary holder for the counts of reactions and comments
     let postIdsForQuery = []; // need to store postIds for query
@@ -135,11 +127,19 @@ module.exports = {
     for (let postId in postObject) {
       postIdsForQuery.push(postId);
 
+      let notifIds = [];
+
+      for (let i in postObject[postId]) {
+        notifIds.push(postObject[postId][i]._id)
+      }
+
       // sort the array by reactions and comments, so we can count easily
       let tempObj = _.groupBy(postObject[postId], (subObj) => subObj.type);
 
       // add to the CountObj if we have the event type
       countObj[postId] = {
+        postId: postId,
+        notifIds: notifIds,
         reactionCount: (tempObj['new-reaction'] !== undefined) ? tempObj['new-reaction'].length : 0,
         commentCount: (tempObj["new-comment"] !== undefined) ? tempObj['new-comment'].length : 0
       };
@@ -198,11 +198,15 @@ module.exports = {
       }*/
 
       postIds.forEach((x) => {
-        postMessageArray.push(readablePostNotification({
-          communityName,
-          commentCount: countObj[x._id].commentCount,
-          reactionCount: countObj[x._id].reactionCount
-        }));
+        postMessageArray.push(
+          readablePostNotification({
+            communityName,
+            commentCount: countObj[x._id].commentCount,
+            reactionCount: countObj[x._id].reactionCount,
+            postId: countObj[x._id].postId,
+            notifIds: countObj[x._id].notifIds
+          })
+        );
         /*
         postMessageArray.push({
           title: `New comments and reactions on your post in #${communityName}!`,
@@ -215,16 +219,24 @@ module.exports = {
   },
 
   async formalizeCommentInteractionNotifs(commentObj) {
+    console.log(commentObj);
     let commentMessageArray = [];
     let countObj = {};
     let commentIdsForQuery = [];
 
     for (let commentId in commentObj) {
       commentIdsForQuery.push(commentId);
+      let notifIds = [];
 
       let tempObj = _.groupBy(commentObj[commentId], (subObj) => subObj.type);
 
+      for (let i in commentObj[commentId]) {
+        notifIds.push(commentObj[commentId][i]._id)
+      }
+
       countObj[commentId] = {
+        commentId: commentId,
+        notifIds: notifIds,
         upvoteCount: (tempObj['new-upvote'] !== undefined) ? tempObj['new-upvote'].length : 0,
         replyCount: (tempObj['new-reply'] !== undefined) ? tempObj['new-reply'].length : 0,
       }
@@ -273,6 +285,8 @@ module.exports = {
             communityName,
             replyCount: countObj[x._id].replyCount,
             upvoteCount: countObj[x._id].upvoteCount,
+            commentId: countObj[x._id].commentId,
+            notifIds: countObj[x._id].notifIds,
           }));
           /*
           commentMessageArray.push({
@@ -303,35 +317,26 @@ module.exports = {
 
     switch (type) {
       case 'new-subscriber':
-        console.log('new-subscriber');
         // should have ownerProjectId, sendingProfileId, NA
-        //let { ownerProjectId, sendingProfileId } = notifObject;
         await Notification.create({ type, ownerProjectId, sendingProfileId });
 
         break;
 
       case 'new-reaction': // emoji reaction to a post
-        console.log('new-reaction');
-
         // should have (ownerProjectId OR ownerProfileId), postId, sendingProfileId
         await Notification.create({ type, ownerProjectId, ownerProfileId, sendingProfileId, postId });
 
         break;
 
       case 'new-comment': // new comment in direct reply to a post
-        console.log('new-comment');
         await Notification.create({ type, ownerProjectId, ownerProfileId, sendingProfileId, postId });
-        //console.log(notif);
         break;
 
       case 'new-reply': // new reply to a comment of yours
-        console.log('new-reply');
         let notif = await Notification.create({ type, ownerProfileId, sendingProfileId, commentId });
-        console.log(notif);
         break;
 
       case 'new-upvote': // new upvote on one of your comments
-        console.log('new-upvote');
         //let { ownerProfileId, sendingProfileId, commentId } = notifObject;
         await Notification.create({ type, ownerProfileId, sendingProfileId, commentId });
 

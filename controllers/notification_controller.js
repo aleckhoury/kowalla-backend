@@ -9,7 +9,6 @@ module.exports = {
     const { projectIdsArray } = req.body; // an array of string owned projects ids
     // CURRENT-STATE MVP SETUPS
 
-    console.log(profileId);
     const notifications = await Notification.find({
       // we want
       // (unviewed notifications) AND ((notifications for a user) OR (notifications from a user's project))
@@ -19,7 +18,6 @@ module.exports = {
       ]
     });
 
-    console.log(notifications);
 
     // for subscriptions
 
@@ -90,11 +88,14 @@ module.exports = {
               tempPostArray = sortedNotifications['new-reaction'];
             }
 
-            let postInteractionsArray = _.groupBy(tempPostArray, function(obj) {
+            let postInteractionsObject = _.groupBy(tempPostArray, function(obj) {
               return obj.postId;
             });
 
-            let postNotifs = await NotificationHelper.formalizePostInteractionNotifs(postInteractionsArray);
+            //console.log("\n\npostInteractionsObject")
+            //console.log(postInteractionsObject)
+
+            let postNotifs = await NotificationHelper.formalizePostInteractionNotifs(postInteractionsObject);
             notifsArray = notifsArray.concat(postNotifs);
 
             break; // end post-interactions
@@ -153,39 +154,4 @@ module.exports = {
 
     res.send({notifications: notifsArray});
   },
-
-  // NOT AN EXPRESS ROUTE, FOR USE IN OTHER CONTROLLERS TO MAKE NOTIFICATIONS
-  async createNotification(type="", notifObject) {
-    /* Notif Obj
-      needs one of each row:
-        WHO IS THIS FOR: ownerProfileId, or ownerProjectId,
-        WHO IS THIS FROM: sendingProfileId, sendingProjectId, sendingCommunityId,
-        WHAT IS THIS ABOUT: postId, commentId
-    */
-    /*
-    switch (type) {
-      case 'new-subscriber':
-        console.log('new-subscriber');
-        break;
-
-      case 'new-reaction': // emoji reaction to a post
-        console.log('new-reaction');
-        break;
-
-      case 'new-comment': // new comment in direct reply to a post
-        console.log('new-comment');
-        break;
-
-      case 'new-reply': // new reply to a comment of yours
-        console.log('new-reply');
-        break;
-
-      case 'new-upvote': // new upvote on one of your comments
-        console.log('new-upvote');
-        break;
-
-      default: break;
-    }*/
-  }
-
 }

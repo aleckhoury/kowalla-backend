@@ -28,7 +28,7 @@ module.exports = {
     }
 
     // Send
-    res.status(200).send({posts});
+    res.status(200).send(posts);
   },
 
   async getProjectPostList(req, res, next) { // add sorting
@@ -45,7 +45,7 @@ module.exports = {
     }
 
     // Send
-    res.status(200).send({posts});
+    res.status(200).send(posts);
   },
   async updatePost(req, res, next) {
       // Init
@@ -74,7 +74,7 @@ module.exports = {
     }
 
     // Send
-    res.status(200).send({posts});
+    res.status(200).send(posts);
   },
 
   async getPosts(req, res, next) {

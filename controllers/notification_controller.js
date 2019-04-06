@@ -1,4 +1,5 @@
 const Notification = require('../models/NotificationModel');
+const NotificationHelper = require('../helpers/notification_helpers');
 const _ = require('lodash');
 
 module.exports = {
@@ -20,20 +21,21 @@ module.exports = {
     // for subscriptions
 
     let notificationQueue = {};
+    let notifsArray = [];
 
-    let notifications = [
+    let notifications = [ //0YYLqkssl
       // SUBSCRIBERS
-      { type: "new-subscriber", ownerProjectId: "1"}, { type: "new-subscriber", ownerProjectId: "1"}, { type: "new-subscriber", ownerProjectId: "1"},
-      { type: "new-subscriber", ownerProjectId: "2"}, { type: "new-subscriber", ownerProjectId: "2"},
-      { type: "new-subscriber", ownerProjectId: "3"},
+      { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"}, { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"}, { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"},
+      { type: "new-subscriber", ownerProjectId: "U-_5qwjXV"}, { type: "new-subscriber", ownerProjectId: "U-_5qwjXV"},
+      { type: "new-subscriber", ownerProjectId: "azDnNnf_5"},
 
       // POST INTERACTIONS
-      { type: "new-reaction", postId: "1"}, { type: "new-comment", postId: "1"}, { type: "new-reaction", postId: "1"},
-      { type: "new-reaction", postId: "2"}, { type: "new-comment", postId: "2"},
+      { type: "new-reaction", postId: "0YYLqkssl"}, { type: "new-comment", postId: "0YYLqkssl"}, { type: "new-reaction", postId: "0YYLqkssl"},
+      { type: "new-reaction", postId: "3LgzJA2yG"}, { type: "new-comment", postId: "3LgzJA2yG"},
 
       // COMMENT INTERACTIONS
-      { type: "new-reply", commentId: "1"}, { type: "new-upvote", commentId: "1"}, { type: "new-reply", commentId: "1"},
-      { type: "new-reply", commentId: "2"}, { type: "new-upvote", commentId: "2"},
+      { type: "new-reply", commentId: "M_YXkcNQQ"}, { type: "new-upvote", commentId: "M_YXkcNQQ"}, { type: "new-reply", commentId: "M_YXkcNQQ"},
+      { type: "new-reply", commentId: "a8nCBdPSE"}, { type: "new-upvote", commentId: "a8nCBdPSE"},
     ];
 
     const sortedNotifications = _.groupBy(notifications, function(notif) {
@@ -48,7 +50,11 @@ module.exports = {
             return subObj.ownerProjectId;
           })
 
-          notificationQueue["subscriptions"] = subscriptionNotifications
+          notificationQueue["subscriptions"] = subscriptionNotifications;
+
+          let subNotifs = await NotificationHelper.formalizeSubscriptionNotifs(notificationQueue.subscriptions);
+          notifsArray = notifsArray.concat(subNotifs);
+
           break; // end new-subscriber
 
         // when a case is empty or doesn't have a break, they'll default to the next one below it
@@ -62,11 +68,13 @@ module.exports = {
         case 'new-comment':
           if (!notificationQueue.hasOwnProperty("posts")) {
             let tempPostArray = sortedNotifications['new-comment'].concat(sortedNotifications['new-reaction'])
-            //console.log(tempPostArray)
 
             notificationQueue["posts"] = _.groupBy(tempPostArray, function(obj) {
               return obj.postId;
             });
+
+            let postNotifs = await NotificationHelper.formalizePostInteractionNotifs(notificationQueue["posts"]);
+            notifsArray = notifsArray.concat(postNotifs);
 
             break; // end post-interactions
           }
@@ -80,16 +88,16 @@ module.exports = {
         // these will come as upvotes on the comment, or direct replies to it
         case 'new-reply':
         case 'new-upvote':
-          //console.log(`${key}: ${!notificationQueue.hasOwnProperty("comments")}`)
           if (!notificationQueue.hasOwnProperty("comments")) { // if we DON'T have comments already
             let tempCommentArray = sortedNotifications['new-reply'].concat(sortedNotifications['new-upvote'])
-            //console.log(tempCommentArray)
 
             notificationQueue["comments"] = _.groupBy(tempCommentArray, function(obj) {
               return obj.commentId;
             });
 
-            //notificationQueue["comments"] = commentInteractions;
+            let commentNotifs = await NotificationHelper.formalizeCommentInteractionNotifs(notificationQueue["comments"])
+
+            notifsArray = notifsArray.concat(commentNotifs)
 
             break;
           }
@@ -104,8 +112,8 @@ module.exports = {
       }
     }
 
-    console.log({notificationQueue});
-    res.send({notifications: notificationQueue});
+
+    res.send({notifications: notifsArray});
   },
 
   // NOT AN EXPRESS ROUTE, FOR USE IN OTHER CONTROLLERS TO MAKE NOTIFICATIONS
@@ -130,7 +138,7 @@ module.exports = {
         break;
 
       case 'new-reply': // new reply to a comment of yours
-        console.log('new-comment');
+        console.log('new-reply');
         break;
 
       case 'new-upvote': // new upvote on one of your comments

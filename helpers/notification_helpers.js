@@ -5,9 +5,101 @@ const Community = require('../models/CommunityModel');
 const Notification = require('../models/NotificationModel');
 const _ = require('lodash');
 
+function pluralize(baseWord, count, alt=false) {
+  if (alt === false) {
+    return ((count > 1) || (count === 0)) ? baseWord + "s" : baseWord;
+  }
+
+  else {
+    return ((count > 1) || (count === 0)) ? baseWord.slice(0, -1) + "ies" : baseWord;
+  }
+
+};
+
+function combineExentions(ext1, ext2) {
+  let output = "";
+
+  if ((ext1 !== "") && (ext2 !== "")) {
+    output = ext1 + " and " + ext2;
+  }
+
+  else if ((ext1 !== "") && (ext2 === "")) {
+    output = ext1
+  }
+
+  else if ((ext1 === "") && (ext2 !== "")) {
+    output = ext2;
+  }
+
+  return output;
+};
+
+function readablePostNotification(contentObj) {
+  let { communityName, commentCount, reactionCount } = contentObj;
+
+  let title = `Your post in #${communityName} is getting attention!`;
+  let commentExt = "";
+  let reactionExt = "";
+
+  if (commentCount > 0) {
+    commentExt = `${commentCount} new ` + pluralize("comment", commentCount);
+  }
+
+  if (reactionCount > 0) {
+    reactionExt = `${reactionCount} new ` + pluralize("reaction", reactionCount);
+  }
+
+  return {
+    title,
+    message: combineExentions(commentExt, reactionExt)
+  };
+};
+
+
+function readableCommentNotification(contentObj) {
+  console.log("contentObj");
+  console.log(contentObj);
+
+  let { communityName, replyCount, upvoteCount } = contentObj;
+
+  let title = `New interactions on your comment in #${communityName}!`
+  let replyExt = "";
+  let upvoteExt = "";
+
+  if (replyCount > 0) {
+    replyExt = `${replyCount} new ` + pluralize("reply", replyCount, true);
+  }
+
+  console.log("replyExt");
+  console.log(replyExt);
+
+  if (upvoteCount > 0) {
+    upvoteExt = `${upvoteCount} new ` + pluralize("upvote", upvoteCount);
+  }
+
+  console.log("upvoteExt");
+  console.log(upvoteExt);
+
+  return {
+    title,
+    message: combineExentions(replyExt, upvoteExt)
+  };
+};
+
+function readableSubscriptionNotification(contentObj) {
+  let { projectName, subCount } = contentObj;
+
+  let title = `@${projectName} has new subscriptions!`;
+  let message = `${subCount} new ` + pluralize("subscriber", subCount);
+
+  return { title, message };
+
+}
+
 module.exports = {
   async formalizeSubscriptionNotifs(subscriptionObj) {
-
+    //console.log("subscriptionObj")
+    //console.log(subscriptionObj)
     let subscriptionMessageArray = []; // holder for our subscription message objs
     let projectIdArray = []; // temporarily used for the query
 
@@ -21,16 +113,21 @@ module.exports = {
     // for each project found, match it with the corresponding notification
     // and build the notification message
     for (let i in projects) {
-      subscriptionMessageArray.push({
+      subscriptionMessageArray.push(readableSubscriptionNotification({
+        projectName: projects[i].name,
+        subCount: subscriptionObj[projects[i]._id].length
+      }));
+      /*subscriptionMessageArray.push({
         title: `@${projects[i].name} has new subscriptions!`,
         message: `You've gained ${subscriptionObj[projects[i]._id].length} new followers!`
-      });
+      });*/
     }
 
     return subscriptionMessageArray;
   },
 
   async formalizePostInteractionNotifs(postObject) {
+    //console.log(postObject);
     let postMessageArray = []; // holder for our post interaction message objs
     let countObj = {}; // temporary holder for the counts of reactions and comments
     let postIdsForQuery = []; // need to store postIds for query
@@ -101,14 +198,20 @@ module.exports = {
       }*/
 
       postIds.forEach((x) => {
+        postMessageArray.push(readablePostNotification({
+          communityName,
+          commentCount: countObj[x._id].commentCount,
+          reactionCount: countObj[x._id].reactionCount
+        }));
+        /*
         postMessageArray.push({
           title: `New comments and reactions on your post in #${communityName}!`,
           message: `${countObj[x._id].commentCount} new comments and ${countObj[x._id].reactionCount} new reactions`
-        });
+        });*/
       });
     }
 
-    return postMessageArray
+    return postMessageArray;
   },
 
   async formalizeCommentInteractionNotifs(commentObj) {
@@ -166,10 +269,16 @@ module.exports = {
 
         // build a notif for each commentId
         commentIds.forEach((x) => {
+          commentMessageArray.push(readableCommentNotification({
+            communityName,
+            replyCount: countObj[x._id].replyCount,
+            upvoteCount: countObj[x._id].upvoteCount,
+          }));
+          /*
           commentMessageArray.push({
             title: `New replies and upvotes on your comment on a post in #${communityName}!`,
             message: `${countObj[x._id].replyCount} new replies and ${countObj[x._id].upvoteCount} new upvotes`
-          });
+          });*/
         });
       }
     }
@@ -231,5 +340,10 @@ module.exports = {
       default: break;
     }
   },
-  
+
+  /*readablePostNotification(contentObj) {
+
+  },*/
+
+
 }

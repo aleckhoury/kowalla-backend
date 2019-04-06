@@ -72,11 +72,11 @@ module.exports = {
         case 'new-reaction':
         case 'new-comment':
           if (!postInteractionsComplete) {
-            let commentsDefined = sortedNotifications.hasOwnProperty('new-comment');;
-            let reactionsDefined = sortedNotifications.hasOwnProperty('new-reactions');;
+            postInteractionsComplete = true;
 
+            let commentsDefined = sortedNotifications.hasOwnProperty('new-comment');
+            let reactionsDefined = sortedNotifications.hasOwnProperty('new-reaction');
             let tempPostArray = [];
-            //let tempPostArray = sortedNotifications['new-comment'].concat(sortedNotifications['new-reaction'])
 
             if ((commentsDefined) && (reactionsDefined)) {
               tempPostArray = sortedNotifications['new-comment'].concat(sortedNotifications['new-reaction']);
@@ -93,8 +93,6 @@ module.exports = {
             let postInteractionsArray = _.groupBy(tempPostArray, function(obj) {
               return obj.postId;
             });
-            console.log("postInteractionsArray")
-            console.log(postInteractionsArray)
 
             let postNotifs = await NotificationHelper.formalizePostInteractionNotifs(postInteractionsArray);
             notifsArray = notifsArray.concat(postNotifs);
@@ -112,6 +110,7 @@ module.exports = {
         case 'new-reply':
         case 'new-upvote':
           if (!commentInteractionsComplete) { // if we DON'T have comments already
+            commentInteractionsComplete = true;
             let repliesDefined = sortedNotifications.hasOwnProperty('new-reply');
             let upvotesDefined = sortedNotifications.hasOwnProperty('new-upvote');
 

@@ -9,20 +9,25 @@ module.exports = {
     const { projectIdsArray } = req.body; // an array of string owned projects ids
     // CURRENT-STATE MVP SETUPS
 
-    /*const notifications = await Notification.find({
+    console.log(profileId);
+    const notifications = await Notification.find({
       // we want
       // (unviewed notifications) AND ((notifications for a user) OR (notifications from a user's project))
       $and: [
         { viewed: false },
         { $or: [{ ownerProfileId: profileId }, { ownerProjectId: { $in: projectIdsArray }}] }
       ]
-    });*/
+    });
+
+    console.log(notifications);
 
     // for subscriptions
 
     let notificationQueue = {};
     let notifsArray = [];
-
+    let commentInteractionsComplete = false;
+    let postInteractionsComplete = false;
+    /*
     let notifications = [ //0YYLqkssl
       // SUBSCRIBERS
       { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"}, { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"}, { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"},
@@ -36,7 +41,7 @@ module.exports = {
       // COMMENT INTERACTIONS
       { type: "new-reply", commentId: "M_YXkcNQQ"}, { type: "new-upvote", commentId: "M_YXkcNQQ"}, { type: "new-reply", commentId: "M_YXkcNQQ"},
       { type: "new-reply", commentId: "a8nCBdPSE"}, { type: "new-upvote", commentId: "a8nCBdPSE"},
-    ];
+    ];*/
 
     const sortedNotifications = _.groupBy(notifications, function(notif) {
       return notif.type;
@@ -50,9 +55,9 @@ module.exports = {
             return subObj.ownerProjectId;
           })
 
-          notificationQueue["subscriptions"] = subscriptionNotifications;
+          //notificationQueue["subscriptions"] = subscriptionNotifications;
 
-          let subNotifs = await NotificationHelper.formalizeSubscriptionNotifs(notificationQueue.subscriptions);
+          let subNotifs = await NotificationHelper.formalizeSubscriptionNotifs(subscriptionNotifications);
           notifsArray = notifsArray.concat(subNotifs);
 
           break; // end new-subscriber
@@ -66,14 +71,32 @@ module.exports = {
         // NOTE, this DOES NOT include comments that reply direct to comments on your post
         case 'new-reaction':
         case 'new-comment':
-          if (!notificationQueue.hasOwnProperty("posts")) {
-            let tempPostArray = sortedNotifications['new-comment'].concat(sortedNotifications['new-reaction'])
+          if (!postInteractionsComplete) {
+            let commentsDefined = sortedNotifications.hasOwnProperty('new-comment');;
+            let reactionsDefined = sortedNotifications.hasOwnProperty('new-reactions');;
 
-            notificationQueue["posts"] = _.groupBy(tempPostArray, function(obj) {
+            let tempPostArray = [];
+            //let tempPostArray = sortedNotifications['new-comment'].concat(sortedNotifications['new-reaction'])
+
+            if ((commentsDefined) && (reactionsDefined)) {
+              tempPostArray = sortedNotifications['new-comment'].concat(sortedNotifications['new-reaction']);
+            }
+
+            else if ((commentsDefined) && (reactionsDefined === false)) {
+              tempPostArray = sortedNotifications['new-comment'];
+            }
+
+            else if ((reactionsDefined) && (commentsDefined === false)) {
+              tempPostArray = sortedNotifications['new-reaction'];
+            }
+
+            let postInteractionsArray = _.groupBy(tempPostArray, function(obj) {
               return obj.postId;
             });
+            console.log("postInteractionsArray")
+            console.log(postInteractionsArray)
 
-            let postNotifs = await NotificationHelper.formalizePostInteractionNotifs(notificationQueue["posts"]);
+            let postNotifs = await NotificationHelper.formalizePostInteractionNotifs(postInteractionsArray);
             notifsArray = notifsArray.concat(postNotifs);
 
             break; // end post-interactions
@@ -88,14 +111,30 @@ module.exports = {
         // these will come as upvotes on the comment, or direct replies to it
         case 'new-reply':
         case 'new-upvote':
-          if (!notificationQueue.hasOwnProperty("comments")) { // if we DON'T have comments already
-            let tempCommentArray = sortedNotifications['new-reply'].concat(sortedNotifications['new-upvote'])
+          if (!commentInteractionsComplete) { // if we DON'T have comments already
+            let repliesDefined = sortedNotifications.hasOwnProperty('new-reply');
+            let upvotesDefined = sortedNotifications.hasOwnProperty('new-upvote');
 
-            notificationQueue["comments"] = _.groupBy(tempCommentArray, function(obj) {
+            let tempCommentArray = [];
+
+            if ((repliesDefined) && (upvotesDefined)) {
+              tempCommentArray = sortedNotifications['new-reply'].concat(sortedNotifications['new-upvote']);
+            }
+
+            else if ((repliesDefined) && (upvotesDefined === false)) {
+              tempCommentArray = sortedNotifications['new-reply'];
+            }
+
+            else if ((upvotesDefined) && (repliesDefined === false)) {
+              tempCommentArray = sortedNotifications['new-upvote'];
+            }
+
+            let commentInteractionsArray = _.groupBy(tempCommentArray, function(obj) {
+
               return obj.commentId;
             });
 
-            let commentNotifs = await NotificationHelper.formalizeCommentInteractionNotifs(notificationQueue["comments"])
+            let commentNotifs = await NotificationHelper.formalizeCommentInteractionNotifs(commentInteractionsArray)
 
             notifsArray = notifsArray.concat(commentNotifs)
 
@@ -124,6 +163,7 @@ module.exports = {
         WHO IS THIS FROM: sendingProfileId, sendingProjectId, sendingCommunityId,
         WHAT IS THIS ABOUT: postId, commentId
     */
+    /*
     switch (type) {
       case 'new-subscriber':
         console.log('new-subscriber');
@@ -146,6 +186,7 @@ module.exports = {
         break;
 
       default: break;
-    }
+    }*/
   }
+
 }

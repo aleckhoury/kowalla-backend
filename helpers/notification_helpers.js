@@ -2,6 +2,7 @@ const Project = require('../models/ProjectModel');
 const Post = require('../models/PostModel');
 const Comment = require('../models/CommentModel');
 const Community = require('../models/CommunityModel');
+const Notification = require('../models/NotificationModel');
 const _ = require('lodash');
 
 module.exports = {
@@ -43,7 +44,7 @@ module.exports = {
       // add to the CountObj if we have the event type
       countObj[postId] = {
         reactionCount: (tempObj['new-reaction'] !== undefined) ? tempObj['new-reaction'].length : 0,
-        commentCount: (tempObj["new-comment"] !== undefined) ? tempObj['new-reaction'].length : 0
+        commentCount: (tempObj["new-comment"] !== undefined) ? tempObj['new-comment'].length : 0
       };
     }
 
@@ -174,5 +175,61 @@ module.exports = {
     }
 
     return commentMessageArray;
-  }
+  },
+
+  async createNotification(type="", notifObject) {
+    /* Notif Obj
+      needs one of each row:
+        WHO IS THIS FOR: ownerProfileId, or ownerProjectId,
+        WHO IS THIS FROM: sendingProfileId, sendingProjectId, sendingCommunityId,
+        WHAT IS THIS ABOUT: postId, commentId
+    */
+    const {
+      ownerProfileId,
+      ownerProjectId,
+      sendingProfileId,
+      commentId,
+      postId,
+    } = notifObject
+
+    switch (type) {
+      case 'new-subscriber':
+        console.log('new-subscriber');
+        // should have ownerProjectId, sendingProfileId, NA
+        //let { ownerProjectId, sendingProfileId } = notifObject;
+        await Notification.create({ type, ownerProjectId, sendingProfileId });
+
+        break;
+
+      case 'new-reaction': // emoji reaction to a post
+        console.log('new-reaction');
+
+        // should have (ownerProjectId OR ownerProfileId), postId, sendingProfileId
+        await Notification.create({ type, ownerProjectId, ownerProfileId, sendingProfileId, postId });
+
+        break;
+
+      case 'new-comment': // new comment in direct reply to a post
+        console.log('new-comment');
+        await Notification.create({ type, ownerProjectId, ownerProfileId, sendingProfileId, postId });
+        //console.log(notif);
+        break;
+
+      case 'new-reply': // new reply to a comment of yours
+        console.log('new-reply');
+        let notif = await Notification.create({ type, ownerProfileId, sendingProfileId, commentId });
+        console.log(notif);
+        break;
+
+      case 'new-upvote': // new upvote on one of your comments
+        console.log('new-upvote');
+        //let { ownerProfileId, sendingProfileId, commentId } = notifObject;
+        await Notification.create({ type, ownerProfileId, sendingProfileId, commentId });
+
+        break;
+
+      default: break;
+    }
+  },
+  
 }

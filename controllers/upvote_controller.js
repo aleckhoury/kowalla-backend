@@ -2,6 +2,8 @@
 
 // Models
 const Upvote = require('../models/UpvoteModel');
+const Comment = require('../models/CommentModel');
+const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
   async getUpvoteList(req, res, next) {
@@ -45,6 +47,19 @@ module.exports = {
     // Send
     upvote.save();
     res.status(201).send(upvote);
+
+    // Build Notification
+
+    // first we need the owner of the comment
+    let comment = await Comment.findOne({_id: commentId}, 'profileId');
+    //console.log(comment);
+    let notifObject = {
+      ownerProfileId: comment.profileId,
+      sendingProfileId: profileId,
+      commentId,
+    }
+
+    await NotificationHelper.createNotification("new-upvote", notifObject);
   },
 
   async deleteUpvote(req, res, next) {

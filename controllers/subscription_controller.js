@@ -5,6 +5,8 @@ const Subscription = require('../models/SubscriptionModel');
 const Project = require('../models/ProjectModel');
 const Community = require('../models/CommunityModel');
 const Profile = require('../models/ProfileModel');
+const Notification = require('../models/NotificationModel');
+const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
   async getSubscriptionList(req, res, next) {
@@ -129,9 +131,14 @@ module.exports = {
       await subscription.save();
       res.status(201).send(subscription);
 
-      await Community.findOneAndUpdate({_id: communityId}, {$inc: { subscribers: 1}});
+      //await Community.findOneAndUpdate({_id: communityId}, {$inc: { subscribers: 1}});
+      // build the notification
+      let notifObject = {
+        sendingProfileId: profileId,
+        ownerCommunityId: communityId,
+      };
 
-
+      await NotificationHelper.createNotification("new-subscriber", notifObject);
     }
 
     else if (communityId === undefined) { // add Project Sub
@@ -142,8 +149,22 @@ module.exports = {
       await subscription.save();
       res.status(201).send(subscription);
 
+      /*
+      profileId: String,
+      projectId: String,
+      communityId: String,
+      */
+
+      // build the notification
+      let notifObject = {
+        sendingProfileId: profileId,
+        ownerProjectId: projectId,
+      };
+
+      await NotificationHelper.createNotification("new-subscriber", notifObject);
+
       // updates the amount of on the project
-      await Project.findOneAndUpdate({_id: projectId}, {$inc: {subscribers: 1}});
+      //await Project.findOneAndUpdate({_id: projectId}, {$inc: {subscribers: 1}});
     }
   },
 

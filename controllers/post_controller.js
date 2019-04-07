@@ -52,7 +52,7 @@ module.exports = {
       await Post.findOneAndUpdate({_id: postId}, updateParams);
       const post = await Post.findOne({_id: postId});
       // Send
-      await post.save();
+      //await post.save();
       res.status(200).send(post);
     },
   async getCommunityPostList(req, res, next) { // add sorting

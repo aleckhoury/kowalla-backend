@@ -34,8 +34,8 @@ function combineExentions(ext1, ext2) {
   return output;
 };
 
-function readablePostNotification(contentObj) {
-  let { communityName, commentCount, reactionCount, postId, notifIds } = contentObj;
+function readablePostNotification(contentObject) {
+  let { communityName, commentCount, reactionCount, postId, notifIds } = contentObject;
 
   let title = `Your post in #${communityName} is getting attention!`;
   let commentExt = "";
@@ -58,9 +58,9 @@ function readablePostNotification(contentObj) {
   };
 };
 
-function readableCommentNotification(contentObj) {
+function readableCommentNotification(contentObject) {
 
-  let { communityName, replyCount, upvoteCount, commentId, notifIds } = contentObj;
+  let { communityName, replyCount, upvoteCount, commentId, postId, notifIds } = contentObject;
 
   let title = `New interactions on your comment in #${communityName}!`
   let replyExt = "";
@@ -78,27 +78,28 @@ function readableCommentNotification(contentObj) {
     title,
     message: combineExentions(replyExt, upvoteExt),
     commentId,
+    postId,
     notifIds,
     communityName,
   };
 };
 
-function readableSubscriptionNotification(contentObj) {
-  let { projectName, subCount } = contentObj;
+function readableSubscriptionNotification(contentObject) {
+  let { projectName, subCount } = contentObject;
 
   let title = `@${projectName} has new subscriptions!`;
   let message = `${subCount} new ` + pluralize("subscriber", subCount);
 
-  return { title, message };
+  return { title, message, projectName };
 
 }
 
 module.exports = {
-  async formalizeSubscriptionNotifs(subscriptionObj) {
+  async formalizeSubscriptionNotifs(subscriptionObject) {
     let subscriptionMessageArray = []; // holder for our subscription message objs
     let projectIdArray = []; // temporarily used for the query
 
-    for (let projectId in subscriptionObj) {
+    for (let projectId in subscriptionObject) {
       projectIdArray.push(projectId);
     }
 
@@ -111,7 +112,7 @@ module.exports = {
       subscriptionMessageArray.push(
         readableSubscriptionNotification({
           projectName: projects[i].name,
-          subCount: subscriptionObj[projects[i]._id].length
+          subCount: subscriptionObject[projects[i]._id].length
         })
       );
     }
@@ -218,20 +219,19 @@ module.exports = {
     return postMessageArray;
   },
 
-  async formalizeCommentInteractionNotifs(commentObj) {
-    console.log(commentObj);
+  async formalizeCommentInteractionNotifs(commentObject) {
     let commentMessageArray = [];
     let countObj = {};
     let commentIdsForQuery = [];
 
-    for (let commentId in commentObj) {
+    for (let commentId in commentObject) {
       commentIdsForQuery.push(commentId);
       let notifIds = [];
 
-      let tempObj = _.groupBy(commentObj[commentId], (subObj) => subObj.type);
+      let tempObj = _.groupBy(commentObject[commentId], (subObj) => subObj.type);
 
-      for (let i in commentObj[commentId]) {
-        notifIds.push(commentObj[commentId][i]._id)
+      for (let i in commentObject[commentId]) {
+        notifIds.push(commentObject[commentId][i]._id)
       }
 
       countObj[commentId] = {
@@ -286,6 +286,7 @@ module.exports = {
             replyCount: countObj[x._id].replyCount,
             upvoteCount: countObj[x._id].upvoteCount,
             commentId: countObj[x._id].commentId,
+            postId: postId,
             notifIds: countObj[x._id].notifIds,
           }));
           /*
@@ -346,7 +347,7 @@ module.exports = {
     }
   },
 
-  /*readablePostNotification(contentObj) {
+  /*readablePostNotification(contentObject) {
 
   },*/
 

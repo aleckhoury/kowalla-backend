@@ -2,6 +2,8 @@
 
 // Models
 const Reaction = require('../models/ReactionModel');
+const Post = require('../models/PostModel');
+const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
   async getReactionList(req, res, next) {
@@ -56,6 +58,20 @@ module.exports = {
     // Send
     await reaction.save();
     res.status(201).send(reaction);
+
+    // Build notification
+
+    // get the owner of the post we're reacting to
+    let post = await Post.findOne({_id: postId}, 'profileId projectId');
+
+    let notifObject = {
+      sendingProfileId: profileId,
+      postId: postId,
+      ownerProfileId: (post.profileId === undefined) ? undefined : post.profileId,
+      ownerProjectId: (post.projectId === undefined) ? undefined : post.projectId,
+    }
+    console.log(notifObject)
+    await NotificationHelper.createNotification("new-reaction", notifObject);
   },
 
   async deleteReaction(req, res, next) {

@@ -2,6 +2,8 @@
 
 // Models
 const Comment = require('../models/CommentModel');
+const Post = require('../models/PostModel');
+const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
   async getPostCommentList(req, res, next) {
@@ -51,10 +53,37 @@ module.exports = {
 
     // Act
     const comment = await Comment.create({profileId, content, postId, commentId, views});
-
+    console.log(comment);
     // Send
     await comment.save();
     res.status(201).send(comment);
+
+    let post = await Post.findOne({_id: postId}, "profileId projectId");
+    console.log(post)
+
+    // build notification
+    if (commentId === undefined) {
+      // if no commentId, we're a high level post, which is a "new-comment" notif
+
+      let notifObject = {
+        sendingProfileId: profileId,
+        postId: postId,
+        ownerProfileId: (post.profileId === undefined) ? undefined : post.profileId,
+        ownerProjectId: (post.projectId === undefined) ? undefined : post.projectId,
+      };
+
+      await NotificationHelper.createNotification("new-comment", notifObject)
+    }
+
+    else { // otherwise, it's a reply to a comment, which is a "new-reply" notif
+      let notifObject = {
+        sendingProfileId: profileId,
+        commentId: commentId,
+        ownerProfileId: (post.profileId === undefined) ? undefined : post.profileId,
+      };
+
+      await NotificationHelper.createNotification("new-reply", notifObject);
+    }
   },
 
   async deletePostComment(req, res, next) {

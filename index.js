@@ -15,7 +15,6 @@ const upvoteRoutes = require('./routes/upvote_routes');
 const searchRoutes = require('./routes/search_routes');
 const jwt = require('./helpers/jwt');
 const cors = require('cors');
-const compression = require('compression');
 
 const app = express();
 
@@ -56,8 +55,6 @@ mongoose.connection
 // setup app
 app.use(bodyParser.json());
 app.use(cors());
-
-app.use(compression());
 
 // expand routes
 testRoutes(app);

@@ -16,7 +16,7 @@ function pluralize(baseWord, count, alt=false) {
 
 };
 
-function combineExentions(ext1, ext2) {
+function combineExtensions(ext1, ext2) {
   let output = "";
 
   if ((ext1 !== "") && (ext2 !== "")) {
@@ -51,7 +51,7 @@ function readablePostNotification(contentObject) {
 
   return {
     title,
-    message: combineExentions(commentExt, reactionExt),
+    message: combineExtensions(commentExt, reactionExt),
     postId,
     notifIds,
     communityName
@@ -76,7 +76,7 @@ function readableCommentNotification(contentObject) {
 
   return {
     title,
-    message: combineExentions(replyExt, upvoteExt),
+    message: combineExtensions(replyExt, upvoteExt),
     commentId,
     postId,
     notifIds,

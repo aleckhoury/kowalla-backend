@@ -14,16 +14,18 @@ const commentRoutes = require('./routes/comment_routes');
 const upvoteRoutes = require('./routes/upvote_routes');
 const searchRoutes = require('./routes/search_routes');
 const jwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler');
 const cors = require('cors');
 
 const app = express();
 
 const host = process.env.HOST || '127.0.0.1'
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8080;
 
 app.set('port', port);
 
 app.use(function(req, res, next) {
+  console.log(req);
   let allowedOrigins = ['http://127.0.0.1:8020', 'http://localhost:8020', 'http://127.0.0.1:9000', 'http://localhost:9000'];
   let origin = req.headers.origin;
   if(allowedOrigins.indexOf(origin) > -1){
@@ -50,7 +52,8 @@ mongoose.connection
 
 // Require authentication to access API routes
 // Disabled for ease of development until we have auth fully setup
-// app.use(jwt());
+app.use(jwt());
+app.use(errorHandler);
 
 // setup app
 app.use(bodyParser.json());

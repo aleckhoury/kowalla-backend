@@ -29,7 +29,7 @@ module.exports = (app) => {
   | List: GET /projects/-/posts : sent [n/a]; response [object]
   */
 
-  app.get('/api/v1/projects/:projectId/posts', PostController.getProjectPostList);
+  app.get('/api/v1/project/posts/:projectId/:sort/:skip', PostController.getProjectPostList);
 
   // ##########################################################################
   // Update Routes

@@ -25,7 +25,6 @@ const port = process.env.PORT || 8080;
 app.set('port', port);
 
 app.use(function(req, res, next) {
-  console.log(req);
   let allowedOrigins = ['http://127.0.0.1:8020', 'http://localhost:8020', 'http://127.0.0.1:9000', 'http://localhost:9000'];
   let origin = req.headers.origin;
   if(allowedOrigins.indexOf(origin) > -1){

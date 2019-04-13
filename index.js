@@ -52,7 +52,7 @@ mongoose.connection
 
 // Require authentication to access API routes
 // Disabled for ease of development until we have auth fully setup
-app.use(jwt());
+// app.use(jwt());
 app.use(errorHandler);
 
 // setup app

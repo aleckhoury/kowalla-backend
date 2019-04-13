@@ -39,6 +39,7 @@ module.exports = {
             profileId: sub.profileId,
             projectId: sub.projectId,
             name: projectObj.name,
+            isProject: true,
             pictureURL: projectObj.profilePicture,
             numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
           };
@@ -63,6 +64,7 @@ module.exports = {
             profileId: sub.profileId,
             communityId: sub.communityId,
             name: communityObj.name,
+            isProject: false,
             pictureURL: communityObj.profilePicture,
             numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
           };

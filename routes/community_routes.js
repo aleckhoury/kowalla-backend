@@ -32,8 +32,7 @@ module.exports = (app) => {
   | Update: PUT /communities/-/posts/-/ : sent [object]; response [object]
   | Delete: DELETE /communities/-/posts/-/ : sent [n/a]; response [?]
   */
-
-  app.get('/api/v1/communities/:communityId/posts', PostController.getCommunityPostList);
+  app.get('/api/v1/community/posts/:communityId/:sort/:skip', PostController.getCommunityPostList);
   app.get('/api/v1/communities/:communityId/posts/:postId', PostController.getPost);
   app.post('/api/v1/communities/:communityId/posts', PostController.createPost);
   //app.put('/api/v1/communities/:communityId/posts/:postId', PostController.updatePost);

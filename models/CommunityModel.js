@@ -4,6 +4,7 @@ const shortid = require('shortid');
 
 const CommunitySchema = new Schema({ // TODO: add username
   _id: { type: String, default: shortid.generate },
+  isProject: { type: String, default: false },
   name: String,
   description: String,
   profilePicture: String, // TODO: this doesn't exist in our current designs

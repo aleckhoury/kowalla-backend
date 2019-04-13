@@ -14,13 +14,14 @@ const commentRoutes = require('./routes/comment_routes');
 const upvoteRoutes = require('./routes/upvote_routes');
 const searchRoutes = require('./routes/search_routes');
 const jwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler');
 const cors = require('cors');
 const compression = require('compression');
 
 const app = express();
 
 const host = process.env.HOST || '127.0.0.1'
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8080;
 
 app.set('port', port);
 
@@ -52,6 +53,7 @@ mongoose.connection
 // Require authentication to access API routes
 // Disabled for ease of development until we have auth fully setup
 // app.use(jwt());
+app.use(errorHandler);
 
 // setup app
 app.use(bodyParser.json());

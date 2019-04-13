@@ -89,7 +89,7 @@ module.exports = {
       // Act
       const reputation = await getReputationByProfileId("", username);
       console.log(`rep: ${reputation}`)
-      await Profile.findOneAndUpdate({ username }, { reputation })
+      await Profile.findOneAndUpdate({ username }, { reputation });
 
       const user = await Profile.findOne({ username })
         .populate('postCount')
@@ -99,6 +99,19 @@ module.exports = {
       // Send
       res.status(200).send(user)
     } catch(err) {
+      console.log(err);
+    }
+  },
+  async getProfileOnLoad(req, res, next) {
+    // Init
+    const { username } = req.params;
+    try {
+      // Act
+      const user = await Profile.findOne({ username });
+      // Send
+      res.status(200).send(user)
+    } catch(err) {
+      console.log(err);
     }
   },
   async getProfile(req, res, next) {
@@ -114,9 +127,6 @@ module.exports = {
       .populate('commentCount')
       .exec();
 
-    console.log(profile);
-
-    //profile.reputation =
     // Send
     res.status(200).send(profile)
   },

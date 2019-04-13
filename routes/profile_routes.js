@@ -86,6 +86,7 @@ module.exports = (app) => {
   app.get('/api/v1/profiles/:profileId/posts', PostController.getProfilePostList);
 
   app.post('/api/v1/profiles/:profileId/notifications', NotificationController.getNotificationsList);
+  app.delete('/api/v1/profiles/:profileId/notifications', NotificationController.deleteArrayOfNotifs);
 
 
   //app.get('/api/v1/profiles/:profileId/rep', ProfileController.getProfileReputation);

@@ -10,36 +10,17 @@ module.exports = {
     // CURRENT-STATE MVP SETUPS
 
     const notifications = await Notification.find({
-      // we want
-      // (unviewed notifications) AND ((notifications for a user) OR (notifications from a user's project))
-      $and: [
-        { viewed: false },
-        { $or: [{ ownerProfileId: profileId }, { ownerProjectId: { $in: projectIdsArray }}] }
+      $or: [
+        { $and: [{ ownerProfileId: profileId }, { viewed: false }]},
+        { $and: [{ownerProjectId: { $in: projectIdsArray }}, { viewed: false }]}
       ]
     });
-
-
     // for subscriptions
 
     let notificationQueue = {};
     let notifsArray = [];
     let commentInteractionsComplete = false;
     let postInteractionsComplete = false;
-    /*
-    let notifications = [ //0YYLqkssl
-      // SUBSCRIBERS
-      { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"}, { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"}, { type: "new-subscriber", ownerProjectId: "5ujOxFHEK"},
-      { type: "new-subscriber", ownerProjectId: "U-_5qwjXV"}, { type: "new-subscriber", ownerProjectId: "U-_5qwjXV"},
-      { type: "new-subscriber", ownerProjectId: "azDnNnf_5"},
-
-      // POST INTERACTIONS
-      { type: "new-reaction", postId: "0YYLqkssl"}, { type: "new-comment", postId: "0YYLqkssl"}, { type: "new-reaction", postId: "0YYLqkssl"},
-      { type: "new-reaction", postId: "3LgzJA2yG"}, { type: "new-comment", postId: "3LgzJA2yG"},
-
-      // COMMENT INTERACTIONS
-      { type: "new-reply", commentId: "M_YXkcNQQ"}, { type: "new-upvote", commentId: "M_YXkcNQQ"}, { type: "new-reply", commentId: "M_YXkcNQQ"},
-      { type: "new-reply", commentId: "a8nCBdPSE"}, { type: "new-upvote", commentId: "a8nCBdPSE"},
-    ];*/
 
     const sortedNotifications = _.groupBy(notifications, function(notif) {
       return notif.type;
@@ -151,7 +132,19 @@ module.exports = {
       }
     }
 
-
+    console.log(notifsArray);
     res.send({notifications: notifsArray});
   },
+
+  async deleteArrayOfNotifs(req, res, next) {
+    //console.log(req.body)
+    let { notifIds } = req.body;
+    //console.log(notifIds)
+    await Notification.deleteMany({ _id: { $in: notifIds }});
+
+    const notifications = await Notification.find({_id: { $in: notifIds }});
+
+    // Send
+    res.status(204).send(notifications);
+  }
 }

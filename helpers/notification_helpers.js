@@ -5,6 +5,14 @@ const Community = require('../models/CommunityModel');
 const Notification = require('../models/NotificationModel');
 const _ = require('lodash');
 
+function checkForTomfoolery(ownerProfileId, sendingProfileId) {
+  if (ownerProfileId === sendingProfileId) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function pluralize(baseWord, count, alt=false) {
   if (alt === false) {
     return ((count > 1) || (count === 0)) ? baseWord + "s" : baseWord;
@@ -85,12 +93,12 @@ function readableCommentNotification(contentObject) {
 };
 
 function readableSubscriptionNotification(contentObject) {
-  let { projectName, subCount } = contentObject;
+  let { projectName, subCount, notifIds } = contentObject;
 
   let title = `@${projectName} has new subscriptions!`;
   let message = `${subCount} new ` + pluralize("subscriber", subCount);
 
-  return { title, message, projectName };
+  return { title, message, projectName, notifIds };
 
 }
 
@@ -98,9 +106,18 @@ module.exports = {
   async formalizeSubscriptionNotifs(subscriptionObject) {
     let subscriptionMessageArray = []; // holder for our subscription message objs
     let projectIdArray = []; // temporarily used for the query
+    let notifIdObject = {};
+
 
     for (let projectId in subscriptionObject) {
       projectIdArray.push(projectId);
+
+      let tempNotifArray = []
+      for (let i in subscriptionObject[projectId]) {
+        tempNotifArray.push(subscriptionObject[projectId][i]._id);
+      }
+
+      notifIdObject[projectId] = tempNotifArray;
     }
 
     // search for matching projects
@@ -111,11 +128,14 @@ module.exports = {
     for (let i in projects) {
       subscriptionMessageArray.push(
         readableSubscriptionNotification({
+          //notifId: subscriptionObject[]
           projectName: projects[i].name,
-          subCount: subscriptionObject[projects[i]._id].length
+          subCount: subscriptionObject[projects[i]._id].length,
+          notifIds: notifIdObject[projects[i]._id]
         })
       );
     }
+
 
     return subscriptionMessageArray;
   },
@@ -319,27 +339,64 @@ module.exports = {
     switch (type) {
       case 'new-subscriber':
         // should have ownerProjectId, sendingProfileId, NA
-        await Notification.create({ type, ownerProjectId, sendingProfileId });
+
+        // if owner and sender are the same
+        if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
+          break;
+        }
+
+        else {
+          await Notification.create({ type, ownerProjectId, sendingProfileId });
+        }
 
         break;
 
       case 'new-reaction': // emoji reaction to a post
         // should have (ownerProjectId OR ownerProfileId), postId, sendingProfileId
-        await Notification.create({ type, ownerProjectId, ownerProfileId, sendingProfileId, postId });
+        if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
+          break;
+        }
+
+        else {
+          await Notification.create({ type, ownerProjectId, ownerProfileId, sendingProfileId, postId });
+        }
+
 
         break;
 
       case 'new-comment': // new comment in direct reply to a post
-        await Notification.create({ type, ownerProjectId, ownerProfileId, sendingProfileId, postId });
+
+        if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
+          break;
+        }
+
+        else {
+          await Notification.create({ type, ownerProjectId, ownerProfileId, sendingProfileId, postId });
+        }
+
         break;
 
       case 'new-reply': // new reply to a comment of yours
-        let notif = await Notification.create({ type, ownerProfileId, sendingProfileId, commentId });
+
+        if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
+          break;
+        }
+
+        else {
+          await Notification.create({ type, ownerProfileId, sendingProfileId, commentId });
+        }
+
         break;
 
       case 'new-upvote': // new upvote on one of your comments
         //let { ownerProfileId, sendingProfileId, commentId } = notifObject;
-        await Notification.create({ type, ownerProfileId, sendingProfileId, commentId });
+        if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
+          break;
+        }
+
+        else {
+          await Notification.create({ type, ownerProfileId, sendingProfileId, commentId });
+        }
 
         break;
 

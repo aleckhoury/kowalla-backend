@@ -16,6 +16,7 @@ const searchRoutes = require('./routes/search_routes');
 const jwt = require('./helpers/jwt');
 const errorHandler = require('./helpers/error-handler');
 const cors = require('cors');
+const compression = require('compression');
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use(errorHandler);
 // setup app
 app.use(bodyParser.json());
 app.use(cors());
+app.use(compression());
 
 // expand routes
 testRoutes(app);

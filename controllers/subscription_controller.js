@@ -31,7 +31,7 @@ module.exports = {
 
       if (sub['projectId'] !== undefined) {
 
-        let projectObj = await Project.findOne({ _id: sub.projectId });
+        let projectObj = await Project.findOne({ _id: sub.projectId }).populate('subscribers');
 
 
         if (projectObj !== null) {
@@ -41,7 +41,7 @@ module.exports = {
             name: projectObj.name,
             isProject: true,
             pictureURL: projectObj.profilePicture,
-            numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
+            numSubs: projectObj.subscribers,
           };
 
           // does profileId match admin of project?
@@ -57,7 +57,7 @@ module.exports = {
 
       if (sub['communityId'] !== undefined) {
 
-        let communityObj = await Community.findOne({ _id: sub.communityId });
+        let communityObj = await Community.findOne({ _id: sub.communityId }).populate('subscribers');
 
         if (communityObj !== null) {
           let subObj = {
@@ -66,7 +66,7 @@ module.exports = {
             name: communityObj.name,
             isProject: false,
             pictureURL: communityObj.profilePicture,
-            numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
+            numSubs: communityObj.subscribers,
           };
 
           //console.log(communityObj);

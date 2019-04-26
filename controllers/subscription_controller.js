@@ -40,7 +40,7 @@ module.exports = {
             projectId: sub.projectId,
             name: projectObj.name,
             isProject: true,
-            pictureURL: projectObj.profilePicture,
+            pictureUrl: projectObj.profilePicture,
             numSubs: projectObj.subscribers,
           };
 
@@ -65,7 +65,7 @@ module.exports = {
             communityId: sub.communityId,
             name: communityObj.name,
             isProject: false,
-            pictureURL: communityObj.profilePicture,
+            pictureUrl: communityObj.profilePicture,
             numSubs: communityObj.subscribers,
           };
 

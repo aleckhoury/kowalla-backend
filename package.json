@@ -35,5 +35,6 @@
     "nodemon": "^1.18.9",
     "sharp": "^0.21.3",
     "shortid": "^2.2.14"
-  }
+  },
+  "devDependencies": {}
 }

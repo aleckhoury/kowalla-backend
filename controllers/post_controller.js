@@ -19,16 +19,21 @@ module.exports = {
     let { profileId, sort, skip } = req.params;
     skip = Number(skip);
 
-    // Act
-    let posts;
-    if (sort === 'Newest') {
-      posts = await Post.find({ profileId }).limit(5).sort('-createdAt').skip(skip);
-    } else if (sort === 'Oldest') {
-      posts = await Post.find({ profileId }).limit(5).sort('createdAt').skip(skip);
+    try {
+      // Act
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({ profileId }).limit(5).sort('-createdAt').skip(skip);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({ profileId }).limit(5).sort('createdAt').skip(skip);
+      }
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
     }
-
-    // Send
-    res.status(200).send(posts);
   },
 
   async getProjectPostList(req, res, next) { // add sorting
@@ -36,16 +41,21 @@ module.exports = {
     let { projectId, sort, skip } = req.params;
     skip = Number(skip);
 
-    // Act
-    let posts;
-    if (sort === 'Newest') {
-      posts = await Post.find({ projectId }).limit(5).sort('-createdAt').skip(skip);
-    } else if (sort === 'Oldest') {
-      posts = await Post.find({ projectId }).limit(5).sort('createdAt').skip(skip);
+    try {
+      // Act
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({ projectId }).limit(5).sort('-createdAt').skip(skip);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({ projectId }).limit(5).sort('createdAt').skip(skip);
+      }
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
     }
-
-    // Send
-    res.status(200).send(posts);
   },
   async updatePost(req, res, next) {
       // Init
@@ -67,31 +77,44 @@ module.exports = {
     let { communityId, sort, skip } = req.params;
     skip = Number(skip);
 
-    // Act
-    let posts;
-    if (sort === 'Newest') {
-      posts = await Post.find({communityId}).limit(5).sort('-createdAt').skip(skip);
-    } else if (sort === 'Oldest') {
-      posts = await Post.find({communityId}).limit(5).sort('createdAt').skip(skip);
+    try {
+      // Act
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({communityId}).limit(5).sort('-createdAt').skip(skip);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({communityId}).limit(5).sort('createdAt').skip(skip);
+      }
+      // Send
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
     }
 
-    // Send
-    res.status(200).send(posts);
   },
 
   async getPosts(req, res, next) {
     // Init
     let { sort, skip } = req.params;
     skip = Number(skip);
-    // Act
-    let posts;
-    if (sort === 'Newest') {
-      posts = await Post.find({}).limit(5).sort('-createdAt').skip(skip);
-    } else if (sort === 'Oldest') {
-      posts = await Post.find({}).limit(5).sort('createdAt').skip(skip);
+    try {
+      // Act
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({}).limit(5).sort('-createdAt').skip(skip);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({}).limit(5).sort('createdAt').skip(skip);
+      }
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
     }
-    // Send
-    res.status(200).send(posts);
   },
 
   async getPost(req, res, next) {

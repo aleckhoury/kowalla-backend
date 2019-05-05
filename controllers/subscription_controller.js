@@ -12,7 +12,6 @@ module.exports = {
   async getSubscriptionList(req, res, next) {
     // Init
     const { profileId } = req.params;
-    console.log(profileId);
     //const profileObj = await Profile.findOne({_id: profileId});
 
     //onsole.log(profileObj);

@@ -9,6 +9,7 @@ const Subscription = require('./SubscriptionModel');
 const ProjectSchema = new Schema({
   _id: { type: String, default: shortid.generate },
   isProject: { type: String, default: true },
+  projectName: String,
   name: String,
   description: String,
   profilePicture: String, // TODO: change to actual image storage

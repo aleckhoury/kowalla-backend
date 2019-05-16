@@ -81,6 +81,7 @@ module.exports = {
     // Init
     const {
       name,
+      projectName,
       description,
       profilePicture,
       headerPicture,
@@ -91,6 +92,7 @@ module.exports = {
     const adminIds = await getProfileIdsFromUsernames(admins);
     const project = await Project.create({
       name,
+      projectName,
       description,
       profilePicture,
       headerPicture,

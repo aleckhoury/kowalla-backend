@@ -1,7 +1,6 @@
+const { PORT, NODE_ENV, MONGO_URI, SESS_NAME, SESS_SECRET, SESS_LIFETIME } = require("./config.json");
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const testRoutes = require('./routes/test_routes');
 const profileRoutes = require('./routes/profile_routes');
 const projectRoutes = require('./routes/project_routes');
 const communityRoutes = require('./routes/community_routes');
@@ -13,6 +12,7 @@ const configRoutes = require('./routes/config_routes');
 const commentRoutes = require('./routes/comment_routes');
 const upvoteRoutes = require('./routes/upvote_routes');
 const searchRoutes = require('./routes/search_routes');
+const oAuthRoutes = require('./routes/oauth_routes');
 const jwt = require('./helpers/jwt');
 const errorHandler = require('./helpers/error-handler');
 const cors = require('cors');
@@ -20,8 +20,11 @@ const compression = require('compression');
 
 const app = express();
 
-const host = process.env.HOST || '127.0.0.1'
+const host = process.env.HOST || '127.0.0.1';
 const port = process.env.PORT || 8080;
+
+// Don't allow users to see we're using Express
+app.disable('x-powered-by');
 
 app.set('port', port);
 
@@ -39,8 +42,7 @@ app.use(function(req, res, next) {
 });
 
 // setup mongodb connection
-const mLabPath = "mongodb://" + process.env.MONGO_USERNAME.toString() + ":" + process.env.MONGO_PASSWORD.toString() + "@" + process.env.MLAB_SERVER.toString() + ".mlab.com:" + process.env.MLAB_PORT_AND_DB.toString();
-mongoose.connect(mLabPath, { useNewUrlParser: true });
+mongoose.connect(MONGO_URI, { useNewUrlParser: true });
 mongoose.connection
   .once('open', () => {
     console.log('mongoose connection is good to go')
@@ -56,12 +58,12 @@ mongoose.connection
 app.use(errorHandler);
 
 // setup app
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 app.use(compression());
 
 // expand routes
-testRoutes(app);
 profileRoutes(app);
 projectRoutes(app);
 communityRoutes(app);
@@ -73,6 +75,7 @@ configRoutes(app);
 commentRoutes(app);
 upvoteRoutes(app);
 searchRoutes(app);
+oAuthRoutes(app);
 
 app.listen(port, () => {
   console.log("API SERVER");

@@ -12,10 +12,10 @@ module.exports = (app) => {
   app.post('/api/v1/profiles', ProfileController.createProfile);
   app.put('/api/v1/profiles/:profileId', ProfileController.updateProfile);
   app.delete('/api/v1/profiles/:profileId', ProfileController.deleteProfile);
-  app.get('/api/v1/profiles/u/:username', ProfileController.getProfileByUsername);
+  app.get('/api/v1/profiles/user/:username', ProfileController.getProfileByUsername);
 
   // Subscription Routes
-  app.get('/api/v1/profiles/u/:username/subs', SubscriptionController.getSubscriptionList);
+  app.get('/api/v1/profiles/user/:username/subs', SubscriptionController.getSubscriptionList);
   app.get('/api/v1/profiles/:profileId/subs', SubscriptionController.getSubscriptionList);
   app.get('/api/v1/profiles/:profileId/subs/:type/:typeId', SubscriptionController.getSubscription);
   app.post('/api/v1/profiles/:profileId/subs', SubscriptionController.createSubscription);

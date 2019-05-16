@@ -21,7 +21,7 @@ module.exports = (app) => {
   app.put('/api/v1/projects/:id', ProjectController.updateProject);
   app.delete('/api/v1/projects/:id', ProjectController.deleteProject);
 
-  app.get('/api/v1/projects/p/:projectName', ProjectController.getProjectByName);
+  app.get('/api/v1/projects/project/:projectName', ProjectController.getProjectByName);
   // ##########################################################################
   // Post Routes
   // ##########################################################################

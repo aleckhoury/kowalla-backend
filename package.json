@@ -34,7 +34,8 @@
     "multer": "^1.4.1",
     "nodemon": "^1.18.9",
     "sharp": "^0.21.3",
-    "shortid": "^2.2.14"
+    "shortid": "^2.2.14",
+    "superagent": "^5.0.5"
   },
   "devDependencies": {}
 }

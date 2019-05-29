@@ -5,12 +5,13 @@ const Subscription = require('../models/SubscriptionModel');
 const Project = require('../models/ProjectModel');
 const Community = require('../models/CommunityModel');
 const Profile = require('../models/ProfileModel');
+const Notification = require('../models/NotificationModel');
+const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
   async getSubscriptionList(req, res, next) {
     // Init
     const { profileId } = req.params;
-    console.log(profileId);
     //const profileObj = await Profile.findOne({_id: profileId});
 
     //onsole.log(profileObj);
@@ -29,7 +30,7 @@ module.exports = {
 
       if (sub['projectId'] !== undefined) {
 
-        let projectObj = await Project.findOne({ _id: sub.projectId });
+        let projectObj = await Project.findOne({ _id: sub.projectId }).populate('subscribers');
 
 
         if (projectObj !== null) {
@@ -37,12 +38,13 @@ module.exports = {
             profileId: sub.profileId,
             projectId: sub.projectId,
             name: projectObj.name,
-            pictureURL: projectObj.profilePicture,
-            numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
+            isProject: true,
+            pictureUrl: projectObj.profilePicture,
+            numSubs: projectObj.subscribers,
           };
 
           // does profileId match admin of project?
-          console.log(projectObj);
+          //console.log(projectObj);
           if (projectObj.admins.includes(profileId)) {
             owned.push(subObj);
           } else {
@@ -54,18 +56,19 @@ module.exports = {
 
       if (sub['communityId'] !== undefined) {
 
-        let communityObj = await Community.findOne({ _id: sub.communityId });
+        let communityObj = await Community.findOne({ _id: sub.communityId }).populate('subscribers');
 
         if (communityObj !== null) {
           let subObj = {
             profileId: sub.profileId,
             communityId: sub.communityId,
             name: communityObj.name,
-            pictureURL: communityObj.profilePicture,
-            numSubs: Math.floor(Math.random() * Math.floor(1000)) // TODO: replace once we have that figured out
+            isProject: false,
+            pictureUrl: communityObj.profilePicture,
+            numSubs: communityObj.subscribers,
           };
 
-          console.log(communityObj);
+          //console.log(communityObj);
           if (communityObj.admins.includes(profileId)) {
             owned.push(subObj);
           } else {
@@ -79,22 +82,9 @@ module.exports = {
       owned,
       subscriptions,
     };
-    /*
-    const profileSubscriptions = {
-      subscriptions: [
-        {name: "TestProject1", pictureURL: 'aaa', projectId: "1111", numSubs: 1000},
-        {name: "TestCommunity1", pictureURL: 'bbb', communityId: "2222", numSubs: 10},
-      ],
-      owned: [
-        {name: "TestProject2", pictureURL: 'aaa', projectId: "1111", numSubs: 1000},
-        {name: "TestCommunity2", pictureURL: 'bbb', communityId: "2222", numSubs: 10},
-      ]
-    };
-    */
 
     // Send
     res.status(200).send({profileSubscriptions});
-    //res.status(200).send({subscriptions});
   },
 
   async getSubscription(req, res, next) {
@@ -141,6 +131,15 @@ module.exports = {
       // Send
       await subscription.save();
       res.status(201).send(subscription);
+
+      //await Community.findOneAndUpdate({_id: communityId}, {$inc: { subscribers: 1}});
+      // build the notification
+      let notifObject = {
+        sendingProfileId: profileId,
+        ownerCommunityId: communityId,
+      };
+
+      await NotificationHelper.createNotification("new-subscriber", notifObject);
     }
 
     else if (communityId === undefined) { // add Project Sub
@@ -150,6 +149,23 @@ module.exports = {
       // Send
       await subscription.save();
       res.status(201).send(subscription);
+
+      /*
+      profileId: String,
+      projectId: String,
+      communityId: String,
+      */
+
+      // build the notification
+      let notifObject = {
+        sendingProfileId: profileId,
+        ownerProjectId: projectId,
+      };
+
+      await NotificationHelper.createNotification("new-subscriber", notifObject);
+
+      // updates the amount of on the project
+      //await Project.findOneAndUpdate({_id: projectId}, {$inc: {subscribers: 1}});
     }
   },
 

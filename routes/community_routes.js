@@ -21,7 +21,7 @@ module.exports = (app) => {
   app.delete('/api/v1/communities/:communityId', CommunityController.deleteCommunity);
 
 
-  app.get('/api/v1/communities/c/:communityName', CommunityController.getCommunityByName);
+  app.get('/api/v1/communities/community/:communityName', CommunityController.getCommunityByName);
   // ##########################################################################
   // Post Routes
   // ##########################################################################
@@ -32,8 +32,7 @@ module.exports = (app) => {
   | Update: PUT /communities/-/posts/-/ : sent [object]; response [object]
   | Delete: DELETE /communities/-/posts/-/ : sent [n/a]; response [?]
   */
-
-  app.get('/api/v1/communities/:communityId/posts', PostController.getCommunityPostList);
+  app.get('/api/v1/community/posts/:communityId/:sort/:skip', PostController.getCommunityPostList);
   app.get('/api/v1/communities/:communityId/posts/:postId', PostController.getPost);
   app.post('/api/v1/communities/:communityId/posts', PostController.createPost);
   //app.put('/api/v1/communities/:communityId/posts/:postId', PostController.updatePost);

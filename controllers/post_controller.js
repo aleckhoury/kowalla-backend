@@ -2,6 +2,7 @@
 
 // Models
 const Post = require('../models/PostModel');
+const Subscriptions = require('../models/SubscriptionModel');
 
 module.exports = {
   async getActivePostByUser(req, res, next) {
@@ -14,35 +15,48 @@ module.exports = {
     res.status(200).send(posts);
   },
 
-  async getBlogPosts(req, res, next) {
-    // Act
-    // Fetch hardcoded list of our blog posts so we don't need to add extra properties to posts
-    const posts = await Post.find({_id: ['bOVESikDy', 'uxWP0nd_C']});
-
-    // Send
-    res.status(200).send({posts});
-  },
-
   async getProfilePostList(req, res, next) { // add sorting
     // Init
-    const { profileId } = req.params;
+    let { profileId, sort, skip } = req.params;
+    skip = Number(skip);
 
-    // Act
-    const posts = await Post.find({profileId});
-
-    // Send
-    res.status(200).send({posts});
+    try {
+      // Act
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({ profileId }).limit(5).sort('-createdAt').skip(skip);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({ profileId }).limit(5).sort('createdAt').skip(skip);
+      }
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
+    }
   },
 
   async getProjectPostList(req, res, next) { // add sorting
     // Init
-    const { projectId } = req.params;
+    let { projectId, sort, skip } = req.params;
+    skip = Number(skip);
 
-    // Act
-    const posts = await Post.find({projectId});
-
-    // Send
-    res.status(200).send({posts});
+    try {
+      // Act
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({ projectId }).limit(5).sort('-createdAt').skip(skip);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({ projectId }).limit(5).sort('createdAt').skip(skip);
+      }
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
+    }
   },
   async updatePost(req, res, next) {
       // Init
@@ -52,27 +66,92 @@ module.exports = {
       await Post.findOneAndUpdate({_id: postId}, updateParams);
       const post = await Post.findOne({_id: postId});
       // Send
+
+    if (post !== null && post !== undefined) {
       await post.save();
+    }
+
       res.status(200).send(post);
     },
   async getCommunityPostList(req, res, next) { // add sorting
     // Init
-    const { communityId } = req.params;
+    let { communityId, sort, skip } = req.params;
+    skip = Number(skip);
 
-    // Act
-    const posts = await Post.find({communityId});
+    try {
+      // Act
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({communityId}).limit(5).sort('-createdAt').skip(skip);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({communityId}).limit(5).sort('createdAt').skip(skip);
+      }
+      // Send
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
+    }
 
-    // Send
-    res.status(200).send({posts});
   },
-
+  async getSubscribedPosts(req, res, next) {
+    // Init
+    let { profileId, sort, skip } = req.params;
+    skip = Number(skip);
+    try {
+      const subs = await Subscriptions.find({ profileId }).select('projectId communityId');
+      const idList = subs.map(x => x.projectId ? x.projectId : x.communityId);
+      // // Act
+      console.log(idList);
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({
+          // Find documents matching any of these values
+          $or: [
+            {'projectId': {$in: idList}},
+            {'communityId': {$in: idList}}
+          ],
+        }).limit(5).sort('-createdAt').skip(skip);
+        console.log(posts);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({
+          // Find documents matching any of these values
+          $or: [
+            {projectId: {$in: idList}},
+            {communityId: {$in: idList}}
+          ],
+        }).limit(5).sort('createdAt').skip(skip);
+        console.log(posts);
+      }
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
+    }
+  },
   async getPosts(req, res, next) {
     // Init
-
-    // Act
-    const posts = await Post.find({});
-    // Send
-    res.status(200).send(posts);
+    let { sort, skip } = req.params;
+    skip = Number(skip);
+    try {
+      // Act
+      let posts;
+      if (sort === 'Newest') {
+        posts = await Post.find({}).limit(5).sort('-createdAt').skip(skip);
+      } else if (sort === 'Oldest') {
+        posts = await Post.find({}).limit(5).sort('createdAt').skip(skip);
+      }
+      if (posts.length) {
+        return res.status(200).send(posts);
+      }
+      return res.status(204).send('No posts yet!');
+    } catch(err) {
+      return res.status(500).send(err, 'An error occurred while fetching posts');
+    }
   },
 
   async getPost(req, res, next) {

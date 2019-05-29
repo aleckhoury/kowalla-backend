@@ -21,7 +21,7 @@ module.exports = (app) => {
   app.put('/api/v1/projects/:id', ProjectController.updateProject);
   app.delete('/api/v1/projects/:id', ProjectController.deleteProject);
 
-  app.get('/api/v1/projects/p/:projectName', ProjectController.getProjectByName);
+  app.get('/api/v1/projects/project/:projectName', ProjectController.getProjectByName);
   // ##########################################################################
   // Post Routes
   // ##########################################################################
@@ -29,7 +29,7 @@ module.exports = (app) => {
   | List: GET /projects/-/posts : sent [n/a]; response [object]
   */
 
-  app.get('/api/v1/projects/:projectId/posts', PostController.getProjectPostList);
+  app.get('/api/v1/project/posts/:projectId/:sort/:skip', PostController.getProjectPostList);
 
   // ##########################################################################
   // Update Routes

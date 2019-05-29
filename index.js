@@ -29,7 +29,7 @@ app.disable('x-powered-by');
 app.set('port', port);
 
 app.use(function(req, res, next) {
-  let allowedOrigins = ['http://127.0.0.1:8020', 'http://localhost:8020', 'http://127.0.0.1:9000', 'http://localhost:9000'];
+  let allowedOrigins = ['http://127.0.0.1:8020', 'http://localhost:8020', 'http://127.0.0.1:9000', 'http://localhost:9000', 'https://kowalla-backend-tob.herokuapp.com'];
   let origin = req.headers.origin;
   if(allowedOrigins.indexOf(origin) > -1){
     res.setHeader('Access-Control-Allow-Origin', origin);

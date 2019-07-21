@@ -21,7 +21,6 @@ const Post = require('./models/PostModel');
 
 const app = express();
 
-let server = require('http').createServer(app);
 const host = process.env.HOST || '127.0.0.1';
 const port = process.env.PORT || 8080;
 

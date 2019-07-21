@@ -6,8 +6,8 @@ module.exports = (app) => {
 app.get('/api/v1/feed/posts/:sort/:skip', PostController.getPosts);
 app.get('/api/v1/feed/posts/:profileId/:sort/:skip', PostController.getSubscribedPosts);
 app.get('/api/v1/posts/:id', PostController.getPost);
-app.get('/api/v1/posts/active/:profileId', PostController.getActivePostByUser);
+app.get('/api/v1/posts/active/:username', PostController.getActivePostByUser);
 
-// app.post('/api/v1/posts', PostController.createPost);
+app.post('/api/v1/posts', PostController.createPost);
 // app.put('/api/v1/posts/:postId', PostController.updatePost);
 };

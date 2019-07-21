@@ -10,8 +10,11 @@ const PostSchema = new Schema({
   content: String,
   views: Number,
   duration: String,
+  start: Date,
+  end: Date,
   expiration: Date,
   isActive: Boolean,
+  username: String,
   userCompleted: Boolean
 },
 {

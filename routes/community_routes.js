@@ -34,7 +34,7 @@ module.exports = (app) => {
   */
   app.get('/api/v1/community/posts/:communityId/:sort/:skip', PostController.getCommunityPostList);
   app.get('/api/v1/communities/:communityId/posts/:postId', PostController.getPost);
-  app.post('/api/v1/communities/:communityId/posts', PostController.createPost);
+  // app.post('/api/v1/communities/:communityId/posts', PostController.createPost);
   //app.put('/api/v1/communities/:communityId/posts/:postId', PostController.updatePost);
   app.delete('/api/v1/communities/:communityId/posts/:postId', PostController.deletePost);
 

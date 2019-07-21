@@ -7,9 +7,9 @@ const Subscriptions = require('../models/SubscriptionModel');
 module.exports = {
   async getActivePostByUser(req, res, next) {
     // Init
-    const { profileId } = req.params;
+    const { username } = req.params;
     // Act
-    const posts = await Post.findOne({profileId, isActive: true});
+    const posts = await Post.findOne({username, isActive: true});
 
     // Send
     res.status(200).send(posts);
@@ -104,7 +104,6 @@ module.exports = {
       const subs = await Subscriptions.find({ profileId }).select('projectId communityId');
       const idList = subs.map(x => x.projectId ? x.projectId : x.communityId);
       // // Act
-      console.log(idList);
       let posts;
       if (sort === 'Newest') {
         posts = await Post.find({
@@ -114,7 +113,6 @@ module.exports = {
             {'communityId': {$in: idList}}
           ],
         }).limit(5).sort('-createdAt').skip(skip);
-        console.log(posts);
       } else if (sort === 'Oldest') {
         posts = await Post.find({
           // Find documents matching any of these values
@@ -123,7 +121,6 @@ module.exports = {
             {communityId: {$in: idList}}
           ],
         }).limit(5).sort('createdAt').skip(skip);
-        console.log(posts);
       }
       if (posts.length) {
         return res.status(200).send(posts);
@@ -169,14 +166,15 @@ module.exports = {
     const {
       profileId,
       projectId,
+      communityId,
       content,
       duration,
-      expiration,
+      start,
+      end,
       isActive,
-      userCompleted,
+      username,
     } = req.body;
 
-    const { communityId } = req.params;
     const views = 0;
 
     // Act
@@ -187,9 +185,10 @@ module.exports = {
       content,
       views,
       duration,
-      expiration,
+      start,
+      end,
       isActive,
-      userCompleted});
+      username });
 
     // Send
     await post.save();

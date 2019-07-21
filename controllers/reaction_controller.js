@@ -69,8 +69,7 @@ module.exports = {
       postId: postId,
       ownerProfileId: (post.profileId === undefined) ? undefined : post.profileId,
       ownerProjectId: (post.projectId === undefined) ? undefined : post.projectId,
-    }
-    console.log(notifObject)
+    };
     await NotificationHelper.createNotification("new-reaction", notifObject);
   },
 

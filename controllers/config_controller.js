@@ -9,7 +9,6 @@ module.exports = {
         const {
             name,
         } = req.body;
-        console.log(req.body);
         const { accessKeyId, secretAccessKey } = req.body.options;
 
         // Act

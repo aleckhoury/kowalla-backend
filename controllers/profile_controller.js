@@ -28,7 +28,6 @@ async function getReputationByProfileId(profileId, username="") {
 
   if (username !== "") {
     const profileObj = await Profile.findOne({username}, '_id');
-    console.log(profileObj);
     profileId = profileObj._id;
   }
 
@@ -89,7 +88,6 @@ module.exports = {
     try {
       // Act
       const reputation = await getReputationByProfileId("", username);
-      console.log(`rep: ${reputation}`)
       await Profile.findOneAndUpdate({ username }, { reputation });
 
       const user = await Profile.findOne({ username })

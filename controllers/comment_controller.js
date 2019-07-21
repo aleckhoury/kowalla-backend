@@ -59,7 +59,6 @@ module.exports = {
     res.status(201).send(comment);
 
     let post = await Post.findOne({_id: postId}, "profileId projectId");
-    console.log(post)
 
     // build notification
     if (commentId === undefined) {

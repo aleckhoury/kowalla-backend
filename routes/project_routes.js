@@ -20,6 +20,7 @@ module.exports = (app) => {
   app.post('/api/v1/projects', ProjectController.createProject);
   app.put('/api/v1/projects/:id', ProjectController.updateProject);
   app.delete('/api/v1/projects/:id', ProjectController.deleteProject);
+  app.post('/api/v1/communities/:projectId/posts', PostController.createPost);
 
   app.get('/api/v1/projects/project/:projectName', ProjectController.getProjectByName);
   // ##########################################################################

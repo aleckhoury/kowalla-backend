@@ -132,7 +132,6 @@ module.exports = {
       }
     }
 
-    console.log(notifsArray);
     res.send({notifications: notifsArray});
   },
 

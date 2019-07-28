@@ -57,6 +57,7 @@ module.exports = {
                         username: result.body.login,
                         description: '',
                         profilePicture: result.body.avatar_url,
+                        githubToken: data.access_token,
                     });
                     user.save();
                 } else {

@@ -13,6 +13,7 @@ const commentRoutes = require('./routes/comment_routes');
 const upvoteRoutes = require('./routes/upvote_routes');
 const searchRoutes = require('./routes/search_routes');
 const oAuthRoutes = require('./routes/oauth_routes');
+const integrationRoutes = require('./routes/integration_routes');
 const jwt = require('./helpers/jwt');
 const errorHandler = require('./helpers/error-handler');
 const cors = require('cors');
@@ -77,6 +78,7 @@ commentRoutes(app);
 upvoteRoutes(app);
 searchRoutes(app);
 oAuthRoutes(app);
+integrationRoutes(app);
 
 const listener = app.listen(port, () => {
   console.log("API SERVER");

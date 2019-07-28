@@ -11,6 +11,8 @@ const ProfileSchema = new Schema({
   profilePicture: String, // TODO: update to have image upload
   uiColor: String, // string #XXXXXX
   reputation: { type: Number, default: 0 }, // need to implement update
+  integrations: { type: Array, default: [] },
+  githubToken: { type: String, default: '' },
 },
 {
   toObject: { getters: true },

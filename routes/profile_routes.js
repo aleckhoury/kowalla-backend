@@ -4,6 +4,7 @@ const UpvoteController = require('../controllers/upvote_controller');
 const ReactionController = require('../controllers/reaction_controller');
 const PostController = require('../controllers/post_controller');
 const NotificationController = require('../controllers/notification_controller');
+const IntegrationController = require('../controllers/integration_controller');
 
 module.exports = (app) => {
   // Profile Routes
@@ -37,9 +38,11 @@ module.exports = (app) => {
   app.get('/api/v1/profile/posts/:profileId/:sort/:skip', PostController.getProfilePostList);
 
   // Notification Routes
-  app.post('/api/v1/profiles/:profileId/notifications', NotificationController.getNotificationsList);
+  app.put('/api/v1/profile/posts/:postId', PostController.updatePost);
   app.delete('/api/v1/profiles/:profileId/notifications', NotificationController.deleteArrayOfNotifs);
 
+  // Integration Routes
+  app.put('/api/v1/profile/:profileId/integrations', ProfileController.toggleIntegration);
 
   //app.get('/api/v1/profiles/:profileId/rep', ProfileController.getProfileReputation);
 

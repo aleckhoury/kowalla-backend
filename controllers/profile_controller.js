@@ -145,6 +145,24 @@ module.exports = {
     res.status(200).send(profile);
   },
 
+  async toggleIntegration(req, res, next) {
+    // Init
+    const { profileId } = req.params;
+    const { integration } = req.body;
+    // Act
+    const profile = await Profile.findOne({_id: profileId});
+    const index = profile.integrations.indexOf(integration);
+
+    if (index !== -1) {
+      profile.integrations.splice(index, 1);
+    } else {
+      profile.integrations.push(integration);
+    }
+    await profile.save();
+    // Send
+    return res.status(200).send(profile);
+  },
+
   async deleteProfile(req, res, next) {
     // Init
     const { profileId } = req.params;

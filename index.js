@@ -110,7 +110,7 @@ io.on('connection', (client) => {
       }
     });
     if (isActive) {
-      io.sockets.emit('updateUsers', userList);
+      io.sockets.emit('updateUsers', [...userList]);
       setTimeout(async () => {
         io.sockets.emit('checkForUser', user.username);
         setTimeout(async () => {

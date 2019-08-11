@@ -9,5 +9,7 @@ app.get('/api/v1/posts/:id', PostController.getPost);
 app.get('/api/v1/posts/active/:username', PostController.getActivePostByUser);
 
 app.post('/api/v1/posts', PostController.createPost);
+app.delete('/api/v1/posts/:postId', PostController.deletePost);
+
 // app.put('/api/v1/posts/:postId', PostController.updatePost);
 };

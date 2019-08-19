@@ -6,10 +6,9 @@ const ProfileSchema = new Schema({
   _id: { type: String, default: shortid.generate },
   firstName: String,
   lastName: String,
-  username: String,
+  username: { type: String, unique: true, required: true },
   description: String,
-  profilePicture: String, // TODO: update to have image upload
-  uiColor: String, // string #XXXXXX
+  profilePicture: String,
   reputation: { type: Number, default: 0 }, // need to implement update
   integrations: { type: Array, default: [] },
   githubToken: { type: String, default: '' },

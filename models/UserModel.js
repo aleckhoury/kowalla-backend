@@ -1,16 +1,19 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const shortid = require('shortid');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const UserSchema = new Schema({
   _id: { type: String, default: shortid.generate },
-  username: String,
-  email: String,
-  password: String,
+  username: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
+  email: { type: String, unique: true, uniqueCaseInsensitive: true },
+  password: { type: String, required: true },
 },
 {
   timestamps: true
 });
+
+UserSchema.plugin(uniqueValidator, { message: 'This username or email is already taken.' });
 
 const User = mongoose.model('user', UserSchema);
 

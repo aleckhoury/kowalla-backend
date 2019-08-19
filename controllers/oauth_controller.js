@@ -48,6 +48,7 @@ module.exports = {
                 if (!user) {
                     const newUser = await User.create({
                         username: result.body.login,
+                        email: result.body.email,
                         password: '',
                     });
                     newUser.save();
@@ -187,7 +188,6 @@ module.exports = {
                             username: result.body.screen_name,
                             description: result.body.description,
                             profilePicture: result.body.profile_image_url_https,
-                            uiColor: result.body.profile_link_color,
                         });
                         user.save();
                     } else {

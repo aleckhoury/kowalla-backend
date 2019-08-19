@@ -11,7 +11,7 @@ ProfileProps = {
   name: String,
   username: String,
   description: String,
-  profilePicture: String, // TODO: update to have image upload
+  profilePicture: String,
   uiColor: String, // string #XXXXXX
 }
 */

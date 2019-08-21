@@ -1,6 +1,7 @@
 // Dependencies
 const User = require('../models/UserModel');
 const Profile = require('../models/ProfileModel');
+const Subscription = require('../models/SubscriptionModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../config.json');
@@ -18,14 +19,16 @@ module.exports = {
                         password: hash,
                     });
                     await newUser.save();
-                    let user = await Profile.create({
+                    let profile = await Profile.create({
                         firstName: req.body.username,
                         lastName: '',
                         username: req.body.username,
                         description: '',
                         profilePicture: '',
                     });
-                    await user.save();
+                    const subscription = await Subscription.create({profileId: profile._id, communityId: 'fugmXEmwr'});
+                    await profile.save();
+                    await subscription.save();
                     const token = await jwt.sign({ sub: newUser._id }, config.secret);
                     const { _doc: { _id, username, password }, ...userWithoutPassword } = await newUser;
                     await Email.sendWelcomeEmail(req.body.username, req.body.email);

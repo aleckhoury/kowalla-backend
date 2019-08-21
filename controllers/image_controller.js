@@ -24,6 +24,7 @@ async uploadProfilePic(req, res, next) {
             Bucket: `kowalla-dev/${req.body.picType}/profile-pics`,
             Key: `${now}-${req.file.originalname}`,
             Body: buffer,
+            ContentType: 'image/jpeg',
             ACL: 'public-read'
         }).promise();
 
@@ -45,7 +46,7 @@ async uploadBannerPic(req, res, next) {
                 width: 1000,
                 height: 300,
                 fit: 'cover',
-                background: 'white',
+                background: 'transparent',
             })
             .toBuffer();
 
@@ -53,6 +54,7 @@ async uploadBannerPic(req, res, next) {
             Bucket: `kowalla-dev/${req.body.picType}/banner-pics`,
             Key: `${now}-${req.file.originalname}`,
             Body: buffer,
+            ContentType: 'image/jpeg',
             ACL: 'public-read'
         }).promise();
 
@@ -81,6 +83,7 @@ async uploadPostImage(req, res, next) {
             Bucket: `kowalla-dev/${req.body.type}/post-pics`,
             Key: `${now}-${req.file.originalname}`,
             Body: buffer,
+            ContentType: 'image/jpeg',
             ACL: 'public-read'
         }).promise();
 

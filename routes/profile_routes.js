@@ -39,6 +39,7 @@ module.exports = (app) => {
 
   // Notification Routes
   app.put('/api/v1/profile/posts/:postId', PostController.updatePost);
+  app.post('/api/v1/profiles/:profileId/notifications', NotificationController.getNotificationsList);
   app.delete('/api/v1/profiles/:profileId/notifications', NotificationController.deleteArrayOfNotifs);
 
   // Integration Routes

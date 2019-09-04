@@ -101,10 +101,38 @@ io.on('connection', (client) => {
       io.sockets.emit('updateUsers', [...userList]);
     }
   });
+  client.on('manual-disconnect', async () => {
+    let user;
+    console.log(userList);
+    await userList.forEach((x) => {
+      if(x.socketId === client.id){
+        user = x;
+        userList.delete(x);
+      }
+    });
+    console.log(user);
+      io.sockets.emit('updateUsers', [...userList]);
+          console.log(userList);
+          if (!userList.size || ![...userList].some((x) => x.username === user.username)) {
+            const post = await Post.findOne({ username: user.username, isActive: true });
+            console.log(post);
+            const end = new Date();
+            // update post to no longer be active, note the end date and time, and calculate duration in milliseconds minus the 20 second delay
+            await Post.findOneAndUpdate({_id: post._id }, {
+              isActive: false,
+              end,
+              duration: (end.getTime() - post.start.getTime()),
+            });
+            io.sockets.emit('confirmManualDisconnect');
+          }
+  });
   client.on('disconnect', async () => {
     let isActive = false;
     let user;
+    console.log('test');
     await userList.forEach((x) => {
+      console.log(x);
+      console.log(client.id);
       if(x.socketId === client.id){
         user = x;
         isActive = true;
@@ -118,6 +146,7 @@ io.on('connection', (client) => {
         setTimeout(async () => {
           if (![...userList].some((x) => x.username === user.username)) {
             const post = await Post.findOne({ username: user.username, isActive: true });
+            console.log(post);
             const end = new Date();
             // update post to no longer be active, note the end date and time, and calculate duration in milliseconds minus the 20 second delay
             await Post.findOneAndUpdate({_id: post._id }, {

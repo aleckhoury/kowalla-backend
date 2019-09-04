@@ -17,6 +17,13 @@ module.exports = {
     res.status(200).send({upvotes});
   },
 
+  async getUpvoteCount(req, res, next) {
+
+    const { commentId } = req.params;
+    const upvoteCount = await Upvote.count({ commentId });
+    res.status(200).send({ count: upvoteCount });
+  },
+
   async getUpvote(req, res, next) { // gets a single upvote for a comment
     // Init
     const {

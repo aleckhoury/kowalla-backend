@@ -13,7 +13,7 @@ function jwt() {
             /^\/api\/v1\/users\/.*/,
             /^\/api\/v1\/search\/.*/,
             /^\/api\/v1\/profiles\/.*/,
-            /^\/api\/v1\/communities\/.*/,
+            /^\/api\/v1\/spaces\/.*/,
             /^\/api\/v1\/reactions\/.*/,
             /^\/api\/v1\/comments\/.*/
         ]

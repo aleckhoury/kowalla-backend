@@ -1,7 +1,7 @@
 // Dependencies
 
 // Models
-const Community = require('../models/CommunityModel');
+const Space = require('../models/SpaceModel');
 const Profile = require('../models/ProfileModel');
 
 /*
@@ -33,47 +33,47 @@ async function getProfileIdsFromUsernames(usernames) {
 }
 
 module.exports = {
-  async getCommunityList(req, res, next) {
+  async getSpaceList(req, res, next) {
       // Init
-      communities = await Community.find({})
+      spaces = await Space.find({})
         .populate('subscribers')
         .populate('postCount')
         .exec();
 
       // Send
-      res.send({communities});
+      res.send({spaces});
   },
 
-  async getCommunityByName(req, res, next) {
+  async getSpaceByName(req, res, next) {
 
     // Init
-    const { communityName } = req.params;
+    const { spaceName } = req.params;
 
     // Act
-    const community = await Community.findOne({name: communityName})
+    const space = await Space.findOne({name: spaceName})
       .populate('subscribers')
       .populate('postCount')
       .exec();
 
     // Send
-    res.status(200).send(community);
+    res.status(200).send(space);
   },
 
-  async getCommunity(req, res, next) {
+  async getSpace(req, res, next) {
       // Init
-      const { communityId } = req.params;
+      const { spaceId } = req.params;
 
       // Act
-      const community = await Community.findOne({_id: communityId})
+      const space = await Space.findOne({_id: spaceId})
         .populate('subscribers')
         .populate('postCount')
         .exec();
 
       // Send
-      res.status(200).send(community);
+      res.status(200).send(space);
   },
 
-  async createCommunity(req, res, next) {
+  async createSpace(req, res, next) {
       // Init
       const {
         name,
@@ -85,7 +85,7 @@ module.exports = {
 
       // Act
       const adminIds = await getProfileIdsFromUsernames(admins);
-      const community = await Community.create({
+      const space = await Space.create({
         name,
         description,
         headerPicture,
@@ -93,43 +93,43 @@ module.exports = {
         admins: adminIds,
       });
 
-      await community.save();
+      await space.save();
 
       // Send
-      const populatedCommunity = await Community.findOne({ _id: community._id })
+      const populatedSpace = await Space.findOne({ _id: space._id })
         .populate('subscribers')
         .populate('postCount')
         .exec();
 
-      res.status(201).send(populatedCommunity);
+      res.status(201).send(populatedSpace);
 
   },
 
-  async updateCommunity(req, res, next) {
+  async updateSpace(req, res, next) {
       // Init
-      const { communityId } = req.params;
+      const { spaceId } = req.params;
       const updateParams = req.body;
 
       // Act
-      await Community.findOneAndUpdate({_id: communityId}, updateParams);
-      const community = await Community.findOne({_id: communityId})
+      await Space.findOneAndUpdate({_id: spaceId}, updateParams);
+      const space = await Space.findOne({_id: spaceId})
         .populate('subscribers')
         .populate('postCount')
         .exec();
 
       // Send
-      res.status(200).send(community);
+      res.status(200).send(space);
   },
 
-  async deleteCommunity(req, res, next) {
+  async deleteSpace(req, res, next) {
       // Init
-      const { communityId } = req.params;
+      const { spaceId } = req.params;
 
       // Act
-      await Community.findOneAndDelete({_id: communityId});
-      const community = await Community.findOne({_id: communityId});
+      await Space.findOneAndDelete({_id: spaceId});
+      const space = await Space.findOne({_id: spaceId});
 
       // Send
-      res.status(204).send(community);
+      res.status(204).send(space);
   },
 }

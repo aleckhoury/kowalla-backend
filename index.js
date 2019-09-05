@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const profileRoutes = require('./routes/profile_routes');
 const projectRoutes = require('./routes/project_routes');
-const communityRoutes = require('./routes/community_routes');
+const spaceRoutes = require('./routes/space_routes');
 const userRoutes = require('./routes/user_routes');
 const postRoutes = require('./routes/post_routes');
 const imageRoutes = require('./routes/image_routes');
@@ -69,7 +69,7 @@ app.use(compression());
 // expand routes
 profileRoutes(app);
 projectRoutes(app);
-communityRoutes(app);
+spaceRoutes(app);
 userRoutes(app);
 postRoutes(app);
 reactionRoutes(app);
@@ -103,19 +103,15 @@ io.on('connection', (client) => {
   });
   client.on('manual-disconnect', async () => {
     let user;
-    console.log(userList);
     await userList.forEach((x) => {
       if(x.socketId === client.id){
         user = x;
         userList.delete(x);
       }
     });
-    console.log(user);
       io.sockets.emit('updateUsers', [...userList]);
-          console.log(userList);
           if (!userList.size || ![...userList].some((x) => x.username === user.username)) {
             const post = await Post.findOne({ username: user.username, isActive: true });
-            console.log(post);
             const end = new Date();
             // update post to no longer be active, note the end date and time, and calculate duration in milliseconds minus the 20 second delay
             await Post.findOneAndUpdate({_id: post._id }, {
@@ -129,10 +125,7 @@ io.on('connection', (client) => {
   client.on('disconnect', async () => {
     let isActive = false;
     let user;
-    console.log('test');
     await userList.forEach((x) => {
-      console.log(x);
-      console.log(client.id);
       if(x.socketId === client.id){
         user = x;
         isActive = true;
@@ -146,7 +139,6 @@ io.on('connection', (client) => {
         setTimeout(async () => {
           if (![...userList].some((x) => x.username === user.username)) {
             const post = await Post.findOne({ username: user.username, isActive: true });
-            console.log(post);
             const end = new Date();
             // update post to no longer be active, note the end date and time, and calculate duration in milliseconds minus the 20 second delay
             await Post.findOneAndUpdate({_id: post._id }, {

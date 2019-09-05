@@ -5,7 +5,7 @@ const _ = require('lodash');
 module.exports = {
   async getNotificationsList(req, res, next) {
     const { profileId } = req.params;
-    // send owned projects and communities
+    // send owned projects and spaces
     const { projectIdsArray } = req.body; // an array of string owned projects ids
     // CURRENT-STATE MVP SETUPS
 
@@ -73,9 +73,6 @@ module.exports = {
               return obj.postId;
             });
 
-            //console.log("\n\npostInteractionsObject")
-            //console.log(postInteractionsObject)
-
             let postNotifs = await NotificationHelper.formalizePostInteractionNotifs(postInteractionsObject);
             notifsArray = notifsArray.concat(postNotifs);
 
@@ -136,9 +133,7 @@ module.exports = {
   },
 
   async deleteArrayOfNotifs(req, res, next) {
-    //console.log(req.body)
     let { notifIds } = req.body;
-    //console.log(notifIds)
     await Notification.deleteMany({ _id: { $in: notifIds }});
 
     const notifications = await Notification.find({_id: { $in: notifIds }});

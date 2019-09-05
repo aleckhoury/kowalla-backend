@@ -1,7 +1,7 @@
 const Project = require('../models/ProjectModel');
 const Post = require('../models/PostModel');
 const Comment = require('../models/CommentModel');
-const Community = require('../models/CommunityModel');
+const Space = require('../models/SpaceModel');
 const Notification = require('../models/NotificationModel');
 const _ = require('lodash');
 
@@ -43,9 +43,9 @@ function combineExtensions(ext1, ext2) {
 };
 
 function readablePostNotification(contentObject) {
-  let { communityName, commentCount, reactionCount, postId, notifIds } = contentObject;
+  let { spaceName, commentCount, reactionCount, postId, notifIds } = contentObject;
 
-  let title = `Your post in #${communityName} is getting attention!`;
+  let title = `Your post in #${spaceName} is getting attention!`;
   let commentExt = "";
   let reactionExt = "";
 
@@ -62,15 +62,15 @@ function readablePostNotification(contentObject) {
     message: combineExtensions(commentExt, reactionExt),
     postId,
     notifIds,
-    communityName
+    spaceName
   };
 };
 
 function readableCommentNotification(contentObject) {
 
-  let { communityName, replyCount, upvoteCount, commentId, postId, notifIds } = contentObject;
+  let { spaceName, replyCount, upvoteCount, commentId, postId, notifIds } = contentObject;
 
-  let title = `New interactions on your comment in #${communityName}!`
+  let title = `New interactions on your comment in #${spaceName}!`
   let replyExt = "";
   let upvoteExt = "";
 
@@ -88,7 +88,7 @@ function readableCommentNotification(contentObject) {
     commentId,
     postId,
     notifIds,
-    communityName,
+    spaceName,
   };
 };
 
@@ -167,31 +167,31 @@ module.exports = {
     }
 
     // find all posts matching the ids we have notifications for
-    let postArray = await Post.find({ _id: { $in: postIdsForQuery }}, 'communityId');
+    let postArray = await Post.find({ _id: { $in: postIdsForQuery }}, 'spaceId');
 
-    // sort the postArray by the CommunityIds, so we can make notifications cumalitve
+    // sort the postArray by the SpaceIds, so we can make notifications cumalitve
     // returns an object
-    let postArraySortedByCommunityId = _.groupBy(postArray, function(subObj) {
-      return subObj.communityId
+    let postArraySortedBySpaceId = _.groupBy(postArray, function(subObj) {
+      return subObj.spaceId
     });
 
-    let communityIdsForQuery = [];
-    for (let communityId in postArraySortedByCommunityId) {
-      communityIdsForQuery.push(communityId);
+    let spaceIdsForQuery = [];
+    for (let spaceId in postArraySortedBySpaceId) {
+      spaceIdsForQuery.push(spaceId);
     }
 
-    // has communityNames and communityIds
-    let communities = await Community.find({_id: { $in: communityIdsForQuery }}, 'name');
+    // has spaceNames and spaceIds
+    let spaces = await Space.find({_id: { $in: spaceIdsForQuery }}, 'name');
 
-    // since our communities can contain multiple posts that we want to aggregate
-    // we'll iterate through by communities, then build a notification for each
-    // community
-    for (let i in communities) {
-      let communityName = communities[i].name;
-      let communityId = communities[i].id;
+    // since our spaces can contain multiple posts that we want to aggregate
+    // we'll iterate through by spaces, then build a notification for each
+    // space
+    for (let i in spaces) {
+      let spaceName = spaces[i].name;
+      let spaceId = spaces[i].id;
 
-      // get all ids associated with that community
-      let postIds = postArraySortedByCommunityId[communityId];
+      // get all ids associated with that space
+      let postIds = postArraySortedBySpaceId[spaceId];
 
       /*
       // if we have more than one, aggregate
@@ -205,15 +205,15 @@ module.exports = {
         })
 
         postMessageArray.push({
-          title: `New comments and reactions to your posts in #${communityName}!`,
+          title: `New comments and reactions to your posts in #${spaceName}!`,
           message: `${commentCount} new comments and ${reactionCount} new reactions`
         });
       }
 
-      // if we only have one post in that community
+      // if we only have one post in that space
       else {
         postMessageArray.push({
-          title: `New comments and reactions in #${communityName}!`,
+          title: `New comments and reactions in #${spaceName}!`,
           message: `${countObj[postIds[0]._id].commentCount} new comments and ${countObj[postIds[0]._id].reactionCount} new reactions`
         });
       }*/
@@ -221,7 +221,7 @@ module.exports = {
       postIds.forEach((x) => {
         postMessageArray.push(
           readablePostNotification({
-            communityName,
+            spaceName,
             commentCount: countObj[x._id].commentCount,
             reactionCount: countObj[x._id].reactionCount,
             postId: countObj[x._id].postId,
@@ -230,7 +230,7 @@ module.exports = {
         );
         /*
         postMessageArray.push({
-          title: `New comments and reactions on your post in #${communityName}!`,
+          title: `New comments and reactions on your post in #${spaceName}!`,
           message: `${countObj[x._id].commentCount} new comments and ${countObj[x._id].reactionCount} new reactions`
         });*/
       });
@@ -264,34 +264,34 @@ module.exports = {
 
     let commentArray = await Comment.find({ _id: {$in: commentIdsForQuery}});
 
-    //let postArray = await Post.find({ _id: { $in: postIdsForQuery }}, 'communityId');
+    //let postArray = await Post.find({ _id: { $in: postIdsForQuery }}, 'spaceId');
     let commentArraySortedByPostId = _.groupBy(commentArray, function(subObj) {
       return subObj.postId
     });
 
     let postIdsForQuery = commentArray.map((x) => x.postId);
-    let postArray = await Post.find({ _id: { $in: postIdsForQuery }}, 'communityId');
+    let postArray = await Post.find({ _id: { $in: postIdsForQuery }}, 'spaceId');
 
-    let postArraySortedByCommunityId = _.groupBy(postArray, function(subObj) {
-      return subObj.communityId;
+    let postArraySortedBySpaceId = _.groupBy(postArray, function(subObj) {
+      return subObj.spaceId;
     });
 
 
-    // build array from sorted communityIds we found from querying the posts
-    let communityIdsForQuery = [];
-    for (let communityId in postArraySortedByCommunityId) {
-      communityIdsForQuery.push(communityId);
+    // build array from sorted spaceIds we found from querying the posts
+    let spaceIdsForQuery = [];
+    for (let spaceId in postArraySortedBySpaceId) {
+      spaceIdsForQuery.push(spaceId);
     }
 
-    let communities = await Community.find({_id: { $in: communityIdsForQuery }}, 'name');
+    let spaces = await Space.find({_id: { $in: spaceIdsForQuery }}, 'name');
 
-    // since we include community names in notifs, start there
-    for (let i in communities) {
-      let communityName = communities[i].name;
-      let communityId = communities[i].id;
+    // since we include space names in notifs, start there
+    for (let i in spaces) {
+      let spaceName = spaces[i].name;
+      let spaceId = spaces[i].id;
 
-      // get every post associated with that community
-      let postIds = postArraySortedByCommunityId[communityId];
+      // get every post associated with that space
+      let postIds = postArraySortedBySpaceId[spaceId];
 
       // cycle through those posts, get the associated comment ids
       for (let i in postIds) {
@@ -302,7 +302,7 @@ module.exports = {
         // build a notif for each commentId
         commentIds.forEach((x) => {
           commentMessageArray.push(readableCommentNotification({
-            communityName,
+            spaceName,
             replyCount: countObj[x._id].replyCount,
             upvoteCount: countObj[x._id].upvoteCount,
             commentId: countObj[x._id].commentId,
@@ -311,7 +311,7 @@ module.exports = {
           }));
           /*
           commentMessageArray.push({
-            title: `New replies and upvotes on your comment on a post in #${communityName}!`,
+            title: `New replies and upvotes on your comment on a post in #${spaceName}!`,
             message: `${countObj[x._id].replyCount} new replies and ${countObj[x._id].upvoteCount} new upvotes`
           });*/
         });
@@ -325,7 +325,7 @@ module.exports = {
     /* Notif Obj
       needs one of each row:
         WHO IS THIS FOR: ownerProfileId, or ownerProjectId,
-        WHO IS THIS FROM: sendingProfileId, sendingProjectId, sendingCommunityId,
+        WHO IS THIS FROM: sendingProfileId, sendingProjectId, sendingSpaceId,
         WHAT IS THIS ABOUT: postId, commentId
     */
     const {

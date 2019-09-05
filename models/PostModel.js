@@ -6,7 +6,7 @@ const PostSchema = new Schema({
   _id: { type: String, default: shortid.generate },
   profileId: String,
   projectId: String,
-  communityId: String,
+  spaceId: String,
   content: String,
   views: Number,
   duration: String,

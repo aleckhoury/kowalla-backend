@@ -26,7 +26,7 @@ module.exports = {
                         description: '',
                         profilePicture: '',
                     });
-                    const subscription = await Subscription.create({profileId: profile._id, communityId: 'fugmXEmwr'});
+                    const subscription = await Subscription.create({profileId: profile._id, spaceId: 'fugmXEmwr'});
                     await profile.save();
                     await subscription.save();
                     const token = await jwt.sign({ sub: newUser._id }, config.secret);
@@ -51,7 +51,6 @@ module.exports = {
      async authUser(req, res, next) {
         const globalRes = res;
         let user;
-        console.log(req.body);
         if (req.body.usernameOrEmail.includes('@')) {
             user = await User.findOne({email: req.body.usernameOrEmail });
         } else {

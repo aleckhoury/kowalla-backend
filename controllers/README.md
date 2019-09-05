@@ -21,18 +21,18 @@ $ updateProfile() # updates/overwrites profile, returns new object
 $ deleteProfile() # deletes the profile, returns status 200
 '''
 
-## Community Controller
+## Space Controller
 
 ''' bash
-$ getCommunityList() # returns list of objects
+$ getSpaceList() # returns list of objects
 
-$ getCommunity() # takes communityID, returns object
+$ getSpace() # takes spaceID, returns object
 
-$ createCommunity() # creates new file, returns new object
+$ createSpace() # creates new file, returns new object
 
-$ updateCommunity() # updates/overwrites community, returns new object
+$ updateSpace() # updates/overwrites space, returns new object
 
-$ deleteCommunity() # deletes the community, returns status 200
+$ deleteSpace() # deletes the space, returns status 200
 '''
 
 ## Project Controller

@@ -73,18 +73,18 @@ module.exports = {
 
       res.status(200).send(post);
     },
-  async getCommunityPostList(req, res, next) { // add sorting
+  async getSpacePostList(req, res, next) { // add sorting
     // Init
-    let { communityId, sort, skip } = req.params;
+    let { spaceId, sort, skip } = req.params;
     skip = Number(skip);
 
     try {
       // Act
       let posts;
       if (sort === 'Newest') {
-        posts = await Post.find({communityId}).limit(5).sort('-createdAt').skip(skip);
+        posts = await Post.find({spaceId}).limit(5).sort('-createdAt').skip(skip);
       } else if (sort === 'Oldest') {
-        posts = await Post.find({communityId}).limit(5).sort('createdAt').skip(skip);
+        posts = await Post.find({spaceId}).limit(5).sort('createdAt').skip(skip);
       }
       // Send
       if (posts.length) {
@@ -101,8 +101,8 @@ module.exports = {
     let { profileId, sort, skip } = req.params;
     skip = Number(skip);
     try {
-      const subs = await Subscriptions.find({ profileId }).select('projectId communityId');
-      const idList = subs.map(x => x.projectId ? x.projectId : x.communityId);
+      const subs = await Subscriptions.find({ profileId }).select('projectId spaceId');
+      const idList = subs.map(x => x.projectId ? x.projectId : x.spaceId);
       // // Act
       let posts;
       if (sort === 'Newest') {
@@ -110,7 +110,7 @@ module.exports = {
           // Find documents matching any of these values
           $or: [
             {'projectId': {$in: idList}},
-            {'communityId': {$in: idList}}
+            {'spaceId': {$in: idList}}
           ],
         }).limit(5).sort('-createdAt').skip(skip);
       } else if (sort === 'Oldest') {
@@ -118,7 +118,7 @@ module.exports = {
           // Find documents matching any of these values
           $or: [
             {projectId: {$in: idList}},
-            {communityId: {$in: idList}}
+            {spaceId: {$in: idList}}
           ],
         }).limit(5).sort('createdAt').skip(skip);
       }
@@ -166,7 +166,7 @@ module.exports = {
     const {
       profileId,
       projectId,
-      communityId,
+      spaceId,
       content,
       duration,
       start,
@@ -181,7 +181,7 @@ module.exports = {
     const post = await Post.create({
       profileId,
       projectId,
-      communityId,
+      spaceId,
       content,
       views,
       duration,

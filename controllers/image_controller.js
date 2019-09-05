@@ -62,6 +62,7 @@ async uploadBannerPic(req, res, next) {
             res.json({ file: s3res.Location })
         })
     } catch(err) {
+        console.log(err);
         res.status(500).send(err);
     }
 },

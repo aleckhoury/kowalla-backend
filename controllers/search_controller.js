@@ -1,12 +1,12 @@
 // Models
 const Profile = require('../models/ProfileModel');
-const Community = require('../models/CommunityModel');
+const Space = require('../models/SpaceModel');
 const Project = require('../models/ProjectModel');
 
 module.exports = {
   async mvpSearch(req, res, next) {
     let profiles = await Profile.find({});
-    let communities = await Community.find({});
+    let spaces = await Space.find({});
     let projects = await Project.find({});
 
     let responseArray = [];
@@ -33,13 +33,13 @@ module.exports = {
       }
     }
 
-    for (let i=0; i < communities.length; i++) {
-      if (communities[i].name !== undefined) {
+    for (let i=0; i < spaces.length; i++) {
+      if (spaces[i].name !== undefined) {
 
         responseArray.push({
-          name: communities[i].name,
-          communityId: communities[i]._id,
-          picture: communities[i].profilePicture
+          name: spaces[i].name,
+          spaceId: spaces[i]._id,
+          picture: spaces[i].profilePicture
         });
       }
     }

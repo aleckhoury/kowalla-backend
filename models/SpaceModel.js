@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const shortid = require('shortid');
 
-const CommunitySchema = new Schema({ // TODO: add username
+const SpaceSchema = new Schema({ // TODO: add username
   _id: { type: String, default: shortid.generate },
   isProject: { type: String, default: false },
   name: String,
@@ -18,20 +18,20 @@ const CommunitySchema = new Schema({ // TODO: add username
 });
 
 
-CommunitySchema.virtual('subscribers', {
+SpaceSchema.virtual('subscribers', {
   ref: 'subscription',
   localField: '_id',
-  foreignField: 'communityId',
+  foreignField: 'spaceId',
   count: true,
 });
 
-CommunitySchema.virtual('postCount', {
+SpaceSchema.virtual('postCount', {
   ref: 'post',
   localField: '_id',
-  foreignField: 'communityId',
+  foreignField: 'spaceId',
   count: true,
 });
 
-const Community = mongoose.model('community', CommunitySchema);
+const Space = mongoose.model('space', SpaceSchema);
 
-module.exports = Community;
+module.exports = Space;

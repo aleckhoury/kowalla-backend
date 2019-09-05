@@ -19,7 +19,7 @@
       - comments
   - subscriptions
 
-2. Community
+2. Space
   - posts
     - reactions
     - comments

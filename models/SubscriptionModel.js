@@ -6,7 +6,7 @@ const SubscriptionSchema = new Schema({
   _id: { type: String, default: shortid.generate },
   profileId: String,
   projectId: String,
-  communityId: String,
+  spaceId: String,
 },
 {
   timestamps: true

@@ -40,13 +40,13 @@
 - createUpdate -- done
 - deleteUpdate -- done
 
-## Communities
+## Spaces
 ### General Routes
-- getCommunities -- done
-- getCommunity -- done
-- createCommunity -- done
-- updateCommunity -- done
-- deleteCommunity -- done
+- getSpaces -- done
+- getSpace -- done
+- createSpace -- done
+- updateSpace -- done
+- deleteSpace -- done
 ### Post Routes
 - getPosts -- done
 - getPost -- done

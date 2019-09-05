@@ -57,7 +57,6 @@ module.exports = {
 
     // first we need the owner of the comment
     let comment = await Comment.findOne({_id: commentId}, 'profileId');
-    //console.log(comment);
     let notifObject = {
       ownerProfileId: comment.profileId,
       sendingProfileId: profileId,

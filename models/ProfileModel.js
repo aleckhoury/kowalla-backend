@@ -7,7 +7,7 @@ const ProfileSchema = new Schema({
   _id: { type: String, default: shortid.generate },
   firstName: String,
   lastName: String,
-  username: { type: String, unique: true, uniqueCaseInsensitive: true },
+  username: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
   description: String,
   profilePicture: String,
   reputation: { type: Number, default: 0 }, // need to implement update

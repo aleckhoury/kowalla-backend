@@ -34,48 +34,48 @@ module.exports = {
                 .then(result => {
                     data = result.body;
                 });
-        } catch(err) {
-            console.log(err);
-        }
-        await request
-            .get('https://api.github.com/user')
-            .set('Authorization', `token ${data.access_token}`)
-            .then(async result => {
-                let user = await Profile.findOne({ username: result.body.login })
-                    .populate('postCount')
-                    .populate('commentCount')
-                    .exec();
-                if (!user) {
-                    const newUser = await User.create({
-                        username: result.body.login,
-                        email: result.body.email,
-                        password: '',
-                    });
-                    newUser.save();
-                    user = await Profile.create({
-                        firstName: result.body.login,
-                        lastName: '',
-                        username: result.body.login,
-                        description: '',
-                        profilePicture: result.body.avatar_url,
-                        githubToken: data.access_token,
-                    });
-                    user.save();
-                } else {
-                    const token = await jwt.sign({ sub: user._id }, config.secret);
-                    return res.status(200).json({
+            await request
+                .get('https://api.github.com/user')
+                .set('Authorization', `token ${data.access_token}`)
+                .then(async result => {
+                    let user = await Profile.findOne({ username: result.body.login })
+                        .populate('postCount')
+                        .populate('commentCount')
+                        .exec();
+                    if (!user) {
+                        const newUser = await User.create({
+                            username: result.body.login,
+                            email: result.body.email,
+                            password: '',
+                        });
+                        newUser.save();
+                        user = await Profile.create({
+                            firstName: result.body.login,
+                            lastName: '',
+                            username: result.body.login,
+                            description: '',
+                            profilePicture: result.body.avatar_url,
+                            githubToken: data.access_token,
+                        });
+                        user.save();
+                    } else {
+                        const token = await jwt.sign({ sub: user._id }, config.secret);
+                        return res.status(200).json({
                             isNew: false,
                             token,
                             user
-                    });
-                }
-                const token = await jwt.sign({ sub: user._id }, config.secret);
-                return res.status(200).json({
+                        });
+                    }
+                    const token = await jwt.sign({ sub: user._id }, config.secret);
+                    return res.status(200).json({
                         isNew: true,
                         token,
                         user
-                });
-            })
+                    });
+                })
+        } catch(err) {
+            console.log(err);
+        }
         // Send
     },
     async authTwitterUser(req, res, next) {

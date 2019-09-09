@@ -5,7 +5,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const UserSchema = new Schema({
   _id: { type: String, default: shortid.generate },
-  username: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
+  username: { type: String, unique: true, uniqueCaseInsensitive: true },
   email: { type: String, unique: true, uniqueCaseInsensitive: true },
   password: { type: String },
 },

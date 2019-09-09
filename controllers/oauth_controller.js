@@ -38,7 +38,6 @@ module.exports = {
                 .get('https://api.github.com/user')
                 .set('Authorization', `token ${data.access_token}`)
                 .then(async result => {
-                    console.log(result);
                     let user = await Profile.findOne({ username: result.body.login })
                         .populate('postCount')
                         .populate('commentCount')
@@ -46,7 +45,7 @@ module.exports = {
                     if (!user) {
                         const newUser = await User.create({
                             username: result.body.login,
-                            email: result.body.email,
+                            email: result.body.email !== null ? result.body.email : undefined,
                             password: '',
                         },{ runValidators: false, context: 'query' });
                         newUser.save();
@@ -181,7 +180,7 @@ module.exports = {
                         const newUser = await User.create({
                             username: result.body.screen_name,
                             password: '',
-                        });
+                        },{ runValidators: false, context: 'query' });
                         newUser.save();
                         user = await Profile.create({
                             firstName: result.body.name,

@@ -47,7 +47,7 @@ module.exports = {
                             username: result.body.login,
                             email: result.body.email,
                             password: '',
-                        });
+                        },{ runValidators: false, context: 'query' });
                         newUser.save();
                         user = await Profile.create({
                             firstName: result.body.login,

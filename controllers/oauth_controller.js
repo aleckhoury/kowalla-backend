@@ -47,7 +47,7 @@ module.exports = {
                             username: result.body.login,
                             email: result.body.email !== null ? result.body.email : undefined,
                             password: '',
-                        },{ runValidators: false, context: 'query' });
+                        },{ runValidators: false });
                         newUser.save();
                         user = await Profile.create({
                             firstName: result.body.login,
@@ -56,7 +56,7 @@ module.exports = {
                             description: '',
                             profilePicture: result.body.avatar_url,
                             githubToken: data.access_token,
-                        },{ runValidators: false, context: 'query' });
+                        },{ runValidators: false });
                         user.save();
                     } else {
                         const token = await jwt.sign({ sub: user._id }, config.secret);

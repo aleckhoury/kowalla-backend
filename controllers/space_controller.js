@@ -83,26 +83,29 @@ module.exports = {
         admins,
       } = req.body;
 
-      // Act
-      const adminIds = await getProfileIdsFromUsernames(admins);
-      const space = await Space.create({
-        name,
-        description,
-        headerPicture,
-        profilePicture,
-        admins: adminIds,
-      });
+      try {
+          // Act
+          const adminIds = await getProfileIdsFromUsernames(admins);
+          const space = await Space.create({
+              name,
+              description,
+              headerPicture,
+              profilePicture,
+              admins: adminIds,
+          });
 
-      await space.save();
+          await space.save();
 
-      // Send
-      const populatedSpace = await Space.findOne({ _id: space._id })
-        .populate('subscribers')
-        .populate('postCount')
-        .exec();
+          // Send
+          const populatedSpace = await Space.findOne({ _id: space._id })
+              .populate('subscribers')
+              .populate('postCount')
+              .exec();
 
-      res.status(201).send(populatedSpace);
-
+          res.status(201).send(populatedSpace);
+      } catch(err) {
+          res.status(400).send(err);
+      }
   },
 
   async updateSpace(req, res, next) {
@@ -110,15 +113,19 @@ module.exports = {
       const { spaceId } = req.params;
       const updateParams = req.body;
 
-      // Act
-      await Space.findOneAndUpdate({_id: spaceId}, updateParams);
-      const space = await Space.findOne({_id: spaceId})
-        .populate('subscribers')
-        .populate('postCount')
-        .exec();
+      try {
+          // Act
+          await Space.findOneAndUpdate({_id: spaceId}, updateParams, { runValidators: true, context: 'query' });
+          const space = await Space.findOne({_id: spaceId})
+              .populate('subscribers')
+              .populate('postCount')
+              .exec();
 
-      // Send
-      res.status(200).send(space);
+          // Send
+          res.status(200).send(space);
+      } catch(err) {
+          res.status(400).send(err);
+      }
   },
 
   async deleteSpace(req, res, next) {

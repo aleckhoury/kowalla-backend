@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const shortid = require('shortid');
+const uniqueValidator = require('mongoose-unique-validator');
 
 //import SubscriptionModel from './SubscriptionModel';
 
@@ -9,7 +10,7 @@ const Subscription = require('./SubscriptionModel');
 const ProjectSchema = new Schema({
   _id: { type: String, default: shortid.generate },
   isProject: { type: String, default: true },
-  projectName: String,
+  projectName: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
   name: String,
   description: String,
   profilePicture: String, // TODO: change to actual image storage
@@ -42,9 +43,8 @@ ProjectSchema.virtual('postCount', {
   count: true,
 });
 
+ProjectSchema.plugin(uniqueValidator, { message: 'This project username is already taken.' });
 
 const Project = mongoose.model('project', ProjectSchema);
-
-
 
 module.exports = Project;

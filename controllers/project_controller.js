@@ -88,26 +88,30 @@ module.exports = {
       admins,
     } = req.body;
 
-    // Act
-    const adminIds = await getProfileIdsFromUsernames(admins);
-    const project = await Project.create({
-      name,
-      projectName,
-      description,
-      profilePicture,
-      headerPicture,
-      admins: adminIds
-    });
+    try {
+      // Act
+      const adminIds = await getProfileIdsFromUsernames(admins);
+      const project = await Project.create({
+        name,
+        projectName,
+        description,
+        profilePicture,
+        headerPicture,
+        admins: adminIds
+      });
 
-    await project.save();
+      await project.save();
 
-    // Send
-    const populatedProject = await Project.findOne({ _id: project._id })
-      .populate('subscribers')
-      .populate('postCount')
-      .exec();
+      // Send
+      const populatedProject = await Project.findOne({ _id: project._id })
+          .populate('subscribers')
+          .populate('postCount')
+          .exec();
 
-    res.status(201).send(populatedProject);
+      res.status(201).send(populatedProject);
+    } catch(err) {
+      res.status(400).send(err);
+    }
   },
 
   // Read
@@ -152,16 +156,20 @@ module.exports = {
     const { id } = req.params;
     const updateParams = req.body;
 
-    // Act
-    await Project.findOneAndUpdate({_id: id}, updateParams);
-    const project = await Project.findOne({_id: id})
-      .populate('subscribers')
-      .populate('postCount')
-      .exec();
+    try {
+      // Act
+      await Project.findOneAndUpdate({_id: id}, updateParams, { runValidators: true, context: 'query' });
+      const project = await Project.findOne({_id: id})
+          .populate('subscribers')
+          .populate('postCount')
+          .exec();
 
-    // Send
-    res.status(200).send(project);
-    await project.save();
+      // Send
+      res.status(200).send(project);
+      await project.save();
+    } catch(err) {
+      res.status(400).send(err);
+    }
   },
 
   // Delete

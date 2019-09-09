@@ -25,6 +25,7 @@ module.exports = {
                         username: req.body.username,
                         description: '',
                         profilePicture: '',
+                        userId: newUser._id,
                     });
                     const subscription = await Subscription.create({profileId: profile._id, spaceId: 'fugmXEmwr'});
                     await profile.save();

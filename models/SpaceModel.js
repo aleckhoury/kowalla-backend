@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const shortid = require('shortid');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const SpaceSchema = new Schema({ // TODO: add username
   _id: { type: String, default: shortid.generate },
   isProject: { type: String, default: false },
-  name: String,
+  name: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
   description: String,
   profilePicture: String, // TODO: this doesn't exist in our current designs
   headerPicture: String, // TODO: change to actual image storage
@@ -31,6 +32,8 @@ SpaceSchema.virtual('postCount', {
   foreignField: 'spaceId',
   count: true,
 });
+
+SpaceSchema.plugin(uniqueValidator, { message: 'This space name is already taken.' });
 
 const Space = mongoose.model('space', SpaceSchema);
 

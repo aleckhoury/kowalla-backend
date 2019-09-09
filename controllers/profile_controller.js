@@ -2,6 +2,7 @@
 
 // Models
 const Profile = require('../models/ProfileModel');
+const User = require('../models/UserModel');
 const Comment = require('../models/CommentModel');
 const Post = require('../models/PostModel');
 const Reaction = require('../models/ReactionModel');
@@ -134,15 +135,22 @@ module.exports = {
     // Init
     const { profileId } = req.params;
     const updateParams = req.body;
+    const { username } = updateParams;
 
     // Act
-    await Profile.findOneAndUpdate({_id: profileId}, updateParams);
-    const profile = await Profile.findOne({_id: profileId})
-      .populate('postCount')
-      .exec();
-
-    // Send
-    res.status(200).send(profile);
+    try {
+      const oldProfile = await Profile.findOneAndUpdate({_id: profileId}, updateParams, { runValidators: true, context: 'query' });
+      const profile = await Profile.findOne({_id: profileId})
+          .populate('postCount')
+          .exec();
+      if (username !== oldProfile.username) {
+        await User.findOneAndUpdate({_id: profile.userId}, { username: username }, { runValidators: true, context: 'query' });
+      }
+      // Send
+      res.status(200).send(profile);
+    } catch(err) {
+      res.status(400).send(err);
+    }
   },
 
   async toggleIntegration(req, res, next) {

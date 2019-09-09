@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const shortid = require('shortid');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const ProfileSchema = new Schema({
   _id: { type: String, default: shortid.generate },
   firstName: String,
   lastName: String,
-  username: { type: String, unique: true, required: true },
+  username: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
   description: String,
   profilePicture: String,
   reputation: { type: Number, default: 0 }, // need to implement update
   integrations: { type: Array, default: [] },
   githubToken: { type: String, default: '' },
+  userId: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
 },
 {
   toObject: { getters: true },
@@ -44,6 +46,7 @@ ProfileSchema.virtual('reputation', {
 
 });*/
 
+ProfileSchema.plugin(uniqueValidator, { message: 'This username is already taken.' });
 
 const Profile = mongoose.model('profile', ProfileSchema);
 

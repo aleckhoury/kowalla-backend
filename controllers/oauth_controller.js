@@ -38,6 +38,7 @@ module.exports = {
                 .get('https://api.github.com/user')
                 .set('Authorization', `token ${data.access_token}`)
                 .then(async result => {
+                    console.log(result);
                     let user = await Profile.findOne({ username: result.body.login })
                         .populate('postCount')
                         .populate('commentCount')

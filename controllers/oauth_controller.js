@@ -38,7 +38,6 @@ module.exports = {
                 .get('https://api.github.com/user')
                 .set('Authorization', `token ${data.access_token}`)
                 .then(async result => {
-                    console.log(result.body);
                     let user = await Profile.findOne({ username: result.body.login })
                         .populate('postCount')
                         .populate('commentCount')
@@ -57,7 +56,7 @@ module.exports = {
                             description: '',
                             profilePicture: result.body.avatar_url,
                             githubToken: data.access_token,
-                        });
+                        },{ runValidators: false, context: 'query' });
                         user.save();
                     } else {
                         const token = await jwt.sign({ sub: user._id }, config.secret);

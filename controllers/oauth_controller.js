@@ -45,18 +45,19 @@ module.exports = {
                     if (!user) {
                         const newUser = await User.create({
                             username: result.body.login,
-                            email: result.body.email !== null ? result.body.email : undefined,
+                            email: result.body.email !== null ? result.body.email : '',
                             password: '',
-                        },{ runValidators: false });
+                        });
                         newUser.save();
                         user = await Profile.create({
-                            firstName: result.body.login,
+                            firstName: result.body.name,
                             lastName: '',
                             username: result.body.login,
                             description: '',
                             profilePicture: result.body.avatar_url,
                             githubToken: data.access_token,
-                        },{ runValidators: false });
+                            userId: newUser._id,
+                        });
                         user.save();
                     } else {
                         const token = await jwt.sign({ sub: user._id }, config.secret);
@@ -179,8 +180,9 @@ module.exports = {
                     if (!user) {
                         const newUser = await User.create({
                             username: result.body.screen_name,
+                            email: '',
                             password: '',
-                        },{ runValidators: false, context: 'query' });
+                        });
                         newUser.save();
                         user = await Profile.create({
                             firstName: result.body.name,
@@ -188,6 +190,7 @@ module.exports = {
                             username: result.body.screen_name,
                             description: result.body.description,
                             profilePicture: result.body.profile_image_url_https,
+                            userId: newUser._id,
                         });
                         user.save();
                     } else {

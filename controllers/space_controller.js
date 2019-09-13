@@ -75,13 +75,19 @@ module.exports = {
 
   async createSpace(req, res, next) {
       // Init
-      const {
+      let {
         name,
         description,
         headerPicture,
         profilePicture,
         admins,
       } = req.body;
+
+      if (profilePicture === '') {
+          let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
+          let item = items[Math.floor(Math.random()*items.length)];
+          profilePicture = `https://ui-avatars.com/api/?name=${name}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`;
+      }
 
       try {
           // Act

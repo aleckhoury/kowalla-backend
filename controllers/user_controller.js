@@ -11,6 +11,8 @@ const Email = require('../helpers/email-helpers');
 
 module.exports = {
     async createUser(req, res, next) {
+        let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
+        let item = items[Math.floor(Math.random()*items.length)];
         await bcrypt.hash(req.body.password, 10,async function(err, hash) {
                 try {
                     let newUser = await User.create({
@@ -24,7 +26,7 @@ module.exports = {
                         lastName: '',
                         username: req.body.username,
                         description: '',
-                        profilePicture: '',
+                        profilePicture: `https://ui-avatars.com/api/?name=${req.body.username}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`,
                         userId: newUser._id,
                     });
                     const subscription = await Subscription.create({profileId: profile._id, spaceId: 'fugmXEmwr'});
@@ -52,31 +54,39 @@ module.exports = {
      async authUser(req, res, next) {
         const globalRes = res;
         let user;
-        if (req.body.usernameOrEmail.includes('@')) {
-            user = await User.findOne({email: req.body.usernameOrEmail });
-        } else {
-            user = await User.findOne({username: req.body.usernameOrEmail });
-        }
-        if (!user) {
-            return globalRes.status(400).jsonp({
-                status: 'error',
-                message: 'Invalid username'
-            })
-        }
-        await bcrypt.compare(req.body.password, user.password,function(err, res) {
-            if (res) {
-                const token = jwt.sign({ sub: user._id }, config.secret);
-                const { _doc: { _id, username, password }, ...userWithoutPassword } = user;
-                return globalRes.status(200).json({
-                    username,
-                    token
-                });
+        try {
+            if (req.body.usernameOrEmail === '.*') { throw 'Invalid username' }
+            if (req.body.usernameOrEmail.includes('@')) {
+                user = await User.findOne({ email : { $regex: new RegExp("^" + req.body.usernameOrEmail.toLowerCase(), "i") } });
             } else {
+                user = await User.findOne({ username : { $regex: new RegExp("^" + req.body.usernameOrEmail.toLowerCase(), "i") } });
+            }
+            if (!user) {
                 return globalRes.status(400).jsonp({
                     status: 'error',
-                    message: 'Incorrect Password'
+                    message: 'Invalid username'
                 })
             }
-        });
+            await bcrypt.compare(req.body.password, user.password,function(err, res) {
+                if (res) {
+                    const token = jwt.sign({ sub: user._id }, config.secret);
+                    const { _doc: { _id, username, password }, ...userWithoutPassword } = user;
+                    return globalRes.status(200).json({
+                        username,
+                        token
+                    });
+                } else {
+                    return globalRes.status(400).jsonp({
+                        status: 'error',
+                        message: 'Incorrect Password'
+                    })
+                }
+            });
+        } catch(err) {
+            return globalRes.status(400).jsonp({
+                status: 'error',
+                message: err
+            })
+        }
     }
 };

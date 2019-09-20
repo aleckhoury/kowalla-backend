@@ -5,7 +5,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const SpaceSchema = new Schema({ // TODO: add username
   _id: { type: String, default: shortid.generate },
-  isProject: { type: String, default: false },
+  isProject: { type: Boolean, default: false },
   name: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
   description: String,
   profilePicture: String, // TODO: this doesn't exist in our current designs

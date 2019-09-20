@@ -2,6 +2,7 @@
 const User = require('../models/UserModel');
 const Profile = require('../models/ProfileModel');
 const Subscription = require('../models/SubscriptionModel');
+const Project = require('../models/ProjectModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../config.json');
@@ -13,6 +14,10 @@ module.exports = {
     async createUser(req, res, next) {
         let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
         let item = items[Math.floor(Math.random()*items.length)];
+        let projCheck = await Project.find({ projectName: req.body.username });
+        if (projCheck.length) {
+            throw 'This username is already taken';
+        }
         await bcrypt.hash(req.body.password, 10,async function(err, hash) {
                 try {
                     let newUser = await User.create({
@@ -25,13 +30,16 @@ module.exports = {
                         firstName: req.body.username,
                         lastName: '',
                         username: req.body.username,
+                        integrations: [ "Embed Video" ],
                         description: '',
                         profilePicture: `https://ui-avatars.com/api/?name=${req.body.username}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`,
                         userId: newUser._id,
                     });
                     const subscription = await Subscription.create({profileId: profile._id, spaceId: 'fugmXEmwr'});
+                    const subscription2 = await Subscription.create({profileId: profile._id, projectId: 'nLw0dX1O5'});
                     await profile.save();
                     await subscription.save();
+                    await subscription2.save();
                     const token = await jwt.sign({ sub: newUser._id }, config.secret);
                     const { _doc: { _id, username, password }, ...userWithoutPassword } = await newUser;
                     await Email.sendWelcomeEmail(req.body.username, req.body.email);

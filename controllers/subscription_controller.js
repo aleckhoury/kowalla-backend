@@ -44,7 +44,6 @@ module.exports = {
           };
 
           // does profileId match admin of project?
-          //console.log(projectObj);
           if (projectObj.admins.includes(profileId)) {
             owned.push(subObj);
           } else {
@@ -68,7 +67,6 @@ module.exports = {
             numSubs: spaceObj.subscribers,
           };
 
-          //console.log(spaceObj);
           if (spaceObj.admins.includes(profileId)) {
             owned.push(subObj);
           } else {

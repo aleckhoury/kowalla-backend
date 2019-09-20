@@ -8,6 +8,7 @@ const config = require('../config.json');
 const Config = require('../models/ConfigModel');
 const Profile = require('../models/ProfileModel');
 const User = require('../models/UserModel');
+const Subscription = require('../models/SubscriptionModel');
 let data;
 // Models
 module.exports = {
@@ -53,12 +54,17 @@ module.exports = {
                             firstName: result.body.name,
                             lastName: '',
                             username: result.body.login,
+                            integrations: [ "Embed Video" ],
                             description: '',
                             profilePicture: result.body.avatar_url,
                             githubToken: data.access_token,
                             userId: newUser._id,
                         });
                         user.save();
+                        const subscription = await Subscription.create({profileId: user._id, spaceId: 'fugmXEmwr'});
+                        const subscription2 = await Subscription.create({profileId: user._id, projectId: 'nLw0dX1O5'});
+                        await subscription.save();
+                        await subscription2.save();
                     } else {
                         const token = await jwt.sign({ sub: user._id }, config.secret);
                         return res.status(200).json({
@@ -188,11 +194,16 @@ module.exports = {
                             firstName: result.body.name,
                             lastName: '',
                             username: result.body.screen_name,
+                            integrations: [ "Embed Video" ],
                             description: result.body.description,
                             profilePicture: result.body.profile_image_url_https,
                             userId: newUser._id,
                         });
                         user.save();
+                        const subscription = await Subscription.create({profileId: user._id, spaceId: 'fugmXEmwr'});
+                        const subscription2 = await Subscription.create({profileId: user._id, projectId: 'nLw0dX1O5'});
+                        await subscription.save();
+                        await subscription2.save();
                     } else {
                         const token = await jwt.sign({ sub: user._id }, config.secret);
                         return res.status(200).json({

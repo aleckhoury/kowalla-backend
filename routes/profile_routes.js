@@ -14,6 +14,7 @@ module.exports = (app) => {
   app.put('/api/v1/profiles/:profileId', ProfileController.updateProfile);
   app.delete('/api/v1/profiles/:profileId', ProfileController.deleteProfile);
   app.get('/api/v1/profiles/user/:username', ProfileController.getProfileByUsername);
+  app.get('/api/v1/users/onboarding', ProfileController.getAllSubscriptionOptions);
 
   // Subscription Routes
   app.get('/api/v1/profiles/user/:username/subs', SubscriptionController.getSubscriptionList);

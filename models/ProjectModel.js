@@ -9,7 +9,7 @@ const Subscription = require('./SubscriptionModel');
 
 const ProjectSchema = new Schema({
   _id: { type: String, default: shortid.generate },
-  isProject: { type: String, default: true },
+  isProject: { type: Boolean, default: true },
   projectName: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
   name: String,
   description: String,

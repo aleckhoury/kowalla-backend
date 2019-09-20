@@ -7,6 +7,8 @@ const Comment = require('../models/CommentModel');
 const Post = require('../models/PostModel');
 const Reaction = require('../models/ReactionModel');
 const Upvote = require('../models/UpvoteModel');
+const Space = require('../models/SpaceModel');
+const Project = require('../models/ProjectModel');
 /*
 ProfileProps = {
   name: String,
@@ -55,6 +57,13 @@ async function getReputationByProfileId(profileId, username="") {
 
 }
 module.exports = {
+  async getAllSubscriptionOptions(req, res, next) {
+    const spaces = await Space.find({});
+    const projects = await Project.find({});
+    const list = spaces.concat(projects);
+
+    res.status(201).send(list);
+  },
   async getProfileList(req, res, next) {
     // Init
     const profiles = await Profile.find({})

@@ -8,7 +8,7 @@ const CommentSchema = new Schema({
   postId: String,
   updateId: String,
   commentId: String,
-  content: String, // initially just a string, no tiptaps
+  content: String,
   views: Number,
 },
 {

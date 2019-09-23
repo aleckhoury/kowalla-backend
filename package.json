@@ -4,7 +4,7 @@
   "description": "Express & Node backend for kowalla",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node -r dotenv/config index.js",
+    "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon -r dotenv/config index.js"
   },
   "repository": {

@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const OAuth = require('oauth-1.0a');
 // const request = require('request');
-const config = require('../config.json');
 const Config = require('../models/ConfigModel');
 const Profile = require('../models/ProfileModel');
 const User = require('../models/UserModel');
@@ -66,14 +65,14 @@ module.exports = {
                         await subscription.save();
                         await subscription2.save();
                     } else {
-                        const token = await jwt.sign({ sub: user._id }, config.secret);
+                        const token = await jwt.sign({ sub: user._id }, process.env.secret);
                         return res.status(200).json({
                             isNew: false,
                             token,
                             user
                         });
                     }
-                    const token = await jwt.sign({ sub: user._id }, config.secret);
+                    const token = await jwt.sign({ sub: user._id }, process.env.secret);
                     return res.status(200).json({
                         isNew: true,
                         token,
@@ -205,14 +204,14 @@ module.exports = {
                         await subscription.save();
                         await subscription2.save();
                     } else {
-                        const token = await jwt.sign({ sub: user._id }, config.secret);
+                        const token = await jwt.sign({ sub: user._id }, process.env.secret);
                         return res.status(200).json({
                             isNew: false,
                             token,
                             user
                         });
                     }
-                    const token = await jwt.sign({ sub: user._id }, config.secret);
+                    const token = await jwt.sign({ sub: user._id }, process.env.secret);
                     return res.status(200).json({
                         isNew: true,
                         token,

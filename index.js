@@ -1,4 +1,3 @@
-const { PORT, NODE_ENV, MONGO_URI, SESS_NAME, SESS_SECRET, SESS_LIFETIME } = require("./config.json");
 const express = require('express');
 const mongoose = require('mongoose');
 const profileRoutes = require('./routes/profile_routes');
@@ -45,7 +44,7 @@ app.set('port', port);
 // });
 
 // setup mongodb connection
-mongoose.connect(MONGO_URI, { useNewUrlParser: true });
+mongoose.connect(process.env.NODE_ENV === 'production' ? process.env.MONGO_URI_PRD : process.env.MONGO_URI_SND, { useNewUrlParser: true });
 mongoose.connection
   .once('open', () => {
     console.log('mongoose connection is good to go')

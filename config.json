@@ -1,9 +1,0 @@
-{
-  "secret": "I'm your secret string that you can use to keep secrets. Shhh.",
-  "PORT": 5000,
-  "NODE_ENV": "development",
-  "MONGO_URI": "mongodb://heroku-backend:18Koala99!@ds145694.mlab.com:45694/kow-prd",
-  "SESS_NAME": "sid",
-  "SESS_SECRET": "This is your secret session secret!",
-  "SESS_LIFETIME": 7200000
-}

@@ -5,7 +5,6 @@ const Subscription = require('../models/SubscriptionModel');
 const Project = require('../models/ProjectModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const config = require('../config.json');
 const Email = require('../helpers/email-helpers');
 
 // Models
@@ -40,7 +39,7 @@ module.exports = {
                     await profile.save();
                     await subscription.save();
                     await subscription2.save();
-                    const token = await jwt.sign({ sub: newUser._id }, config.secret);
+                    const token = await jwt.sign({ sub: newUser._id }, process.env.secret);
                     const { _doc: { _id, username, password }, ...userWithoutPassword } = await newUser;
                     await Email.sendWelcomeEmail(req.body.username, req.body.email);
                     return res.status(200).json({
@@ -77,7 +76,7 @@ module.exports = {
             }
             await bcrypt.compare(req.body.password, user.password,function(err, res) {
                 if (res) {
-                    const token = jwt.sign({ sub: user._id }, config.secret);
+                    const token = jwt.sign({ sub: user._id }, process.env.secret);
                     const { _doc: { _id, username, password }, ...userWithoutPassword } = user;
                     return globalRes.status(200).json({
                         username,

@@ -4,8 +4,8 @@
   "description": "Express & Node backend for kowalla",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "NODE_ENV=production node -r dotenv/config index.js",
+    "dev": "NODE_ENV=development nodemon -r dotenv/config index.js"
   },
   "repository": {
     "type": "git",
@@ -42,5 +42,7 @@
     "socket.io": "^2.2.0",
     "superagent": "^5.0.5"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "dotenv": "^8.1.0"
+  }
 }

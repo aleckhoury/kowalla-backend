@@ -8,9 +8,7 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "setupFiles": [
-      "dotenv/config"
-    ]
+    "setupFiles": ["dotenv/config"]
   },
   "scripts": {
     "start": "NODE_ENV=production node index.js",

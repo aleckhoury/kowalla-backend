@@ -4,8 +4,8 @@ const Post = require("./models/PostModel");
 const { mongooseConnect } = require("./helpers/mongoose");
 
 const port = process.env.PORT || 8080;
-
-throng(async () => {
+const workers = process.env.WEB_CONCURRENCY || 1;
+throng({ workers, lifetime: Infinity }, async () => {
   await mongooseConnect();
 
   const app = appInit();

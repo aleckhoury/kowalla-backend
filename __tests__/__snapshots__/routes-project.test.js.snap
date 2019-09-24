@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`routes/project getProjectList() success 1`] = `
+Object {
+  "projects": Array [
+    Object {
+      "__v": 0,
+      "_id": "fS50wWyBY",
+      "admins": Array [
+        "qkJmx0Ma_P",
+      ],
+      "createdAt": "2019-09-24T03:25:34.420Z",
+      "description": "The world's online coworking space, for testing!",
+      "headerPicture": "",
+      "id": "fS50wWyBY",
+      "isProject": true,
+      "name": "kowalla;",
+      "postCount": 0,
+      "profilePicture": "https://ui-avatars.com/api/?name=Kowalla&background=0a2049&color=fff&bold=true&size=200&font-size=0.6",
+      "projectName": "Kowalla",
+      "reputation": 0,
+      "subscribers": 1,
+      "updatedAt": "2019-09-24T03:25:55.480Z",
+    },
+  ],
+}
+`;

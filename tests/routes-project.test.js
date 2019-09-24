@@ -1,14 +1,18 @@
 const request = require("supertest");
-const _ = require("lodash");
 const { mongooseConnect } = require("../helpers/mongoose");
 const { appInit } = require("../helpers/express");
 
 describe("routes/project", () => {
   let app;
+  let mongoose;
 
   beforeAll(async () => {
-    await mongooseConnect();
+    mongoose = await mongooseConnect();
     app = appInit();
+  });
+
+  afterAll(async () => {
+    await mongoose.stop();
   });
 
   describe("getProjectList()", () => {

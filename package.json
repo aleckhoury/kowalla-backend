@@ -3,6 +3,9 @@
   "version": "2.0.0",
   "description": "Express & Node backend for kowalla",
   "main": "index.js",
+  "engines" : {
+    "node" : ">=10.16.3"
+  },
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon -r dotenv/config index.js"
@@ -43,6 +46,11 @@
     "superagent": "^5.0.5"
   },
   "devDependencies": {
-    "dotenv": "^8.1.0"
+    "dotenv": "^8.1.0",
+    "eslint": "6.4.0",
+    "eslint-config-prettier": "6.3.0",
+    "eslint-plugin-node": "10.0.0",
+    "eslint-plugin-prettier": "3.1.1",
+    "prettier": "1.18.2"
   }
 }

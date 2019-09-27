@@ -1,9 +1,9 @@
-const ProjectController = require('../controllers/project_controller');
-const PostController = require('../controllers/post_controller');
-const UpdateController = require('../controllers/update_controller');
-const CommentController = require('../controllers/comment_controller');
+const ProjectController = require("../controllers/project_controller");
+const PostController = require("../controllers/post_controller");
+const UpdateController = require("../controllers/update_controller");
+const CommentController = require("../controllers/comment_controller");
 
-module.exports = (app) => {
+module.exports = app => {
   // ##########################################################################
   // Project Routes
   // ##########################################################################
@@ -15,14 +15,17 @@ module.exports = (app) => {
   | Delete: DELETE /projects/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/projects', ProjectController.getProjectList);
-  app.get('/api/v1/projects/:id', ProjectController.getProject);
-  app.post('/api/v1/projects', ProjectController.createProject);
-  app.put('/api/v1/projects/:id', ProjectController.updateProject);
-  app.delete('/api/v1/projects/:id', ProjectController.deleteProject);
-  app.post('/api/v1/spaces/:projectId/posts', PostController.createPost);
+  app.get("/api/v1/projects", ProjectController.getProjectList);
+  app.get("/api/v1/projects/:id", ProjectController.getProject);
+  app.post("/api/v1/projects", ProjectController.createProject);
+  app.put("/api/v1/projects/:id", ProjectController.updateProject);
+  app.delete("/api/v1/projects/:id", ProjectController.deleteProject);
+  app.post("/api/v1/spaces/:projectId/posts", PostController.createPost);
 
-  app.get('/api/v1/projects/project/:projectName', ProjectController.getProjectByName);
+  app.get(
+    "/api/v1/projects/project/:projectName",
+    ProjectController.getProjectByName
+  );
   // ##########################################################################
   // Post Routes
   // ##########################################################################
@@ -30,7 +33,10 @@ module.exports = (app) => {
   | List: GET /projects/-/posts : sent [n/a]; response [object]
   */
 
-  app.get('/api/v1/project/posts/:projectId/:sort/:skip', PostController.getProjectPostList);
+  app.get(
+    "/api/v1/project/posts/:projectId/:sort/:skip",
+    PostController.getProjectPostList
+  );
 
   // ##########################################################################
   // Update Routes
@@ -43,11 +49,23 @@ module.exports = (app) => {
   | Delete: DELETE /projects/-/updates/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/projects/:projectId/updates', UpdateController.getUpdateList);
-  app.get('/api/v1/projects/:projectId/updates/:updateId', UpdateController.getUpdate);
-  app.post('/api/v1/projects/:projectId/updates', UpdateController.createUpdate);
+  app.get(
+    "/api/v1/projects/:projectId/updates",
+    UpdateController.getUpdateList
+  );
+  app.get(
+    "/api/v1/projects/:projectId/updates/:updateId",
+    UpdateController.getUpdate
+  );
+  app.post(
+    "/api/v1/projects/:projectId/updates",
+    UpdateController.createUpdate
+  );
   //app.put('/api/v1/projects/:projects/updates/:postId', UpdateController.updateUpdate);
-  app.delete('/api/v1/projects/:projectId/updates/:updateId', UpdateController.deleteUpdate);
+  app.delete(
+    "/api/v1/projects/:projectId/updates/:updateId",
+    UpdateController.deleteUpdate
+  );
 
   // ##########################################################################
   // Comment Routes
@@ -60,10 +78,21 @@ module.exports = (app) => {
   | Delete: DELETE /projects/-/updates/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/projects/:projectId/updates/:updateId/comments', CommentController.getUpdateCommentList);
-  app.get('/api/v1/projects/:projectId/updates/:updateId/comments/:commentId', CommentController.getUpdateComment);
-  app.post('/api/v1/projects/:projectId/updates/:updateId/comments', CommentController.createUpdateComment);
+  app.get(
+    "/api/v1/projects/:projectId/updates/:updateId/comments",
+    CommentController.getUpdateCommentList
+  );
+  app.get(
+    "/api/v1/projects/:projectId/updates/:updateId/comments/:commentId",
+    CommentController.getUpdateComment
+  );
+  app.post(
+    "/api/v1/projects/:projectId/updates/:updateId/comments",
+    CommentController.createUpdateComment
+  );
   //app.put('/api/v1/projects/:projectId/updates/:updateId', CommentController.updateUpdateComment);
-  app.delete('/api/v1/projects/:projectId/updates/:updateId/comments/:commentId', CommentController.deleteUpdateComment);
-
-}
+  app.delete(
+    "/api/v1/projects/:projectId/updates/:updateId/comments/:commentId",
+    CommentController.deleteUpdateComment
+  );
+};

@@ -80,21 +80,11 @@ module.exports = {
       }
       if (req.body.usernameOrEmail.includes("@")) {
         user = await User.findOne({
-          email: {
-            $regex: new RegExp(
-              "^" + req.body.usernameOrEmail.toLowerCase(),
-              "i"
-            )
-          }
+          email: req.body.usernameOrEmail
         });
       } else {
         user = await User.findOne({
-          username: {
-            $regex: new RegExp(
-              "^" + req.body.usernameOrEmail.toLowerCase(),
-              "i"
-            )
-          }
+          username: req.body.usernameOrEmail
         });
       }
       if (!user) {

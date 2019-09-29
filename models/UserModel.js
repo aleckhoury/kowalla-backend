@@ -9,9 +9,7 @@ const UserSchema = new Schema({
   email: { type: String, unique: true, uniqueCaseInsensitive: true },
   password: { type: String },
 },
-{
-  timestamps: true
-});
+{ collation: { locale: 'en_US', strength: 1 }, timestamps: true });
 
 UserSchema.plugin(uniqueValidator, { message: 'This username or email is already taken.' });
 

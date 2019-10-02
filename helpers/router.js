@@ -34,19 +34,19 @@ module.exports = {
     // expand routes
     app.register(
       async registerApp => {
-        profileRoutes(app);
+        profileRoutes(registerApp);
         projectRoutes(registerApp);
-        spaceRoutes(app);
-        userRoutes(app);
-        postRoutes(app);
-        reactionRoutes(app);
-        imageRoutes(app);
-        configRoutes(app);
-        commentRoutes(app);
-        upvoteRoutes(app);
-        searchRoutes(app);
-        oAuthRoutes(app);
-        integrationRoutes(app);
+        spaceRoutes(registerApp);
+        userRoutes(registerApp);
+        postRoutes(registerApp);
+        reactionRoutes(registerApp);
+        imageRoutes(registerApp);
+        configRoutes(registerApp);
+        commentRoutes(registerApp);
+        upvoteRoutes(registerApp);
+        searchRoutes(registerApp);
+        oAuthRoutes(registerApp);
+        integrationRoutes(registerApp);
       },
       { prefix: '/api/v1' }
     );

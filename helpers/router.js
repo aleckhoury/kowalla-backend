@@ -1,19 +1,19 @@
 const Fastify = require('fastify');
 const { mongooseConnect } = require('../helpers/mongoose');
 
-const profileRoutes = require('../routes/profile_routes');
-const projectRoutes = require('../routes/project_routes');
-const spaceRoutes = require('../routes/space_routes');
-const userRoutes = require('../routes/user_routes');
-const postRoutes = require('../routes/post_routes');
-const imageRoutes = require('../routes/image_routes');
-const reactionRoutes = require('../routes/reaction_routes');
-const configRoutes = require('../routes/config_routes');
-const commentRoutes = require('../routes/comment_routes');
-const upvoteRoutes = require('../routes/upvote_routes');
-const searchRoutes = require('../routes/search_routes');
-const oAuthRoutes = require('../routes/oauth_routes');
-const integrationRoutes = require('../routes/integration_routes');
+const profileRoutes = require('../routes/profile');
+const projectRoutes = require('../routes/project');
+const spaceRoutes = require('../routes/space');
+const userRoutes = require('../routes/user');
+const postRoutes = require('../routes/post');
+const imageRoutes = require('../routes/image');
+const reactionRoutes = require('../routes/reaction');
+const configRoutes = require('../routes/config');
+const commentRoutes = require('../routes/comment');
+const upvoteRoutes = require('../routes/upvote');
+const searchRoutes = require('../routes/search');
+const oAuthRoutes = require('../routes/oauth');
+const integrationRoutes = require('../routes/integration');
 
 const cors = require('fastify-cors');
 const compress = require('fastify-compress');

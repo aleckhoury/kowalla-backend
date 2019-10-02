@@ -17,13 +17,9 @@ describe("routes/project", () => {
 
   describe("getProjectList()", () => {
     it("success", async () => {
-      try {
-        const res = await app.inject({ method: "GET", url: "/api/v1/projects" });
-        expect(res.statusCode).toBe(200);
-        expect(res.body.projects[0]._id).toBe("fS50wWyBY");
-      } catch (err) {
-        return err;
-      }
+      const res = await app.inject({ method: "GET", url: "/api/v1/projects" });
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res.body).projects[0]._id).toBe("fS50wWyBY");
     });
   });
 

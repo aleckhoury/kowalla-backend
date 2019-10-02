@@ -1,30 +1,34 @@
 # Models
 
 ## Example
+
 1. Parent
+
 - resource 1 that points to Parent
 - resource 2 that points to Parent
 
-
 ## Actual
-*still in the process of updating*
+
+_still in the process of updating_
 
 1. Project
-  - updates
-    - reactions
-  - posts
-    - reactions
+
+- updates
+  - reactions
+- posts
+  - reactions
+  - comments
+    - upvotes
     - comments
-      - upvotes
-      - comments
-  - subscriptions
+- subscriptions
 
 2. Space
-  - posts
-    - reactions
+
+- posts
+  - reactions
+  - comments
+    - upvotes
     - comments
-      - upvotes
-      - comments
-  - subscriptions
+- subscriptions
 
 3. Profile

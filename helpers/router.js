@@ -1,4 +1,3 @@
-const path = require("path");
 const Fastify = require("fastify");
 const { mongooseConnect } = require("../helpers/mongoose");
 
@@ -17,7 +16,6 @@ const oAuthRoutes = require("../routes/oauth_routes");
 const integrationRoutes = require("../routes/integration_routes");
 
 const cors = require("fastify-cors");
-const fstatic = require("fastify-static");
 const compress = require("fastify-compress");
 
 module.exports = {
@@ -52,11 +50,6 @@ module.exports = {
       },
       { prefix: "/api/v1" }
     );
-
-    app.register(fstatic, {
-      root: path.join(__dirname, "static"),
-      prefix: "/static"
-    });
 
     return { app, mongoose };
   },

@@ -76,13 +76,13 @@ module.exports = {
       } // end space if statement
     }
 
-    let profileSubscriptions = {
+    let subs = {
       owned,
       subscriptions,
     };
 
     // Send
-    res.status(200).send({profileSubscriptions});
+    res.status(200).send({subscriptions: subs});
   },
 
   async getSubscription(req, res, next) {

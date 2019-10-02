@@ -1,12 +1,12 @@
 // Dependencies
 
 // Models
-const Subscription = require('../models/SubscriptionModel');
-const Project = require('../models/ProjectModel');
-const Space = require('../models/SpaceModel');
-const Profile = require('../models/ProfileModel');
-const Notification = require('../models/NotificationModel');
-const NotificationHelper = require('../helpers/notification_helpers');
+const Subscription = require("../models/SubscriptionModel");
+const Project = require("../models/ProjectModel");
+const Space = require("../models/SpaceModel");
+const Profile = require("../models/ProfileModel");
+const Notification = require("../models/NotificationModel");
+const NotificationHelper = require("../helpers/notification_helpers");
 
 module.exports = {
   async getSubscriptionList(req, res, next) {
@@ -20,18 +20,13 @@ module.exports = {
     let owned = [];
     let subscriptions = [];
 
-    const subscriptionsArray = await Subscription.find({profileId});
+    const subscriptionsArray = await Subscription.find({ profileId });
 
-
-    for (let i=0; i < subscriptionsArray.length; i++) {
-
+    for (let i = 0; i < subscriptionsArray.length; i++) {
       let sub = subscriptionsArray[i];
 
-
-      if (sub['projectId'] !== undefined) {
-
-        let projectObj = await Project.findOne({ _id: sub.projectId }).populate('subscribers');
-
+      if (sub["projectId"] !== undefined) {
+        let projectObj = await Project.findOne({ _id: sub.projectId }).populate("subscribers");
 
         if (projectObj !== null) {
           let subObj = {
@@ -40,7 +35,7 @@ module.exports = {
             name: projectObj.name,
             isProject: true,
             pictureUrl: projectObj.profilePicture,
-            numSubs: projectObj.subscribers,
+            numSubs: projectObj.subscribers
           };
 
           // does profileId match admin of project?
@@ -50,12 +45,10 @@ module.exports = {
             subscriptions.push(subObj);
           }
         }
-
       } // end project if statement
 
-      if (sub['spaceId'] !== undefined) {
-
-        let spaceObj = await Space.findOne({ _id: sub.spaceId }).populate('subscribers');
+      if (sub["spaceId"] !== undefined) {
+        let spaceObj = await Space.findOne({ _id: sub.spaceId }).populate("subscribers");
 
         if (spaceObj !== null) {
           let subObj = {
@@ -64,7 +57,7 @@ module.exports = {
             name: spaceObj.name,
             isProject: false,
             pictureUrl: spaceObj.profilePicture,
-            numSubs: spaceObj.subscribers,
+            numSubs: spaceObj.subscribers
           };
 
           if (spaceObj.admins.includes(profileId)) {
@@ -78,53 +71,44 @@ module.exports = {
 
     let profileSubscriptions = {
       owned,
-      subscriptions,
+      subscriptions
     };
 
     // Send
-    res.status(200).send({profileSubscriptions});
+    res.status(200).send({ profileSubscriptions });
   },
 
   async getSubscription(req, res, next) {
     // Init
-    const {
-      profileId,
-      type,
-      typeId
-    } = req.params;
+    const { profileId, type, typeId } = req.params;
 
     // Act
-    if (type === 'spaces') {
-      const subscription = await Subscription.findOne({profileId, spaceId: typeId});
+    if (type === "spaces") {
+      const subscription = await Subscription.findOne({ profileId, spaceId: typeId });
+
+      // Send
+      res.status(200).send(subscription);
+    } else if (type === "projects") {
+      const subscription = await Subscription.findOne({ profileId, projectId: typeId });
 
       // Send
       res.status(200).send(subscription);
     }
-
-    else if (type === 'projects') {
-      const subscription = await Subscription.findOne({profileId, projectId: typeId});
-
-      // Send
-      res.status(200).send(subscription);
-    }
-
-
   },
 
   async createSubscription(req, res, next) {
     // Init
-    const { // these need to be null'd if they're not being used
-      profileId,
+    const {
+      // these need to be null'd if they're not being used
+      profileId
     } = req.params;
 
-    const {
-      projectId,
-      spaceId,
-    } = req.body;
+    const { projectId, spaceId } = req.body;
 
-    if (projectId === undefined) { // add Space Sub
+    if (projectId === undefined) {
+      // add Space Sub
       // Act
-      const subscription = await Subscription.create({profileId, spaceId});
+      const subscription = await Subscription.create({ profileId, spaceId });
 
       // Send
       await subscription.save();
@@ -134,15 +118,14 @@ module.exports = {
       // build the notification
       let notifObject = {
         sendingProfileId: profileId,
-        ownerSpaceId: spaceId,
+        ownerSpaceId: spaceId
       };
 
       await NotificationHelper.createNotification("new-subscriber", notifObject);
-    }
-
-    else if (spaceId === undefined) { // add Project Sub
+    } else if (spaceId === undefined) {
+      // add Project Sub
       // Act
-      const subscription = await Subscription.create({profileId, projectId});
+      const subscription = await Subscription.create({ profileId, projectId });
 
       // Send
       await subscription.save();
@@ -157,7 +140,7 @@ module.exports = {
       // build the notification
       let notifObject = {
         sendingProfileId: profileId,
-        ownerProjectId: projectId,
+        ownerProjectId: projectId
       };
 
       await NotificationHelper.createNotification("new-subscriber", notifObject);
@@ -169,29 +152,21 @@ module.exports = {
 
   async deleteSubscription(req, res, next) {
     // Init
-    const {
-      profileId,
-      type,
-      typeId
-    } = req.params;
+    const { profileId, type, typeId } = req.params;
 
     // Act
-    if (type === 'spaces') {
-      await Subscription.findOneAndDelete({profileId, spaceId: typeId});
-      const subscription = await Subscription.findOne({profileId, spaceId: typeId});
+    if (type === "spaces") {
+      await Subscription.findOneAndDelete({ profileId, spaceId: typeId });
+      const subscription = await Subscription.findOne({ profileId, spaceId: typeId });
+
+      // Send
+      res.status(204).send(subscription);
+    } else if (type === "projects") {
+      await Subscription.findOneAndDelete({ profileId, projectId: typeId });
+      const subscription = await Subscription.findOne({ profileId, spaceId: typeId });
 
       // Send
       res.status(204).send(subscription);
     }
-
-    else if (type === 'projects') {
-      await Subscription.findOneAndDelete({profileId, projectId: typeId});
-      const subscription = await Subscription.findOne({profileId, spaceId: typeId});
-
-      // Send
-      res.status(204).send(subscription);
-    }
-
-
-  },
-}
+  }
+};

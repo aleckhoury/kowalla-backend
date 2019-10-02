@@ -1,7 +1,7 @@
 // Models
-const Profile = require('../models/ProfileModel');
-const Space = require('../models/SpaceModel');
-const Project = require('../models/ProjectModel');
+const Profile = require("../models/ProfileModel");
+const Space = require("../models/SpaceModel");
+const Project = require("../models/ProjectModel");
 
 module.exports = {
   async mvpSearch(req, res, next) {
@@ -11,9 +11,8 @@ module.exports = {
 
     let responseArray = [];
 
-    for (let i=0; i < profiles.length; i++) {
+    for (let i = 0; i < profiles.length; i++) {
       if (profiles[i].firstName !== undefined) {
-
         responseArray.push({
           name: `${profiles[i].firstName} ${profiles[i].lastName}`,
           profileId: profiles[i]._id,
@@ -22,9 +21,8 @@ module.exports = {
       }
     }
 
-    for (let i=0; i < projects.length; i++) {
+    for (let i = 0; i < projects.length; i++) {
       if (projects[i].name !== undefined) {
-
         responseArray.push({
           name: projects[i].name,
           projectId: projects[i]._id,
@@ -33,9 +31,8 @@ module.exports = {
       }
     }
 
-    for (let i=0; i < spaces.length; i++) {
+    for (let i = 0; i < spaces.length; i++) {
       if (spaces[i].name !== undefined) {
-
         responseArray.push({
           name: spaces[i].name,
           spaceId: spaces[i]._id,
@@ -44,6 +41,6 @@ module.exports = {
       }
     }
 
-    res.send(responseArray)
+    res.send(responseArray);
   }
-}
+};

@@ -46,10 +46,7 @@ async function getReputation(projectId, name = "") {
   }
 
   // get array of post id values only
-  let postArrayWithKeyValuePairs = await Post.find(
-    { projectId: projectId },
-    "_id"
-  );
+  let postArrayWithKeyValuePairs = await Post.find({ projectId: projectId }, "_id");
   let postArrayWithValues = postArrayWithKeyValuePairs.map(function(object) {
     return object._id;
   });
@@ -82,21 +79,12 @@ module.exports = {
   // Create
   async createProject(req, res, next) {
     // Init
-    let {
-      name,
-      projectName,
-      description,
-      profilePicture,
-      headerPicture,
-      admins
-    } = req.body;
+    let { name, projectName, description, profilePicture, headerPicture, admins } = req.body;
 
     if (profilePicture === "") {
       let items = ["bd56e1", "efbbcc", "0a2049", "db9dee"];
       let item = items[Math.floor(Math.random() * items.length)];
-      profilePicture = `https://ui-avatars.com/api/?name=${projectName}&background=${item}&color=${
-        item === "efbbcc" ? "0a2049" : "fff"
-      }&bold=true&size=200&font-size=0.6`;
+      profilePicture = `https://ui-avatars.com/api/?name=${projectName}&background=${item}&color=${item === "efbbcc" ? "0a2049" : "fff"}&bold=true&size=200&font-size=0.6`;
     }
 
     try {

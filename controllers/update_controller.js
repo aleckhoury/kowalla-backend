@@ -1,7 +1,7 @@
 // Dependencies
 
 // Models
-const Update = require('../models/UpdateModel');
+const Update = require("../models/UpdateModel");
 
 module.exports = {
   async getUpdateList(req, res, next) {
@@ -9,10 +9,10 @@ module.exports = {
     const { projectId } = req.params;
 
     // Act
-    const updates = await Update.find({projectId});
+    const updates = await Update.find({ projectId });
 
     // Send
-    res.status(200).send({updates});
+    res.status(200).send({ updates });
   },
 
   async getUpdate(req, res, next) {
@@ -20,7 +20,7 @@ module.exports = {
     const { updateId } = req.params;
 
     // Act
-    const update = await Update.findOne({_id: updateId});
+    const update = await Update.findOne({ _id: updateId });
 
     // Send
     res.status(200).send(update);
@@ -28,17 +28,14 @@ module.exports = {
 
   async createUpdate(req, res, next) {
     // Init
-    const {
-      profileId,
-      content,
-    } = req.body;
+    const { profileId, content } = req.body;
 
     const { projectId } = req.params;
 
     const views = 0;
 
     // Act
-    const update = await Update.create({profileId, projectId, content, views});
+    const update = await Update.create({ profileId, projectId, content, views });
 
     // Send
     await update.save();
@@ -50,10 +47,10 @@ module.exports = {
     const { updateId } = req.params;
 
     // Act
-    await Update.findOneAndDelete({_id: updateId});
-    const update = await Update.findOne({_id: updateId});
+    await Update.findOneAndDelete({ _id: updateId });
+    const update = await Update.findOne({ _id: updateId });
 
     // Send
     res.status(204).send(update);
-  },
-}
+  }
+};

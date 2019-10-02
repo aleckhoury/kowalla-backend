@@ -1,8 +1,8 @@
 // Dependencies
 
 // Models
-const Space = require('../models/SpaceModel');
-const Profile = require('../models/ProfileModel');
+const Space = require("../models/SpaceModel");
+const Profile = require("../models/ProfileModel");
 
 /*
 1) Create -- first pass done
@@ -24,9 +24,9 @@ const Profile = require('../models/ProfileModel');
 async function getProfileIdsFromUsernames(usernames) {
   let idArray = [];
 
-  for (let i=0; i<usernames.length; i++) {
-    let profileObj = await Profile.findOne({username: usernames[i]});
-    idArray.push(profileObj._id)
+  for (let i = 0; i < usernames.length; i++) {
+    let profileObj = await Profile.findOne({ username: usernames[i] });
+    idArray.push(profileObj._id);
   }
 
   return idArray;
@@ -34,25 +34,24 @@ async function getProfileIdsFromUsernames(usernames) {
 
 module.exports = {
   async getSpaceList(req, res, next) {
-      // Init
-      spaces = await Space.find({})
-        .populate('subscribers')
-        .populate('postCount')
-        .exec();
+    // Init
+    spaces = await Space.find({})
+      .populate("subscribers")
+      .populate("postCount")
+      .exec();
 
-      // Send
-      res.send({spaces});
+    // Send
+    res.send({ spaces });
   },
 
   async getSpaceByName(req, res, next) {
-
     // Init
     const { spaceName } = req.params;
 
     // Act
-    const space = await Space.findOne({name: spaceName})
-      .populate('subscribers')
-      .populate('postCount')
+    const space = await Space.findOne({ name: spaceName })
+      .populate("subscribers")
+      .populate("postCount")
       .exec();
 
     // Send
@@ -60,89 +59,83 @@ module.exports = {
   },
 
   async getSpace(req, res, next) {
-      // Init
-      const { spaceId } = req.params;
+    // Init
+    const { spaceId } = req.params;
 
-      // Act
-      const space = await Space.findOne({_id: spaceId})
-        .populate('subscribers')
-        .populate('postCount')
-        .exec();
+    // Act
+    const space = await Space.findOne({ _id: spaceId })
+      .populate("subscribers")
+      .populate("postCount")
+      .exec();
 
-      // Send
-      res.status(200).send(space);
+    // Send
+    res.status(200).send(space);
   },
 
   async createSpace(req, res, next) {
-      // Init
-      let {
+    // Init
+    let { name, description, headerPicture, profilePicture, admins } = req.body;
+
+    if (profilePicture === "") {
+      let items = ["bd56e1", "efbbcc", "0a2049", "db9dee"];
+      let item = items[Math.floor(Math.random() * items.length)];
+      profilePicture = `https://ui-avatars.com/api/?name=${name}&background=${item}&color=${item === "efbbcc" ? "0a2049" : "fff"}&bold=true&size=200&font-size=0.6`;
+    }
+
+    try {
+      // Act
+      const adminIds = await getProfileIdsFromUsernames(admins);
+      const space = await Space.create({
         name,
         description,
         headerPicture,
         profilePicture,
-        admins,
-      } = req.body;
+        admins: adminIds
+      });
 
-      if (profilePicture === '') {
-          let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
-          let item = items[Math.floor(Math.random()*items.length)];
-          profilePicture = `https://ui-avatars.com/api/?name=${name}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`;
-      }
+      await space.save();
 
-      try {
-          // Act
-          const adminIds = await getProfileIdsFromUsernames(admins);
-          const space = await Space.create({
-              name,
-              description,
-              headerPicture,
-              profilePicture,
-              admins: adminIds,
-          });
+      // Send
+      const populatedSpace = await Space.findOne({ _id: space._id })
+        .populate("subscribers")
+        .populate("postCount")
+        .exec();
 
-          await space.save();
-
-          // Send
-          const populatedSpace = await Space.findOne({ _id: space._id })
-              .populate('subscribers')
-              .populate('postCount')
-              .exec();
-
-          res.status(201).send(populatedSpace);
-      } catch(err) {
-          res.status(400).send(err);
-      }
+      res.status(201).send(populatedSpace);
+    } catch (err) {
+      res.status(400).send(err);
+    }
   },
 
   async updateSpace(req, res, next) {
-      // Init
-      const { spaceId } = req.params;
-      const updateParams = req.body;
+    // Init
+    const { spaceId } = req.params;
+    const updateParams = req.body;
 
-      try {
-          // Act
-          await Space.findOneAndUpdate({_id: spaceId}, updateParams, { runValidators: true, context: 'query' });
-          const space = await Space.findOne({_id: spaceId})
-              .populate('subscribers')
-              .populate('postCount')
-              .exec();
+    try {
+      // Act
+      await Space.findOneAndUpdate({ _id: spaceId }, updateParams, { runValidators: true, context: "query" });
+      const space = await Space.findOne({ _id: spaceId })
+        .populate("subscribers")
+        .populate("postCount")
+        .exec();
 
-          // Send
-          res.status(200).send(space);
-      } catch(err) {
-          res.status(400).send(err);
-      }
+      // Send
+      res.status(200).send(space);
+    } catch (err) {
+      res.status(400).send(err);
+    }
   },
 
   async deleteSpace(req, res, next) {
-      // Init
-      const { spaceId } = req.params;
+    // Init
+    const { spaceId } = req.params;
 
-      // Act
-      await Space.findOneAndDelete({_id: spaceId});
-      const space = await Space.findOne({_id: spaceId});
+    // Act
+    await Space.findOneAndDelete({ _id: spaceId });
+    const space = await Space.findOne({ _id: spaceId });
 
-      // Send
-      res.status(204).send(space);
-  },
-}
+    // Send
+    res.status(204).send(space);
+  }
+};

@@ -31,11 +31,7 @@ module.exports = {
           username: req.body.username,
           integrations: ["Embed Video"],
           description: "",
-          profilePicture: `https://ui-avatars.com/api/?name=${
-            req.body.username
-          }&background=${item}&color=${
-            item === "efbbcc" ? "0a2049" : "fff"
-          }&bold=true&size=200&font-size=0.6`,
+          profilePicture: `https://ui-avatars.com/api/?name=${req.body.username}&background=${item}&color=${item === "efbbcc" ? "0a2049" : "fff"}&bold=true&size=200&font-size=0.6`,
           userId: newUser._id
         });
         const subscription = await Subscription.create({
@@ -93,10 +89,7 @@ module.exports = {
           message: "Invalid username"
         });
       }
-      await bcrypt.compare(req.body.password, user.password, function(
-        err,
-        res
-      ) {
+      await bcrypt.compare(req.body.password, user.password, function(err, res) {
         if (res) {
           const token = jwt.sign({ sub: user._id }, process.env.secret);
           const {

@@ -1,10 +1,10 @@
-const ConfigController = require('../controllers/config_controller');
+const ConfigController = require("../controllers/config_controller");
 
-module.exports = (app) => {
-    // ##########################################################################
-    // User Routes
-    // ##########################################################################
-    /*
+module.exports = app => {
+  // ##########################################################################
+  // User Routes
+  // ##########################################################################
+  /*
     | List: GET /users/ : sent [n/a]; response [object]
     | Get: GET /users/-/ : sent [n/a]; response [object]
     | Create: POST /users/
@@ -12,9 +12,9 @@ module.exports = (app) => {
     | Delete: DELETE /users/-/ : sent [n/a]; response [?]
     */
 
-    // app.get('/api/v1/users', UserController.getUserList);
-    // app.get('/api/v1/users/:id', UserController.getUser);
-    app.post('/api/v1/config', ConfigController.createConfig);
-    // app.put('/api/v1/users/:id', UserController.updateUser);
-    // app.delete('/api/v1/users/:id', UserController.deleteUser);
+  // app.get('/users', UserController.getUserList);
+  // app.get('/users/:id', UserController.getUser);
+  app.post("/config", ConfigController.createConfig);
+  // app.put('/users/:id', UserController.updateUser);
+  // app.delete('/users/:id', UserController.deleteUser);
 };

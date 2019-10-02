@@ -1,8 +1,8 @@
-const SpaceController = require('../controllers/space_controller');
-const PostController = require('../controllers/post_controller');
-const CommentController = require('../controllers/comment_controller');
+const SpaceController = require("../controllers/space_controller");
+const PostController = require("../controllers/post_controller");
+const CommentController = require("../controllers/comment_controller");
 
-module.exports = (app) => {
+module.exports = app => {
   // ##########################################################################
   // General Space Routes
   // ##########################################################################
@@ -14,14 +14,13 @@ module.exports = (app) => {
   | Delete: DELETE /spaces/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/spaces', SpaceController.getSpaceList);
-  app.get('/api/v1/spaces/:spaceId', SpaceController.getSpace);
-  app.post('/api/v1/spaces', SpaceController.createSpace);
-  app.put('/api/v1/spaces/:spaceId', SpaceController.updateSpace);
-  app.delete('/api/v1/spaces/:spaceId', SpaceController.deleteSpace);
+  app.get("/spaces", SpaceController.getSpaceList);
+  app.get("/spaces/:spaceId", SpaceController.getSpace);
+  app.post("/spaces", SpaceController.createSpace);
+  app.put("/spaces/:spaceId", SpaceController.updateSpace);
+  app.delete("/spaces/:spaceId", SpaceController.deleteSpace);
 
-
-  app.get('/api/v1/spaces/space/:spaceName', SpaceController.getSpaceByName);
+  app.get("/spaces/space/:spaceName", SpaceController.getSpaceByName);
   // ##########################################################################
   // Post Routes
   // ##########################################################################
@@ -32,10 +31,10 @@ module.exports = (app) => {
   | Update: PUT /spaces/-/posts/-/ : sent [object]; response [object]
   | Delete: DELETE /spaces/-/posts/-/ : sent [n/a]; response [?]
   */
-  app.get('/api/v1/space/posts/:spaceId/:sort/:skip', PostController.getSpacePostList);
-  app.get('/api/v1/spaces/:spaceId/posts/:postId', PostController.getPost);
-  // app.post('/api/v1/spaces/:spaceId/posts', PostController.createPost);
-  //app.put('/api/v1/spaces/:spaceId/posts/:postId', PostController.updatePost);
+  app.get("/space/posts/:spaceId/:sort/:skip", PostController.getSpacePostList);
+  app.get("/spaces/:spaceId/posts/:postId", PostController.getPost);
+  // app.post('/spaces/:spaceId/posts', PostController.createPost);
+  //app.put('/spaces/:spaceId/posts/:postId', PostController.updatePost);
 
   // ##########################################################################
   // Comment Routes
@@ -48,10 +47,9 @@ module.exports = (app) => {
   | Delete: DELETE /spaces/-/posts/-/ : sent [n/a]; response [?]
   */
 
-  app.get('/api/v1/spaces/:spaceId/posts/:postId/comments', CommentController.getPostCommentList);
-  app.get('/api/v1/spaces/:spaceId/posts/:postId/comments/:commentId', CommentController.getPostComment);
-  app.post('/api/v1/spaces/:spaceId/posts/:postId/comments', CommentController.createPostComment);
-  //app.put('/api/v1/spaces/:spaceId/posts/:postId', CommentController.updatePostComment);
-  app.delete('/api/v1/spaces/:spaceId/posts/:postId/comments/:commentId', CommentController.deletePostComment);
-
-}
+  app.get("/spaces/:spaceId/posts/:postId/comments", CommentController.getPostCommentList);
+  app.get("/spaces/:spaceId/posts/:postId/comments/:commentId", CommentController.getPostComment);
+  app.post("/spaces/:spaceId/posts/:postId/comments", CommentController.createPostComment);
+  //app.put('/spaces/:spaceId/posts/:postId', CommentController.updatePostComment);
+  app.delete("/spaces/:spaceId/posts/:postId/comments/:commentId", CommentController.deletePostComment);
+};

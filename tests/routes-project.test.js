@@ -1,50 +1,44 @@
 // TODO: Kevin 2019-10 Mock with in memory db
-const request = require("supertest");
-const { mongooseConnect } = require("../helpers/mongoose");
-const { appInit } = require("../helpers/express");
+const Fastify = require("fastify");
+const { appInit } = require("../helpers/router");
 
 describe("routes/project", () => {
   let app;
   let mongoose;
 
   beforeAll(async () => {
-    mongoose = await mongooseConnect();
-    app = appInit();
+    ({ app, mongoose } = appInit({ logger: true }));
   });
 
   afterAll(async () => {
+    app.close();
     await mongoose.stop();
   });
 
   describe("getProjectList()", () => {
     it("success", async () => {
-      const res = await request(app)
-        .get("/api/v1/projects")
-        .set("Accept", "application/json")
-        .expect(200);
-
-      expect(res.body.projects[0]._id).toBe("fS50wWyBY");
+      try {
+        const res = await app.inject({ method: "GET", url: "/api/v1/projects" });
+        expect(res.statusCode).toBe(200);
+        expect(res.body.projects[0]._id).toBe("fS50wWyBY");
+      } catch (err) {
+        return err;
+      }
     });
   });
 
   describe("getProject()", () => {
     it("success", async () => {
-      const res = await request(app)
-        .get("/api/v1/projects/fS50wWyBY")
-        .set("Accept", "application/json")
-        .expect(200);
-
+      const res = await app.inject({ method: "GET", url: "/api/v1/projects/fS50wWyBY", payload: { id: "fS50wWyBY" } });
+      expect(res.statusCode).toBe(200);
       expect(res.body._id).toBe("fS50wWyBY");
     });
   });
 
   describe("getProjectByName()", () => {
     it("success", async () => {
-      const res = await request(app)
-        .get("/api/v1/projects/project/kowalla;")
-        .set("Accept", "application/json")
-        .expect(200);
-
+      const res = await app.inject({ method: "GET", url: "/api/v1/projects/project/kowalla;" });
+      expect(res.statusCode).toBe(200);
       expect(res.body._id).toBe("fS50wWyBY");
     });
   });

@@ -1,21 +1,12 @@
 const throng = require("throng");
-const { appInit } = require("./helpers/express");
+const { appInit, appListen } = require("./helpers/router");
 const Post = require("./models/PostModel");
-const { mongooseConnect } = require("./helpers/mongoose");
 
-const port = process.env.PORT || 8080;
-const workers = process.env.WEB_CONCURRENCY || 1;
-throng({ workers, lifetime: Infinity }, async () => {
-  await mongooseConnect();
+async function run() {
+  const { app } = appInit({ logger: true });
+  await appListen({ app });
 
-  const app = appInit();
-  const listener = app.listen(port, () => {
-    console.log("API SERVER");
-    console.log(`Running on port ${port}`);
-    console.log("Enter Ctrl + C to stop");
-  });
-
-  let io = require("socket.io")(listener);
+  let io = require("socket.io")(app.server);
   let userList = new Set();
   io.on("connection", client => {
     client.on("join", data => {
@@ -37,10 +28,7 @@ throng({ workers, lifetime: Infinity }, async () => {
         }
       });
       io.sockets.emit("updateUsers", [...userList]);
-      if (
-        !userList.size ||
-        ![...userList].some(x => x.username === user.username)
-      ) {
+      if (!userList.size || ![...userList].some(x => x.username === user.username)) {
         const post = await Post.findOne({
           username: user.username,
           isActive: true
@@ -94,4 +82,8 @@ throng({ workers, lifetime: Infinity }, async () => {
       }
     });
   });
-});
+}
+
+const workers = process.env.WEB_CONCURRENCY || 1;
+if (workers === 1) run();
+else throng({ workers, lifetime: Infinity }, run);

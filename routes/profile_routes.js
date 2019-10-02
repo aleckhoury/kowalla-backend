@@ -1,52 +1,45 @@
-const ProfileController = require('../controllers/profile_controller');
-const SubscriptionController = require('../controllers/subscription_controller');
-const UpvoteController = require('../controllers/upvote_controller');
-const ReactionController = require('../controllers/reaction_controller');
-const PostController = require('../controllers/post_controller');
-const NotificationController = require('../controllers/notification_controller');
-const IntegrationController = require('../controllers/integration_controller');
+const ProfileController = require("../controllers/profile_controller");
+const SubscriptionController = require("../controllers/subscription_controller");
+const UpvoteController = require("../controllers/upvote_controller");
+const ReactionController = require("../controllers/reaction_controller");
+const PostController = require("../controllers/post_controller");
+const NotificationController = require("../controllers/notification_controller");
 
-module.exports = (app) => {
+module.exports = app => {
   // Profile Routes
-  app.get('/api/v1/profiles', ProfileController.getProfileList);
-  app.get('/api/v1/profiles/:profileId', ProfileController.getProfile);
-  app.post('/api/v1/profiles', ProfileController.createProfile);
-  app.put('/api/v1/profiles/:profileId', ProfileController.updateProfile);
-  app.delete('/api/v1/profiles/:profileId', ProfileController.deleteProfile);
-  app.get('/api/v1/profiles/user/:username', ProfileController.getProfileByUsername);
-  app.get('/api/v1/users/onboarding', ProfileController.getAllSubscriptionOptions);
+  app.get("/profiles", ProfileController.getProfileList);
+  app.get("/profiles/:profileId", ProfileController.getProfile);
+  app.post("/profiles", ProfileController.createProfile);
+  app.put("/profiles/:profileId", ProfileController.updateProfile);
+  app.delete("/profiles/:profileId", ProfileController.deleteProfile);
+  app.get("/profiles/user/:username", ProfileController.getProfileByUsername);
+  app.get("/users/onboarding", ProfileController.getAllSubscriptionOptions);
 
   // Subscription Routes
-  app.get('/api/v1/profiles/user/:username/subs', SubscriptionController.getSubscriptionList);
-  app.get('/api/v1/profiles/:profileId/subs', SubscriptionController.getSubscriptionList);
-  app.get('/api/v1/profiles/:profileId/subs/:type/:typeId', SubscriptionController.getSubscription);
-  app.post('/api/v1/profiles/:profileId/subs', SubscriptionController.createSubscription);
-  app.delete('/api/v1/profiles/:profileId/subs/:type/:typeId', SubscriptionController.deleteSubscription);
+  app.get("/profiles/user/:username/subs", SubscriptionController.getSubscriptionList);
+  app.get("/profiles/:profileId/subs", SubscriptionController.getSubscriptionList);
+  app.get("/profiles/:profileId/subs/:type/:typeId", SubscriptionController.getSubscription);
+  app.post("/profiles/:profileId/subs", SubscriptionController.createSubscription);
+  app.delete("/profiles/:profileId/subs/:type/:typeId", SubscriptionController.deleteSubscription);
 
   // Upvote Routes
-  app.get('/api/v1/profiles/:profileId/upvotes', UpvoteController.getUpvoteList);
-  app.get('/api/v1/profiles/:profileId/upvotes/:commentId', UpvoteController.getUpvote);
-  //app.get('/api/v1/profiles/:profileId/upvotes/:postId', UpvoteController.getUpvoteListForPost); // would get us all the upvotes within a post, which lessens call volume
-  app.post('/api/v1/profiles/:profileId/upvotes', UpvoteController.createUpvote);
-  app.delete('/api/v1/profiles/:profileId/upvotes/:commentId', UpvoteController.deleteUpvote);
+  app.get("/profiles/:profileId/upvotes", UpvoteController.getUpvoteList);
+  app.get("/profiles/:profileId/upvotes/:commentId", UpvoteController.getUpvote);
+  app.post("/profiles/:profileId/upvotes", UpvoteController.createUpvote);
+  app.delete("/profiles/:profileId/upvotes/:commentId", UpvoteController.deleteUpvote);
 
   // Reaction Routes
-  app.get('/api/v1/profiles/:profileId/reactions', ReactionController.getReactionList);
-  app.get('/api/v1/profiles/:profileId/reactions/:type/:typeId', ReactionController.getReaction);
-  app.post('/api/v1/profiles/:profileId/reactions', ReactionController.createReaction);
-  app.delete('/api/v1/profiles/:profileId/reactions/:postId', ReactionController.deleteReaction);
-  app.put('/api/v1/profile/posts/:postId', PostController.updatePost);
-  app.get('/api/v1/profile/posts/:profileId/:sort/:skip', PostController.getProfilePostList);
+  app.get("/profiles/:profileId/reactions", ReactionController.getReactionList);
+  app.get("/profiles/:profileId/reactions/:type/:typeId", ReactionController.getReaction);
+  app.post("/profiles/:profileId/reactions", ReactionController.createReaction);
+  app.delete("/profiles/:profileId/reactions/:postId", ReactionController.deleteReaction);
+  app.put("/profile/posts/:postId", PostController.updatePost);
+  app.get("/profile/posts/:profileId/:sort/:skip", PostController.getProfilePostList);
 
   // Notification Routes
-  app.put('/api/v1/profile/posts/:postId', PostController.updatePost);
-  app.post('/api/v1/profiles/:profileId/notifications', NotificationController.getNotificationsList);
-  app.delete('/api/v1/profiles/:profileId/notifications', NotificationController.deleteArrayOfNotifs);
+  app.post("/profiles/:profileId/notifications", NotificationController.getNotificationsList);
+  app.delete("/profiles/:profileId/notifications", NotificationController.deleteArrayOfNotifs);
 
   // Integration Routes
-  app.put('/api/v1/profile/:profileId/integrations', ProfileController.toggleIntegration);
-
-  //app.get('/api/v1/profiles/:profileId/rep', ProfileController.getProfileReputation);
-
-
+  app.put("/profile/:profileId/integrations", ProfileController.toggleIntegration);
 };

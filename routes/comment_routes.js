@@ -1,15 +1,14 @@
-const CommentController = require('../controllers/comment_controller');
-const UpvoteController = require('../controllers/upvote_controller');
+const CommentController = require("../controllers/comment_controller");
+const UpvoteController = require("../controllers/upvote_controller");
 
-module.exports = (app) => {
-    // Comment Routes
-    app.get('/api/v1/comments/:postId', CommentController.getPostCommentList);
-    app.get('/api/v1/comments/:postId/:commentId', CommentController.getCommentReplyList);
-    // app.get('/api/v1/comments/:id', CommentController.getPost);
-    app.post('/api/v1/comments', CommentController.createPostComment);
+module.exports = app => {
+  // Comment Routes
+  app.get("/comments/:postId", CommentController.getPostCommentList);
+  app.get("/comments/:postId/:commentId", CommentController.getCommentReplyList);
+  app.post("/comments", CommentController.createPostComment);
 
-    // Upvote Routes
-    app.get('/api/v1/comments/:commentId/:profileId/upvote', UpvoteController.getUpvote);
-    app.post('/api/v1/comments/upvote', UpvoteController.createUpvote);
-    app.delete('/api/v1/comments/:commentId/:profileId/upvote', UpvoteController.deleteUpvote);
+  // Upvote Routes
+  app.get("/comments/:commentId/:profileId/upvote", UpvoteController.getUpvote);
+  app.post("/comments/upvote", UpvoteController.createUpvote);
+  app.delete("/comments/:commentId/:profileId/upvote", UpvoteController.deleteUpvote);
 };

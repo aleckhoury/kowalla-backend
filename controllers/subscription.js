@@ -4,8 +4,6 @@
 const Subscription = require('../models/subscription');
 const Project = require('../models/project');
 const Space = require('../models/space');
-const Profile = require('../models/profile');
-const Notification = require('../models/notification');
 const NotificationHelper = require('../helpers/notification');
 
 module.exports = {

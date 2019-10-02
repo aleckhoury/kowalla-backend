@@ -1,8 +1,8 @@
 // Dependencies
 
 // Models
-const Post = require('../models/PostModel');
-const Subscriptions = require('../models/SubscriptionModel');
+const Post = require('../models/post');
+const Subscriptions = require('../models/subscription');
 
 module.exports = {
   async getActivePostByUser(req, res, next) {

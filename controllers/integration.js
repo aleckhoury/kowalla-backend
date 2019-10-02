@@ -1,7 +1,7 @@
 // Dependencies
 
 // Models
-const Integration = require('../models/IntegrationModel');
+const Integration = require('../models/integration');
 
 module.exports = {
   async createIntegration(req, res, next) {

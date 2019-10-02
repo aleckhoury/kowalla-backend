@@ -1,14 +1,14 @@
 // Dependencies
 
 // Models
-const Profile = require('../models/ProfileModel');
-const User = require('../models/UserModel');
-const Comment = require('../models/CommentModel');
-const Post = require('../models/PostModel');
-const Reaction = require('../models/ReactionModel');
-const Upvote = require('../models/UpvoteModel');
-const Space = require('../models/SpaceModel');
-const Project = require('../models/ProjectModel');
+const Profile = require('../models/profile');
+const User = require('../models/user');
+const Comment = require('../models/comment');
+const Post = require('../models/post');
+const Reaction = require('../models/reaction');
+const Upvote = require('../models/upvote');
+const Space = require('../models/space');
+const Project = require('../models/project');
 
 async function getReputationByProfileId(profileId, username = '') {
   if (username !== '') {

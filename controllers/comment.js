@@ -1,9 +1,9 @@
 // Dependencies
 
 // Models
-const Comment = require('../models/CommentModel');
-const Post = require('../models/PostModel');
-const NotificationHelper = require('../helpers/notification_helpers');
+const Comment = require('../models/comment');
+const Post = require('../models/post');
+const NotificationHelper = require('../helpers/notification');
 
 module.exports = {
   async getPostCommentList(req, res, next) {

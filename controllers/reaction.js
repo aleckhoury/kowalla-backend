@@ -1,9 +1,9 @@
 // Dependencies
 
 // Models
-const Reaction = require('../models/ReactionModel');
-const Post = require('../models/PostModel');
-const NotificationHelper = require('../helpers/notification_helpers');
+const Reaction = require('../models/reaction');
+const Post = require('../models/post');
+const NotificationHelper = require('../helpers/notification');
 
 module.exports = {
   async getReactionList(req, res, next) {

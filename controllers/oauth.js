@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const OAuth = require('oauth-1.0a');
 // const request = require('request');
-const Config = require('../models/ConfigModel');
-const Profile = require('../models/ProfileModel');
-const User = require('../models/UserModel');
-const Subscription = require('../models/SubscriptionModel');
+const Config = require('../models/config');
+const Profile = require('../models/profile');
+const User = require('../models/user');
+const Subscription = require('../models/subscription');
 let data;
 // Models
 module.exports = {

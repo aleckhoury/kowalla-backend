@@ -1,7 +1,7 @@
 // Dependencies
 
 // Models
-const Config = require('../models/ConfigModel');
+const Config = require('../models/config');
 
 module.exports = {
   async createConfig(req, res, next) {

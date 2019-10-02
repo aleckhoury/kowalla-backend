@@ -1,9 +1,9 @@
 // Dependencies
 
 // Models
-const Upvote = require('../models/UpvoteModel');
-const Comment = require('../models/CommentModel');
-const NotificationHelper = require('../helpers/notification_helpers');
+const Upvote = require('../models/upvote');
+const Comment = require('../models/comment');
+const NotificationHelper = require('../helpers/notification');
 
 module.exports = {
   async getUpvoteList(req, res, next) {

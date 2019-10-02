@@ -1,4 +1,4 @@
-const ReactionController = require('../controllers/reaction_controller');
+const ReactionController = require('../controllers/reaction');
 
 module.exports = app => {
   // Reaction Routes

@@ -1,7 +1,7 @@
-const ProjectController = require('../controllers/project_controller');
-const PostController = require('../controllers/post_controller');
-const UpdateController = require('../controllers/update_controller');
-const CommentController = require('../controllers/comment_controller');
+const ProjectController = require('../controllers/project');
+const PostController = require('../controllers/post');
+const UpdateController = require('../controllers/update');
+const CommentController = require('../controllers/comment');
 
 module.exports = app => {
   app.get('/projects', ProjectController.getProjectList);

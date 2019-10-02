@@ -1,4 +1,4 @@
-const SearchController = require('../controllers/search_controller');
+const SearchController = require('../controllers/search');
 
 module.exports = app => {
   app.get('/search/', SearchController.mvpSearch);

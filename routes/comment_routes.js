@@ -1,5 +1,5 @@
-const CommentController = require('../controllers/comment_controller');
-const UpvoteController = require('../controllers/upvote_controller');
+const CommentController = require('../controllers/comment');
+const UpvoteController = require('../controllers/upvote');
 
 module.exports = app => {
   // Comment Routes

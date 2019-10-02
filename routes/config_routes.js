@@ -1,4 +1,4 @@
-const ConfigController = require('../controllers/config_controller');
+const ConfigController = require('../controllers/config');
 
 module.exports = app => {
   // ##########################################################################

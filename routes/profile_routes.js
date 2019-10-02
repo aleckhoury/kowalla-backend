@@ -1,9 +1,9 @@
-const ProfileController = require('../controllers/profile_controller');
-const SubscriptionController = require('../controllers/subscription_controller');
-const UpvoteController = require('../controllers/upvote_controller');
-const ReactionController = require('../controllers/reaction_controller');
-const PostController = require('../controllers/post_controller');
-const NotificationController = require('../controllers/notification_controller');
+const ProfileController = require('../controllers/profile');
+const SubscriptionController = require('../controllers/subscription');
+const UpvoteController = require('../controllers/upvote');
+const ReactionController = require('../controllers/reaction');
+const PostController = require('../controllers/post');
+const NotificationController = require('../controllers/notification');
 
 module.exports = app => {
   // Profile Routes

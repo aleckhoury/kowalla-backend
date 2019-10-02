@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
-const uniqueValidator = require("mongoose-unique-validator");
+const shortid = require('shortid');
+const uniqueValidator = require('mongoose-unique-validator');
 
 //import SubscriptionModel from './SubscriptionModel';
 
-const Subscription = require("./SubscriptionModel");
+const Subscription = require('./SubscriptionModel');
 
 const ProjectSchema = new Schema(
   {
@@ -31,22 +31,22 @@ const ProjectSchema = new Schema(
 }*/
 );
 
-ProjectSchema.virtual("subscribers", {
-  ref: "subscription",
-  localField: "_id",
-  foreignField: "projectId",
+ProjectSchema.virtual('subscribers', {
+  ref: 'subscription',
+  localField: '_id',
+  foreignField: 'projectId',
   count: true
 });
 
-ProjectSchema.virtual("postCount", {
-  ref: "post",
-  localField: "_id",
-  foreignField: "projectId",
+ProjectSchema.virtual('postCount', {
+  ref: 'post',
+  localField: '_id',
+  foreignField: 'projectId',
   count: true
 });
 
-ProjectSchema.plugin(uniqueValidator, { message: "This project username is already taken." });
+ProjectSchema.plugin(uniqueValidator, { message: 'This project username is already taken.' });
 
-const Project = mongoose.model("project", ProjectSchema);
+const Project = mongoose.model('project', ProjectSchema);
 
 module.exports = Project;

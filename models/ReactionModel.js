@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
+const shortid = require('shortid');
 
 const ReactionSchema = new Schema(
   {
@@ -15,6 +15,6 @@ const ReactionSchema = new Schema(
   }
 );
 
-const Reaction = mongoose.model("reaction", ReactionSchema);
+const Reaction = mongoose.model('reaction', ReactionSchema);
 
 module.exports = Reaction;

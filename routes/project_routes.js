@@ -1,17 +1,17 @@
-const ProjectController = require("../controllers/project_controller");
-const PostController = require("../controllers/post_controller");
-const UpdateController = require("../controllers/update_controller");
-const CommentController = require("../controllers/comment_controller");
+const ProjectController = require('../controllers/project_controller');
+const PostController = require('../controllers/post_controller');
+const UpdateController = require('../controllers/update_controller');
+const CommentController = require('../controllers/comment_controller');
 
 module.exports = app => {
-  app.get("/projects", ProjectController.getProjectList);
-  app.get("/projects/:id", ProjectController.getProject);
-  app.post("/projects", ProjectController.createProject);
-  app.put("/projects/:id", ProjectController.updateProject);
-  app.delete("/projects/:id", ProjectController.deleteProject);
-  app.post("/spaces/:projectId/posts", PostController.createPost);
+  app.get('/projects', ProjectController.getProjectList);
+  app.get('/projects/:id', ProjectController.getProject);
+  app.post('/projects', ProjectController.createProject);
+  app.put('/projects/:id', ProjectController.updateProject);
+  app.delete('/projects/:id', ProjectController.deleteProject);
+  app.post('/spaces/:projectId/posts', PostController.createPost);
 
-  app.get("/projects/project/:projectName", ProjectController.getProjectByName);
+  app.get('/projects/project/:projectName', ProjectController.getProjectByName);
   // ##########################################################################
   // Post Routes
   // ##########################################################################
@@ -19,7 +19,7 @@ module.exports = app => {
   | List: GET /projects/-/posts : sent [n/a]; response [object]
   */
 
-  app.get("/project/posts/:projectId/:sort/:skip", PostController.getProjectPostList);
+  app.get('/project/posts/:projectId/:sort/:skip', PostController.getProjectPostList);
 
   // ##########################################################################
   // Update Routes
@@ -32,11 +32,11 @@ module.exports = app => {
   | Delete: DELETE /projects/-/updates/-/ : sent [n/a]; response [?]
   */
 
-  app.get("/projects/:projectId/updates", UpdateController.getUpdateList);
-  app.get("/projects/:projectId/updates/:updateId", UpdateController.getUpdate);
-  app.post("/projects/:projectId/updates", UpdateController.createUpdate);
+  app.get('/projects/:projectId/updates', UpdateController.getUpdateList);
+  app.get('/projects/:projectId/updates/:updateId', UpdateController.getUpdate);
+  app.post('/projects/:projectId/updates', UpdateController.createUpdate);
   //app.put('/projects/:projects/updates/:postId', UpdateController.updateUpdate);
-  app.delete("/projects/:projectId/updates/:updateId", UpdateController.deleteUpdate);
+  app.delete('/projects/:projectId/updates/:updateId', UpdateController.deleteUpdate);
 
   // ##########################################################################
   // Comment Routes
@@ -49,9 +49,9 @@ module.exports = app => {
   | Delete: DELETE /projects/-/updates/-/ : sent [n/a]; response [?]
   */
 
-  app.get("/projects/:projectId/updates/:updateId/comments", CommentController.getUpdateCommentList);
-  app.get("/projects/:projectId/updates/:updateId/comments/:commentId", CommentController.getUpdateComment);
-  app.post("/projects/:projectId/updates/:updateId/comments", CommentController.createUpdateComment);
+  app.get('/projects/:projectId/updates/:updateId/comments', CommentController.getUpdateCommentList);
+  app.get('/projects/:projectId/updates/:updateId/comments/:commentId', CommentController.getUpdateComment);
+  app.post('/projects/:projectId/updates/:updateId/comments', CommentController.createUpdateComment);
   //app.put('/projects/:projectId/updates/:updateId', CommentController.updateUpdateComment);
-  app.delete("/projects/:projectId/updates/:updateId/comments/:commentId", CommentController.deleteUpdateComment);
+  app.delete('/projects/:projectId/updates/:updateId/comments/:commentId', CommentController.deleteUpdateComment);
 };

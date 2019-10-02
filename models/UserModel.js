@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
-const uniqueValidator = require("mongoose-unique-validator");
+const shortid = require('shortid');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const UserSchema = new Schema(
   {
@@ -10,11 +10,11 @@ const UserSchema = new Schema(
     email: { type: String, unique: true, uniqueCaseInsensitive: true },
     password: { type: String }
   },
-  { collation: { locale: "en_US", strength: 1 }, timestamps: true }
+  { collation: { locale: 'en_US', strength: 1 }, timestamps: true }
 );
 
-UserSchema.plugin(uniqueValidator, { message: "This username or email is already taken." });
+UserSchema.plugin(uniqueValidator, { message: 'This username or email is already taken.' });
 
-const User = mongoose.model("user", UserSchema);
+const User = mongoose.model('user', UserSchema);
 
 module.exports = User;

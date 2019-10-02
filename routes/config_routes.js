@@ -1,4 +1,4 @@
-const ConfigController = require("../controllers/config_controller");
+const ConfigController = require('../controllers/config_controller');
 
 module.exports = app => {
   // ##########################################################################
@@ -14,7 +14,7 @@ module.exports = app => {
 
   // app.get('/users', UserController.getUserList);
   // app.get('/users/:id', UserController.getUser);
-  app.post("/config", ConfigController.createConfig);
+  app.post('/config', ConfigController.createConfig);
   // app.put('/users/:id', UserController.updateUser);
   // app.delete('/users/:id', UserController.deleteUser);
 };

@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
+const shortid = require('shortid');
 
 const UpdateSchema = new Schema(
   {
@@ -15,6 +15,6 @@ const UpdateSchema = new Schema(
   }
 );
 
-const Update = mongoose.model("update", UpdateSchema);
+const Update = mongoose.model('update', UpdateSchema);
 
 module.exports = Update;

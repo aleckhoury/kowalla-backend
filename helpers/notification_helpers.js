@@ -1,9 +1,9 @@
-const Project = require("../models/ProjectModel");
-const Post = require("../models/PostModel");
-const Comment = require("../models/CommentModel");
-const Space = require("../models/SpaceModel");
-const Notification = require("../models/NotificationModel");
-const _ = require("lodash");
+const Project = require('../models/ProjectModel');
+const Post = require('../models/PostModel');
+const Comment = require('../models/CommentModel');
+const Space = require('../models/SpaceModel');
+const Notification = require('../models/NotificationModel');
+const _ = require('lodash');
 
 function checkForTomfoolery(ownerProfileId, sendingProfileId) {
   if (ownerProfileId === sendingProfileId) {
@@ -15,20 +15,20 @@ function checkForTomfoolery(ownerProfileId, sendingProfileId) {
 
 function pluralize(baseWord, count, alt = false) {
   if (alt === false) {
-    return count > 1 || count === 0 ? baseWord + "s" : baseWord;
+    return count > 1 || count === 0 ? baseWord + 's' : baseWord;
   } else {
-    return count > 1 || count === 0 ? baseWord.slice(0, -1) + "ies" : baseWord;
+    return count > 1 || count === 0 ? baseWord.slice(0, -1) + 'ies' : baseWord;
   }
 }
 
 function combineExtensions(ext1, ext2) {
-  let output = "";
+  let output = '';
 
-  if (ext1 !== "" && ext2 !== "") {
-    output = ext1 + " and " + ext2;
-  } else if (ext1 !== "" && ext2 === "") {
+  if (ext1 !== '' && ext2 !== '') {
+    output = ext1 + ' and ' + ext2;
+  } else if (ext1 !== '' && ext2 === '') {
     output = ext1;
-  } else if (ext1 === "" && ext2 !== "") {
+  } else if (ext1 === '' && ext2 !== '') {
     output = ext2;
   }
 
@@ -39,15 +39,15 @@ function readablePostNotification(contentObject) {
   let { spaceName, commentCount, reactionCount, postId, notifIds } = contentObject;
 
   let title = `Your post in #${spaceName} is getting attention!`;
-  let commentExt = "";
-  let reactionExt = "";
+  let commentExt = '';
+  let reactionExt = '';
 
   if (commentCount > 0) {
-    commentExt = `${commentCount} new ` + pluralize("comment", commentCount);
+    commentExt = `${commentCount} new ` + pluralize('comment', commentCount);
   }
 
   if (reactionCount > 0) {
-    reactionExt = `${reactionCount} new ` + pluralize("reaction", reactionCount);
+    reactionExt = `${reactionCount} new ` + pluralize('reaction', reactionCount);
   }
 
   return {
@@ -63,15 +63,15 @@ function readableCommentNotification(contentObject) {
   let { spaceName, replyCount, upvoteCount, commentId, postId, notifIds } = contentObject;
 
   let title = `New interactions on your comment in #${spaceName}!`;
-  let replyExt = "";
-  let upvoteExt = "";
+  let replyExt = '';
+  let upvoteExt = '';
 
   if (replyCount > 0) {
-    replyExt = `${replyCount} new ` + pluralize("reply", replyCount, true);
+    replyExt = `${replyCount} new ` + pluralize('reply', replyCount, true);
   }
 
   if (upvoteCount > 0) {
-    upvoteExt = `${upvoteCount} new ` + pluralize("upvote", upvoteCount);
+    upvoteExt = `${upvoteCount} new ` + pluralize('upvote', upvoteCount);
   }
 
   return {
@@ -88,7 +88,7 @@ function readableSubscriptionNotification(contentObject) {
   let { projectName, subCount, notifIds } = contentObject;
 
   let title = `@${projectName} has new subscriptions!`;
-  let message = `${subCount} new ` + pluralize("subscriber", subCount);
+  let message = `${subCount} new ` + pluralize('subscriber', subCount);
 
   return { title, message, projectName, notifIds };
 }
@@ -111,7 +111,7 @@ module.exports = {
     }
 
     // search for matching projects
-    let projects = await Project.find({ _id: { $in: projectIdArray } }, "name");
+    let projects = await Project.find({ _id: { $in: projectIdArray } }, 'name');
 
     // for each project found, match it with the corresponding notification
     // and build the notification message
@@ -150,13 +150,13 @@ module.exports = {
       countObj[postId] = {
         postId: postId,
         notifIds: notifIds,
-        reactionCount: tempObj["new-reaction"] !== undefined ? tempObj["new-reaction"].length : 0,
-        commentCount: tempObj["new-comment"] !== undefined ? tempObj["new-comment"].length : 0
+        reactionCount: tempObj['new-reaction'] !== undefined ? tempObj['new-reaction'].length : 0,
+        commentCount: tempObj['new-comment'] !== undefined ? tempObj['new-comment'].length : 0
       };
     }
 
     // find all posts matching the ids we have notifications for
-    let postArray = await Post.find({ _id: { $in: postIdsForQuery } }, "spaceId");
+    let postArray = await Post.find({ _id: { $in: postIdsForQuery } }, 'spaceId');
 
     // sort the postArray by the SpaceIds, so we can make notifications cumalitve
     // returns an object
@@ -170,7 +170,7 @@ module.exports = {
     }
 
     // has spaceNames and spaceIds
-    let spaces = await Space.find({ _id: { $in: spaceIdsForQuery } }, "name");
+    let spaces = await Space.find({ _id: { $in: spaceIdsForQuery } }, 'name');
 
     // since our spaces can contain multiple posts that we want to aggregate
     // we'll iterate through by spaces, then build a notification for each
@@ -246,8 +246,8 @@ module.exports = {
       countObj[commentId] = {
         commentId: commentId,
         notifIds: notifIds,
-        upvoteCount: tempObj["new-upvote"] !== undefined ? tempObj["new-upvote"].length : 0,
-        replyCount: tempObj["new-reply"] !== undefined ? tempObj["new-reply"].length : 0
+        upvoteCount: tempObj['new-upvote'] !== undefined ? tempObj['new-upvote'].length : 0,
+        replyCount: tempObj['new-reply'] !== undefined ? tempObj['new-reply'].length : 0
       };
     }
 
@@ -259,7 +259,7 @@ module.exports = {
     });
 
     let postIdsForQuery = commentArray.map(x => x.postId);
-    let postArray = await Post.find({ _id: { $in: postIdsForQuery } }, "spaceId");
+    let postArray = await Post.find({ _id: { $in: postIdsForQuery } }, 'spaceId');
 
     let postArraySortedBySpaceId = _.groupBy(postArray, function(subObj) {
       return subObj.spaceId;
@@ -271,7 +271,7 @@ module.exports = {
       spaceIdsForQuery.push(spaceId);
     }
 
-    let spaces = await Space.find({ _id: { $in: spaceIdsForQuery } }, "name");
+    let spaces = await Space.find({ _id: { $in: spaceIdsForQuery } }, 'name');
 
     // since we include space names in notifs, start there
     for (let i in spaces) {
@@ -311,7 +311,7 @@ module.exports = {
     return commentMessageArray;
   },
 
-  async createNotification(type = "", notifObject) {
+  async createNotification(type = '', notifObject) {
     /* Notif Obj
       needs one of each row:
         WHO IS THIS FOR: ownerProfileId, or ownerProjectId,
@@ -321,7 +321,7 @@ module.exports = {
     const { ownerProfileId, ownerProjectId, sendingProfileId, commentId, postId } = notifObject;
 
     switch (type) {
-      case "new-subscriber":
+      case 'new-subscriber':
         // should have ownerProjectId, sendingProfileId, NA
 
         // if owner and sender are the same
@@ -333,7 +333,7 @@ module.exports = {
 
         break;
 
-      case "new-reaction": // emoji reaction to a post
+      case 'new-reaction': // emoji reaction to a post
         // should have (ownerProjectId OR ownerProfileId), postId, sendingProfileId
         if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
           break;
@@ -343,7 +343,7 @@ module.exports = {
 
         break;
 
-      case "new-comment": // new comment in direct reply to a post
+      case 'new-comment': // new comment in direct reply to a post
         if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
           break;
         } else {
@@ -352,7 +352,7 @@ module.exports = {
 
         break;
 
-      case "new-reply": // new reply to a comment of yours
+      case 'new-reply': // new reply to a comment of yours
         if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
           break;
         } else {
@@ -361,7 +361,7 @@ module.exports = {
 
         break;
 
-      case "new-upvote": // new upvote on one of your comments
+      case 'new-upvote': // new upvote on one of your comments
         //let { ownerProfileId, sendingProfileId, commentId } = notifObject;
         if (checkForTomfoolery(ownerProfileId, sendingProfileId)) {
           break;

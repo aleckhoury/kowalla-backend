@@ -1,16 +1,16 @@
 // Dependencies
 
 // Models
-const Comment = require("../models/CommentModel");
-const Post = require("../models/PostModel");
-const NotificationHelper = require("../helpers/notification_helpers");
+const Comment = require('../models/CommentModel');
+const Post = require('../models/PostModel');
+const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
   async getPostCommentList(req, res, next) {
     // Init
     const { postId } = req.params;
     // Act
-    const comments = await Comment.find({ postId, commentId: "" });
+    const comments = await Comment.find({ postId, commentId: '' });
 
     // Send
     res.status(200).send(comments);
@@ -49,7 +49,7 @@ module.exports = {
     await comment.save();
     res.status(201).send(comment);
 
-    let post = await Post.findOne({ _id: postId }, "profileId projectId");
+    let post = await Post.findOne({ _id: postId }, 'profileId projectId');
 
     // build notification
     if (commentId === undefined) {
@@ -62,7 +62,7 @@ module.exports = {
         ownerProjectId: post.projectId === undefined ? undefined : post.projectId
       };
 
-      await NotificationHelper.createNotification("new-comment", notifObject);
+      await NotificationHelper.createNotification('new-comment', notifObject);
     } else {
       // otherwise, it's a reply to a comment, which is a "new-reply" notif
       let notifObject = {
@@ -71,7 +71,7 @@ module.exports = {
         ownerProfileId: post.profileId === undefined ? undefined : post.profileId
       };
 
-      await NotificationHelper.createNotification("new-reply", notifObject);
+      await NotificationHelper.createNotification('new-reply', notifObject);
     }
   },
 

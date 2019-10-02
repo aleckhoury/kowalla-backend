@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
+const shortid = require('shortid');
 
 const UpvoteSchema = new Schema(
   {
@@ -13,6 +13,6 @@ const UpvoteSchema = new Schema(
   }
 );
 
-const Upvote = mongoose.model("upvote", UpvoteSchema);
+const Upvote = mongoose.model('upvote', UpvoteSchema);
 
 module.exports = Upvote;

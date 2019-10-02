@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
+const shortid = require('shortid');
 
 const PostSchema = new Schema(
   {
@@ -23,6 +23,6 @@ const PostSchema = new Schema(
   }
 );
 
-const Post = mongoose.model("post", PostSchema);
+const Post = mongoose.model('post', PostSchema);
 
 module.exports = Post;

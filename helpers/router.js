@@ -1,27 +1,27 @@
-const Fastify = require("fastify");
-const { mongooseConnect } = require("../helpers/mongoose");
+const Fastify = require('fastify');
+const { mongooseConnect } = require('../helpers/mongoose');
 
-const profileRoutes = require("../routes/profile_routes");
-const projectRoutes = require("../routes/project_routes");
-const spaceRoutes = require("../routes/space_routes");
-const userRoutes = require("../routes/user_routes");
-const postRoutes = require("../routes/post_routes");
-const imageRoutes = require("../routes/image_routes");
-const reactionRoutes = require("../routes/reaction_routes");
-const configRoutes = require("../routes/config_routes");
-const commentRoutes = require("../routes/comment_routes");
-const upvoteRoutes = require("../routes/upvote_routes");
-const searchRoutes = require("../routes/search_routes");
-const oAuthRoutes = require("../routes/oauth_routes");
-const integrationRoutes = require("../routes/integration_routes");
+const profileRoutes = require('../routes/profile_routes');
+const projectRoutes = require('../routes/project_routes');
+const spaceRoutes = require('../routes/space_routes');
+const userRoutes = require('../routes/user_routes');
+const postRoutes = require('../routes/post_routes');
+const imageRoutes = require('../routes/image_routes');
+const reactionRoutes = require('../routes/reaction_routes');
+const configRoutes = require('../routes/config_routes');
+const commentRoutes = require('../routes/comment_routes');
+const upvoteRoutes = require('../routes/upvote_routes');
+const searchRoutes = require('../routes/search_routes');
+const oAuthRoutes = require('../routes/oauth_routes');
+const integrationRoutes = require('../routes/integration_routes');
 
-const cors = require("fastify-cors");
-const compress = require("fastify-compress");
+const cors = require('fastify-cors');
+const compress = require('fastify-compress');
 
 module.exports = {
   Fastify,
   appInit({ logger = false } = {}) {
-    const app = Fastify({ logger: { level: "debug" } });
+    const app = Fastify({ logger: { level: 'debug' } });
     let mongoose;
 
     app.register(cors);
@@ -48,7 +48,7 @@ module.exports = {
         oAuthRoutes(app);
         integrationRoutes(app);
       },
-      { prefix: "/api/v1" }
+      { prefix: '/api/v1' }
     );
 
     return { app, mongoose };

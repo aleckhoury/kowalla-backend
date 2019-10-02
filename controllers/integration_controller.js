@@ -1,7 +1,7 @@
 // Dependencies
 
 // Models
-const Integration = require("../models/IntegrationModel");
+const Integration = require('../models/IntegrationModel');
 
 module.exports = {
   async createIntegration(req, res, next) {
@@ -22,9 +22,9 @@ module.exports = {
       if (integrations.length) {
         return res.status(200).send(integrations);
       }
-      return res.status(204).send("No Integrations yet!");
+      return res.status(204).send('No Integrations yet!');
     } catch (err) {
-      return res.status(500).send(err, "An error occurred while fetching integrations");
+      return res.status(500).send(err, 'An error occurred while fetching integrations');
     }
   }
 };

@@ -1,5 +1,5 @@
-const UpvoteController = require("../controllers/upvote_controller");
+const UpvoteController = require('../controllers/upvote_controller');
 
 module.exports = app => {
-  app.get("/upvotes/count/:commentId", UpvoteController.getUpvoteCount);
+  app.get('/upvotes/count/:commentId', UpvoteController.getUpvoteCount);
 };

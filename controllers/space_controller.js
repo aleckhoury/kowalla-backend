@@ -1,8 +1,8 @@
 // Dependencies
 
 // Models
-const Space = require("../models/SpaceModel");
-const Profile = require("../models/ProfileModel");
+const Space = require('../models/SpaceModel');
+const Profile = require('../models/ProfileModel');
 
 /*
 1) Create -- first pass done
@@ -36,8 +36,8 @@ module.exports = {
   async getSpaceList(req, res, next) {
     // Init
     spaces = await Space.find({})
-      .populate("subscribers")
-      .populate("postCount")
+      .populate('subscribers')
+      .populate('postCount')
       .exec();
 
     // Send
@@ -50,8 +50,8 @@ module.exports = {
 
     // Act
     const space = await Space.findOne({ name: spaceName })
-      .populate("subscribers")
-      .populate("postCount")
+      .populate('subscribers')
+      .populate('postCount')
       .exec();
 
     // Send
@@ -64,8 +64,8 @@ module.exports = {
 
     // Act
     const space = await Space.findOne({ _id: spaceId })
-      .populate("subscribers")
-      .populate("postCount")
+      .populate('subscribers')
+      .populate('postCount')
       .exec();
 
     // Send
@@ -76,10 +76,10 @@ module.exports = {
     // Init
     let { name, description, headerPicture, profilePicture, admins } = req.body;
 
-    if (profilePicture === "") {
-      let items = ["bd56e1", "efbbcc", "0a2049", "db9dee"];
+    if (profilePicture === '') {
+      let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
       let item = items[Math.floor(Math.random() * items.length)];
-      profilePicture = `https://ui-avatars.com/api/?name=${name}&background=${item}&color=${item === "efbbcc" ? "0a2049" : "fff"}&bold=true&size=200&font-size=0.6`;
+      profilePicture = `https://ui-avatars.com/api/?name=${name}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`;
     }
 
     try {
@@ -97,8 +97,8 @@ module.exports = {
 
       // Send
       const populatedSpace = await Space.findOne({ _id: space._id })
-        .populate("subscribers")
-        .populate("postCount")
+        .populate('subscribers')
+        .populate('postCount')
         .exec();
 
       res.status(201).send(populatedSpace);
@@ -114,10 +114,10 @@ module.exports = {
 
     try {
       // Act
-      await Space.findOneAndUpdate({ _id: spaceId }, updateParams, { runValidators: true, context: "query" });
+      await Space.findOneAndUpdate({ _id: spaceId }, updateParams, { runValidators: true, context: 'query' });
       const space = await Space.findOne({ _id: spaceId })
-        .populate("subscribers")
-        .populate("postCount")
+        .populate('subscribers')
+        .populate('postCount')
         .exec();
 
       // Send

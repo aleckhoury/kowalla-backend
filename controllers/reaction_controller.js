@@ -1,9 +1,9 @@
 // Dependencies
 
 // Models
-const Reaction = require("../models/ReactionModel");
-const Post = require("../models/PostModel");
-const NotificationHelper = require("../helpers/notification_helpers");
+const Reaction = require('../models/ReactionModel');
+const Post = require('../models/PostModel');
+const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
   async getReactionList(req, res, next) {
@@ -22,12 +22,12 @@ module.exports = {
     const { profileId, type, typeId } = req.params;
 
     // Act
-    if (type === "posts") {
+    if (type === 'posts') {
       const reaction = await Reaction.findOne({ profileId, postId: typeId });
 
       // Send
       res.status(200).send(reaction);
-    } else if (type === "updates") {
+    } else if (type === 'updates') {
       const reaction = await Reaction.findOne({ profileId, updateId: postId });
 
       // Send
@@ -51,7 +51,7 @@ module.exports = {
     // Build notification
 
     // get the owner of the post we're reacting to
-    let post = await Post.findOne({ _id: postId }, "profileId projectId");
+    let post = await Post.findOne({ _id: postId }, 'profileId projectId');
 
     let notifObject = {
       sendingProfileId: profileId,
@@ -59,7 +59,7 @@ module.exports = {
       ownerProfileId: post.profileId === undefined ? undefined : post.profileId,
       ownerProjectId: post.projectId === undefined ? undefined : post.projectId
     };
-    await NotificationHelper.createNotification("new-reaction", notifObject);
+    await NotificationHelper.createNotification('new-reaction', notifObject);
   },
 
   async deleteReaction(req, res, next) {
@@ -73,6 +73,6 @@ module.exports = {
     // const reaction = await Reaction.findOne({profileId, postId, emoji});
 
     // Send
-    res.status(201).send("Successfully deleted reaction");
+    res.status(201).send('Successfully deleted reaction');
   }
 };

@@ -1,13 +1,13 @@
 // Dependencies
-const request = require("superagent");
-const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
-const OAuth = require("oauth-1.0a");
+const request = require('superagent');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const OAuth = require('oauth-1.0a');
 // const request = require('request');
-const Config = require("../models/ConfigModel");
-const Profile = require("../models/ProfileModel");
-const User = require("../models/UserModel");
-const Subscription = require("../models/SubscriptionModel");
+const Config = require('../models/ConfigModel');
+const Profile = require('../models/ProfileModel');
+const User = require('../models/UserModel');
+const Subscription = require('../models/SubscriptionModel');
 let data;
 // Models
 module.exports = {
@@ -18,51 +18,51 @@ module.exports = {
     if (!code) {
       return res.send({
         success: false,
-        message: "Error no code"
+        message: 'Error no code'
       });
     }
-    const { options } = await Config.findOne({ name: "githubKeys" });
+    const { options } = await Config.findOne({ name: 'githubKeys' });
     // Post
     try {
       await request
-        .post("https://github.com/login/oauth/access_token")
+        .post('https://github.com/login/oauth/access_token')
         .send({
           client_id: options.client_id,
           client_secret: options.client_secret,
           code
         })
-        .set("Accept", "application/json")
+        .set('Accept', 'application/json')
         .then(result => {
           data = result.body;
         });
       await request
-        .get("https://api.github.com/user")
-        .set("Authorization", `token ${data.access_token}`)
+        .get('https://api.github.com/user')
+        .set('Authorization', `token ${data.access_token}`)
         .then(async result => {
           let user = await Profile.findOne({ username: result.body.login })
-            .populate("postCount")
-            .populate("commentCount")
+            .populate('postCount')
+            .populate('commentCount')
             .exec();
           if (!user) {
             const newUser = await User.create({
               username: result.body.login,
-              email: result.body.email !== null ? result.body.email : "",
-              password: ""
+              email: result.body.email !== null ? result.body.email : '',
+              password: ''
             });
             newUser.save();
             user = await Profile.create({
               firstName: result.body.name,
-              lastName: "",
+              lastName: '',
               username: result.body.login,
-              integrations: ["Embed Video"],
-              description: "",
+              integrations: ['Embed Video'],
+              description: '',
               profilePicture: result.body.avatar_url,
               githubToken: data.access_token,
               userId: newUser._id
             });
             user.save();
-            const subscription = await Subscription.create({ profileId: user._id, spaceId: "fugmXEmwr" });
-            const subscription2 = await Subscription.create({ profileId: user._id, projectId: "nLw0dX1O5" });
+            const subscription = await Subscription.create({ profileId: user._id, spaceId: 'fugmXEmwr' });
+            const subscription2 = await Subscription.create({ profileId: user._id, projectId: 'nLw0dX1O5' });
             await subscription.save();
             await subscription2.save();
           } else {
@@ -86,7 +86,7 @@ module.exports = {
     // Send
   },
   async authTwitterUser(req, res, next) {
-    const { options } = await Config.findOne({ name: "twitterKeys" });
+    const { options } = await Config.findOne({ name: 'twitterKeys' });
 
     // Initialize
     const oauth = OAuth({
@@ -94,18 +94,18 @@ module.exports = {
         key: options.consumerApiKey,
         secret: options.consumerApiSecretKey
       },
-      signature_method: "HMAC-SHA1",
+      signature_method: 'HMAC-SHA1',
       hash_function(base_string, key) {
         return crypto
-          .createHmac("sha1", key)
+          .createHmac('sha1', key)
           .update(base_string)
-          .digest("base64");
+          .digest('base64');
       }
     });
 
     const request_data = {
-      url: "https://api.twitter.com/oauth/request_token",
-      method: "POST"
+      url: 'https://api.twitter.com/oauth/request_token',
+      method: 'POST'
     };
 
     // Note: The token is optional for some requests
@@ -116,13 +116,13 @@ module.exports = {
 
     try {
       const accessBiz = await request
-        .post("https://api.twitter.com/oauth/request_token")
-        .type("form")
+        .post('https://api.twitter.com/oauth/request_token')
+        .type('form')
         .send(oauth.authorize(request_data, token));
-      const values = accessBiz.res.text.split("&");
+      const values = accessBiz.res.text.split('&');
       const obj = {};
       await values.map(x => {
-        const keyValue = x.split("=");
+        const keyValue = x.split('=');
         obj[keyValue[0]] = keyValue[1];
       });
       return res.status(200).json(obj);
@@ -131,7 +131,7 @@ module.exports = {
     }
   },
   async verifyTwitterUser(req, res, next) {
-    const { options } = await Config.findOne({ name: "twitterKeys" });
+    const { options } = await Config.findOne({ name: 'twitterKeys' });
 
     const { oauthToken, verifier } = req.body;
 
@@ -141,18 +141,18 @@ module.exports = {
         key: options.consumerApiKey,
         secret: options.consumerApiSecretKey
       },
-      signature_method: "HMAC-SHA1",
+      signature_method: 'HMAC-SHA1',
       hash_function(base_string, key) {
         return crypto
-          .createHmac("sha1", key)
+          .createHmac('sha1', key)
           .update(base_string)
-          .digest("base64");
+          .digest('base64');
       }
     });
 
     const request_data = {
-      url: "https://api.twitter.com/oauth/access_token",
-      method: "POST",
+      url: 'https://api.twitter.com/oauth/access_token',
+      method: 'POST',
       data: { oauth_verifier: verifier }
     };
 
@@ -163,13 +163,13 @@ module.exports = {
 
     try {
       const accessBiz = await request
-        .post("https://api.twitter.com/oauth/access_token")
-        .type("form")
+        .post('https://api.twitter.com/oauth/access_token')
+        .type('form')
         .send(oauth.authorize(request_data, token));
-      const values = accessBiz.res.text.split("&");
+      const values = accessBiz.res.text.split('&');
       const obj = {};
       await values.map(x => {
-        const keyValue = x.split("=");
+        const keyValue = x.split('=');
         obj[keyValue[0]] = keyValue[1];
       });
       const token2 = {
@@ -177,37 +177,37 @@ module.exports = {
         secret: obj.oauth_token_secret
       };
       const requestData2 = {
-        url: "https://api.twitter.com/1.1/account/verify_credentials.json",
-        method: "GET",
+        url: 'https://api.twitter.com/1.1/account/verify_credentials.json',
+        method: 'GET',
         data: { skip_status: true }
       };
       const userInfo = await request
-        .get("https://api.twitter.com/1.1/account/verify_credentials.json")
+        .get('https://api.twitter.com/1.1/account/verify_credentials.json')
         .query(oauth.authorize(requestData2, token2))
         .then(async result => {
           let user = await Profile.findOne({ username: result.body.screen_name })
-            .populate("postCount")
-            .populate("commentCount")
+            .populate('postCount')
+            .populate('commentCount')
             .exec();
           if (!user) {
             const newUser = await User.create({
               username: result.body.screen_name,
-              email: "",
-              password: ""
+              email: '',
+              password: ''
             });
             newUser.save();
             user = await Profile.create({
               firstName: result.body.name,
-              lastName: "",
+              lastName: '',
               username: result.body.screen_name,
-              integrations: ["Embed Video"],
+              integrations: ['Embed Video'],
               description: result.body.description,
               profilePicture: result.body.profile_image_url_https,
               userId: newUser._id
             });
             user.save();
-            const subscription = await Subscription.create({ profileId: user._id, spaceId: "fugmXEmwr" });
-            const subscription2 = await Subscription.create({ profileId: user._id, projectId: "nLw0dX1O5" });
+            const subscription = await Subscription.create({ profileId: user._id, spaceId: 'fugmXEmwr' });
+            const subscription2 = await Subscription.create({ profileId: user._id, projectId: 'nLw0dX1O5' });
             await subscription.save();
             await subscription2.save();
           } else {

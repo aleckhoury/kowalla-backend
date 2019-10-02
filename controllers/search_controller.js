@@ -1,7 +1,7 @@
 // Models
-const Profile = require("../models/ProfileModel");
-const Space = require("../models/SpaceModel");
-const Project = require("../models/ProjectModel");
+const Profile = require('../models/ProfileModel');
+const Space = require('../models/SpaceModel');
+const Project = require('../models/ProjectModel');
 
 module.exports = {
   async mvpSearch(req, res, next) {

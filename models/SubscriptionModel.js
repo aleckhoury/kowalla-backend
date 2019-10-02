@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
+const shortid = require('shortid');
 
 const SubscriptionSchema = new Schema(
   {
@@ -14,6 +14,6 @@ const SubscriptionSchema = new Schema(
   }
 );
 
-const Subscription = mongoose.model("subscription", SubscriptionSchema);
+const Subscription = mongoose.model('subscription', SubscriptionSchema);
 
 module.exports = Subscription;

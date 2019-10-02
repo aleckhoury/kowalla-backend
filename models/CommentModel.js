@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
+const shortid = require('shortid');
 
 const CommentSchema = new Schema(
   {
@@ -17,6 +17,6 @@ const CommentSchema = new Schema(
   }
 );
 
-const Comment = mongoose.model("comment", CommentSchema);
+const Comment = mongoose.model('comment', CommentSchema);
 
 module.exports = Comment;

@@ -1,6 +1,6 @@
-const Notification = require("../models/NotificationModel");
-const NotificationHelper = require("../helpers/notification_helpers");
-const _ = require("lodash");
+const Notification = require('../models/NotificationModel');
+const NotificationHelper = require('../helpers/notification_helpers');
+const _ = require('lodash');
 
 module.exports = {
   async getNotificationsList(req, res, next) {
@@ -25,9 +25,9 @@ module.exports = {
 
     for (let key in sortedNotifications) {
       switch (key) {
-        case "new-subscriber":
+        case 'new-subscriber':
           // group the subscription notifications by which project is being subscribed to.
-          let subscriptionNotifications = _.groupBy(sortedNotifications["new-subscriber"], function(subObj) {
+          let subscriptionNotifications = _.groupBy(sortedNotifications['new-subscriber'], function(subObj) {
             return subObj.ownerProjectId;
           });
 
@@ -45,21 +45,21 @@ module.exports = {
         // the next two cases are for interactions with posts
         // these will come as emoji reactions or comments directly on the post
         // NOTE, this DOES NOT include comments that reply direct to comments on your post
-        case "new-reaction":
-        case "new-comment":
+        case 'new-reaction':
+        case 'new-comment':
           if (!postInteractionsComplete) {
             postInteractionsComplete = true;
 
-            let commentsDefined = sortedNotifications.hasOwnProperty("new-comment");
-            let reactionsDefined = sortedNotifications.hasOwnProperty("new-reaction");
+            let commentsDefined = sortedNotifications.hasOwnProperty('new-comment');
+            let reactionsDefined = sortedNotifications.hasOwnProperty('new-reaction');
             let tempPostArray = [];
 
             if (commentsDefined && reactionsDefined) {
-              tempPostArray = sortedNotifications["new-comment"].concat(sortedNotifications["new-reaction"]);
+              tempPostArray = sortedNotifications['new-comment'].concat(sortedNotifications['new-reaction']);
             } else if (commentsDefined && reactionsDefined === false) {
-              tempPostArray = sortedNotifications["new-comment"];
+              tempPostArray = sortedNotifications['new-comment'];
             } else if (reactionsDefined && commentsDefined === false) {
-              tempPostArray = sortedNotifications["new-reaction"];
+              tempPostArray = sortedNotifications['new-reaction'];
             }
 
             let postInteractionsObject = _.groupBy(tempPostArray, function(obj) {
@@ -78,22 +78,22 @@ module.exports = {
 
         // the next two cases are for interactions with comments
         // these will come as upvotes on the comment, or direct replies to it
-        case "new-reply":
-        case "new-upvote":
+        case 'new-reply':
+        case 'new-upvote':
           if (!commentInteractionsComplete) {
             // if we DON'T have comments already
             commentInteractionsComplete = true;
-            let repliesDefined = sortedNotifications.hasOwnProperty("new-reply");
-            let upvotesDefined = sortedNotifications.hasOwnProperty("new-upvote");
+            let repliesDefined = sortedNotifications.hasOwnProperty('new-reply');
+            let upvotesDefined = sortedNotifications.hasOwnProperty('new-upvote');
 
             let tempCommentArray = [];
 
             if (repliesDefined && upvotesDefined) {
-              tempCommentArray = sortedNotifications["new-reply"].concat(sortedNotifications["new-upvote"]);
+              tempCommentArray = sortedNotifications['new-reply'].concat(sortedNotifications['new-upvote']);
             } else if (repliesDefined && upvotesDefined === false) {
-              tempCommentArray = sortedNotifications["new-reply"];
+              tempCommentArray = sortedNotifications['new-reply'];
             } else if (upvotesDefined && repliesDefined === false) {
-              tempCommentArray = sortedNotifications["new-upvote"];
+              tempCommentArray = sortedNotifications['new-upvote'];
             }
 
             let commentInteractionsArray = _.groupBy(tempCommentArray, function(obj) {

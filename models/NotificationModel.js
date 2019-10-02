@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
+const shortid = require('shortid');
 
 const NotificationSchema = new Schema(
   {
@@ -22,6 +22,6 @@ const NotificationSchema = new Schema(
   }
 );
 
-const Notification = mongoose.model("notification", NotificationSchema);
+const Notification = mongoose.model('notification', NotificationSchema);
 
 module.exports = Notification;

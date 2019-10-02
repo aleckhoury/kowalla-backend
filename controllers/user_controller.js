@@ -5,7 +5,7 @@ const Subscription = require("../models/SubscriptionModel");
 const Project = require("../models/ProjectModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Email = require("../helpers/email-helpers");
+const Email = require("../helpers/email_helpers");
 
 // Models
 

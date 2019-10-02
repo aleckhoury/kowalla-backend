@@ -1,6 +1,4 @@
 const multer = require("fastify-multer");
-const express = require("express");
-const path = require("path");
 const ImageController = require("../controllers/image_controller");
 
 module.exports = app => {

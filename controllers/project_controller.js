@@ -76,7 +76,7 @@ module.exports = {
       .exec(); // TODO: Add sorting
 
     // Send
-    res.send({ projects });
+    return { projects };
   },
 
   // Create
@@ -134,13 +134,10 @@ module.exports = {
     let reputation = await getReputation("", projectName);
     await Project.findOneAndUpdate({ name: projectName }, { reputation });
 
-    const project = await Project.findOne({ name: projectName })
+    return Project.findOne({ name: projectName })
       .populate("subscribers")
       .populate("postCount")
       .exec();
-
-    // Send
-    res.status(200).send(project);
   },
 
   async getProject(req, res, next) {
@@ -151,13 +148,10 @@ module.exports = {
     let reputation = await getReputation(id);
     await Project.findOneAndUpdate({ _id: id }, { reputation });
 
-    const project = await Project.findOne({ _id: id })
+    return Project.findOne({ _id: id })
       .populate("subscribers")
       .populate("postCount")
       .exec();
-
-    // Send
-    res.status(200).send(project);
   },
 
   // Update

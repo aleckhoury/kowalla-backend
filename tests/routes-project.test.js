@@ -29,9 +29,10 @@ describe("routes/project", () => {
 
   describe("getProject()", () => {
     it("success", async () => {
-      const res = await app.inject({ method: "GET", url: "/api/v1/projects/fS50wWyBY", payload: { id: "fS50wWyBY" } });
+      const res = await app.inject({ method: "GET", url: "/api/v1/projects/fS50wWyBY" });
       expect(res.statusCode).toBe(200);
-      expect(res.body._id).toBe("fS50wWyBY");
+      expect(res.headers["content-type"]).toBe("application/json; charset=utf-8");
+      expect(JSON.parse(res.body)._id).toBe("fS50wWyBY");
     });
   });
 
@@ -39,7 +40,8 @@ describe("routes/project", () => {
     it("success", async () => {
       const res = await app.inject({ method: "GET", url: "/api/v1/projects/project/kowalla;" });
       expect(res.statusCode).toBe(200);
-      expect(res.body._id).toBe("fS50wWyBY");
+      expect(res.headers["content-type"]).toBe("application/json; charset=utf-8");
+      expect(JSON.parse(res.body)._id).toBe("fS50wWyBY");
     });
   });
 });

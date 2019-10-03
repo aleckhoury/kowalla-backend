@@ -3,7 +3,8 @@ const { appInit, appListen } = require('./helpers/router');
 const Post = require('./models/post');
 
 async function run() {
-  const { app } = appInit({ logger: true });
+  const mongoUrl = process.env.NODE_ENV === 'production' ? process.env.MONGO_URI_PRD : process.env.MONGO_URI_SND
+  const { app } = appInit({ logger: true, mongoUrl });
   await appListen({ app });
 
   let io = require('socket.io')(app.server);

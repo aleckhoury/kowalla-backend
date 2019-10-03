@@ -20,15 +20,15 @@ const compress = require('fastify-compress');
 
 module.exports = {
   Fastify,
-  appInit({ logger = false } = {}) {
-    const app = Fastify({ logger: { level: 'debug' } });
+  appInit({ logger = { level: 'warn' }, mongoUrl = '' } = {}) {
+    const app = Fastify({ logger });
     let mongoose;
 
     app.register(cors);
     app.register(compress);
 
     app.register(async () => {
-      mongoose = await mongooseConnect();
+      mongoose = await mongooseConnect(mongoUrl);
     });
 
     // expand routes

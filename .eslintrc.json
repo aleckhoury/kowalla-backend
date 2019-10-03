@@ -1,6 +1,3 @@
 {
   "extends": ["plugin:node/recommended", "plugin:prettier/recommended"],
-  "globals": {
-    "__MONGO_URI__": true
-  }
 }

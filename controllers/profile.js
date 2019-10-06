@@ -123,26 +123,10 @@ module.exports = {
     reply.code(200).send(profile);
   },
 
-  async updateProfile(request, reply) {
-    // Init
-    const { profileId } = request.params;
-    const updateParams = request.body;
-    const { username } = updateParams;
-
-    // Act
-    try {
-      const oldProfile = await Profile.findOneAndUpdate({ _id: profileId }, updateParams, { runValidators: true, context: 'query' });
-      const profile = await Profile.findOne({ _id: profileId })
-        .populate('postCount')
-        .exec();
-      if (username !== oldProfile.username) {
-        await User.findOneAndUpdate({ _id: profile.userId }, { username: username }, { runValidators: true, context: 'query' });
-      }
-      // Send
-      reply.code(200).send(profile);
-    } catch (err) {
-      reply.code(400).send(err);
-    }
+  async updateProfile(req) {
+    const { profileId } = req.params;
+    const updateParams = req.body;
+    return Profile.findByIdAndUpdate(profileId, updateParams, { new: true, runValidators: true, context: 'query' });
   },
 
   async toggleIntegration(request, reply) {

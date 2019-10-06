@@ -1,7 +1,7 @@
 # Kowalla API
 
 ### API Overview
-```
+
 This API is built using a standard structure of models, routes, and controllers.
 
 The backend database is using MongoDB, with most items being tracked by storing IDs of two other objects,
@@ -25,5 +25,3 @@ so some functions are inconsistent in how they handle errors.
 - Not to lay blame, but to lay a bit of blame, my former partner had some convoluted naming
 conventions, so in some areas there may be some variable naming and function naming that isn't the most intuitive.
 Webstorm should help with that, but it can still be annoying.
-
-```

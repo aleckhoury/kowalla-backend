@@ -2,15 +2,15 @@
 
 ## Test Controller
 
-''' bash
+```bash
 $ test() # returns test object
 $ reflect() # reflects sent object
-'''
+```
 
 ## Profile Controller
 
-''' bash
-\$ getProfileList() # returns list of objects
+```bash
+$ getProfileList() # returns list of objects
 
 \$ getProfile() # takes profileID, returns object
 
@@ -18,13 +18,13 @@ $ reflect() # reflects sent object
 
 \$ updateProfile() # updates/overwrites profile, returns new object
 
-\$ deleteProfile() # deletes the profile, returns status 200
-'''
+$ deleteProfile() # deletes the profile, returns status 200
+```
 
 ## Space Controller
 
-''' bash
-\$ getSpaceList() # returns list of objects
+```bash
+$ getSpaceList() # returns list of objects
 
 \$ getSpace() # takes spaceID, returns object
 
@@ -32,13 +32,13 @@ $ reflect() # reflects sent object
 
 \$ updateSpace() # updates/overwrites space, returns new object
 
-\$ deleteSpace() # deletes the space, returns status 200
-'''
+$ deleteSpace() # deletes the space, returns status 200
+```
 
 ## Project Controller
 
-''' bash
-\$ getProjectList() # returns list of objects
+```bash
+$ getProjectList() # returns list of objects
 
 \$ getProject() # takes projectID, returns object
 
@@ -46,5 +46,5 @@ $ reflect() # reflects sent object
 
 \$ updateProject() # updates/overwrites project, returns new object
 
-\$ deleteProject() # deletes the project, returns status 200
-'''
+$ deleteProject() # deletes the project, returns status 200
+```

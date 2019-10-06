@@ -14,7 +14,7 @@ const ProfileSchema = new Schema(
     reputation: { type: Number, default: 0 }, // need to implement update
     integrations: { type: Array, default: [] },
     githubToken: { type: String, default: '' },
-    userId: { type: String, unique: true, required: true, uniqueCaseInsensitive: true }
+    userId: { type: String, unique: true, required: true }
   },
   {
     toObject: { getters: true },

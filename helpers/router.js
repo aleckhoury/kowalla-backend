@@ -22,11 +22,11 @@ module.exports = {
   appInit({ logger = { level: 'warn' }, mongoUrl = '' } = {}) {
     const app = Fastify({ logger });
     let mongoose;
-
-    app.register(require('fastify-cors'), {
-        origin: true,
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
-        methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'] });
+    app.use(require('cors')());
+    // app.register(require('fastify-cors'), {
+    //     origin: true,
+    //     allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
+    //     methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'] });
     app.register(compress);
     app.register(require('fastify-multipart'));
 

@@ -7,7 +7,7 @@
     "node": ">=10.16.3"
   },
   "jest": {
-    "testEnvironment": "node",
+    "preset": "@shelf/jest-mongodb",
     "setupFiles": [
       "dotenv/config"
     ]

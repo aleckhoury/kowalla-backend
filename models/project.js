@@ -12,7 +12,7 @@ const ProjectSchema = new Schema(
     _id: { type: String, default: shortid.generate },
     isProject: { type: Boolean, default: true },
     projectName: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
-    name: String,
+    name: { type: String, required: true },
     description: String,
     profilePicture: String, // TODO: change to actual image storage
     headerPicture: String, // TODO: change to actual image storage

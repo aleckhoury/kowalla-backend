@@ -24,7 +24,7 @@ module.exports = {
     const app = Fastify({ logger });
     let mongoose;
 
-    app.register(cors);
+    app.register(cors, { origin: false });
     app.register(compress);
     app.register(require('fastify-multipart'));
 

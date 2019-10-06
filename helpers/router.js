@@ -26,7 +26,7 @@ module.exports = {
     app.register(require('fastify-cors'), {
         origin: true,
         allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
-        methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'] });
+        methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'] });
     app.register(compress);
     app.register(require('fastify-multipart'));
 

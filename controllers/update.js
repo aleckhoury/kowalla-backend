@@ -9,10 +9,10 @@ module.exports = {
     const { projectId } = request.params;
 
     // Act
-    const updates = await Update.find({projectId});
+    const updates = await Update.find({ projectId });
 
     // Send
-    reply.code(200).send({updates});
+    reply.code(200).send({ updates });
   },
 
   async getUpdate(request, reply) {
@@ -20,7 +20,7 @@ module.exports = {
     const { updateId } = request.params;
 
     // Act
-    const update = await Update.findOne({_id: updateId});
+    const update = await Update.findOne({ _id: updateId });
 
     // Send
     reply.code(200).send(update);
@@ -28,17 +28,14 @@ module.exports = {
 
   async createUpdate(request, reply) {
     // Init
-    const {
-      profileId,
-      content,
-    } = request.body;
+    const { profileId, content } = request.body;
 
     const { projectId } = request.params;
 
     const views = 0;
 
     // Act
-    const update = await Update.create({profileId, projectId, content, views});
+    const update = await Update.create({ profileId, projectId, content, views });
 
     // Send
     await update.save();
@@ -50,10 +47,10 @@ module.exports = {
     const { updateId } = request.params;
 
     // Act
-    await Update.findOneAndDelete({_id: updateId});
-    const update = await Update.findOne({_id: updateId});
+    await Update.findOneAndDelete({ _id: updateId });
+    const update = await Update.findOne({ _id: updateId });
 
     // Send
     reply.code(204).send(update);
-  },
-}
+  }
+};

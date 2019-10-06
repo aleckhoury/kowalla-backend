@@ -1,10 +1,10 @@
 // Dependencies
 
 // Models
-const Project = require("../models/project");
-const Profile = require("../models/profile");
-const Post = require("../models/post");
-const Reaction = require("../models/reaction");
+const Project = require('../models/project');
+const Profile = require('../models/profile');
+const Post = require('../models/post');
+const Reaction = require('../models/reaction');
 /*
 1) Create -- first pass done
 2) Delete -- first pass done
@@ -39,17 +39,14 @@ async function getProfileIdsFromUsernames(usernames) {
   return idArray;
 }
 
-async function getReputation(projectId, name = "") {
-  if (name !== "") {
-    projectObj = await Project.findOne({ name }, "_id");
+async function getReputation(projectId, name = '') {
+  if (name !== '') {
+    projectObj = await Project.findOne({ name }, '_id');
     projectId = projectObj._id;
   }
 
   // get array of post id values only
-  let postArrayWithKeyValuePairs = await Post.find(
-    { projectId: projectId },
-    "_id"
-  );
+  let postArrayWithKeyValuePairs = await Post.find({ projectId: projectId }, '_id');
   let postArrayWithValues = postArrayWithKeyValuePairs.map(function(object) {
     return object._id;
   });
@@ -71,8 +68,8 @@ module.exports = {
   async getProjectList(req, res) {
     // Act
     projects = await Project.find({})
-      .populate("subscribers")
-      .populate("postCount")
+      .populate('subscribers')
+      .populate('postCount')
       .exec(); // TODO: Add sorting
 
     // Send
@@ -82,21 +79,12 @@ module.exports = {
   // Create
   async createProject(request, reply) {
     // Init
-    let {
-      name,
-      projectName,
-      description,
-      profilePicture,
-      headerPicture,
-      admins
-    } = request.body;
+    let { name, projectName, description, profilePicture, headerPicture, admins } = request.body;
 
-    if (profilePicture === "") {
-      let items = ["bd56e1", "efbbcc", "0a2049", "db9dee"];
+    if (profilePicture === '') {
+      let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
       let item = items[Math.floor(Math.random() * items.length)];
-      profilePicture = `https://ui-avatars.com/api/?name=${projectName}&background=${item}&color=${
-        item === "efbbcc" ? "0a2049" : "fff"
-      }&bold=true&size=200&font-size=0.6`;
+      profilePicture = `https://ui-avatars.com/api/?name=${projectName}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`;
     }
 
     try {
@@ -115,8 +103,8 @@ module.exports = {
 
       // Send
       const populatedProject = await Project.findOne({ _id: project._id })
-        .populate("subscribers")
-        .populate("postCount")
+        .populate('subscribers')
+        .populate('postCount')
         .exec();
 
       reply.code(201).send(populatedProject);
@@ -131,12 +119,12 @@ module.exports = {
     const { projectName } = request.params;
 
     // Act
-    let reputation = await getReputation("", projectName);
+    let reputation = await getReputation('', projectName);
     await Project.findOneAndUpdate({ name: projectName }, { reputation });
 
     return Project.findOne({ name: projectName })
-      .populate("subscribers")
-      .populate("postCount")
+      .populate('subscribers')
+      .populate('postCount')
       .exec();
   },
 
@@ -149,8 +137,8 @@ module.exports = {
     await Project.findOneAndUpdate({ _id: id }, { reputation });
 
     return Project.findOne({ _id: id })
-      .populate("subscribers")
-      .populate("postCount")
+      .populate('subscribers')
+      .populate('postCount')
       .exec();
   },
 
@@ -164,11 +152,11 @@ module.exports = {
       // Act
       await Project.findOneAndUpdate({ _id: id }, updateParams, {
         runValidators: true,
-        context: "query"
+        context: 'query'
       });
       const project = await Project.findOne({ _id: id })
-        .populate("subscribers")
-        .populate("postCount")
+        .populate('subscribers')
+        .populate('postCount')
         .exec();
 
       // Send

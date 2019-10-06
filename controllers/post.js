@@ -9,13 +9,14 @@ module.exports = {
     // Init
     const { username } = request.params;
     // Act
-    const posts = await Post.findOne({username, isActive: true});
+    const posts = await Post.findOne({ username, isActive: true });
 
     // Send
     reply.code(200).send(posts);
   },
 
-  async getProfilePostList(request, reply) { // add sorting
+  async getProfilePostList(request, reply) {
+    // add sorting
     // Init
     let { profileId, sort, skip } = request.params;
     skip = Number(skip);
@@ -24,20 +25,27 @@ module.exports = {
       // Act
       let posts;
       if (sort === 'Newest') {
-        posts = await Post.find({ profileId }).limit(5).sort('-createdAt').skip(skip);
+        posts = await Post.find({ profileId })
+          .limit(5)
+          .sort('-createdAt')
+          .skip(skip);
       } else if (sort === 'Oldest') {
-        posts = await Post.find({ profileId }).limit(5).sort('createdAt').skip(skip);
+        posts = await Post.find({ profileId })
+          .limit(5)
+          .sort('createdAt')
+          .skip(skip);
       }
       if (posts.length) {
         return reply.code(200).send(posts);
       }
       return reply.code(204).send('No posts yet!');
-    } catch(err) {
+    } catch (err) {
       return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
 
-  async getProjectPostList(request, reply) { // add sorting
+  async getProjectPostList(request, reply) {
+    // add sorting
     // Init
     let { projectId, sort, skip } = request.params;
     skip = Number(skip);
@@ -46,34 +54,41 @@ module.exports = {
       // Act
       let posts;
       if (sort === 'Newest') {
-        posts = await Post.find({ projectId }).limit(5).sort('-createdAt').skip(skip);
+        posts = await Post.find({ projectId })
+          .limit(5)
+          .sort('-createdAt')
+          .skip(skip);
       } else if (sort === 'Oldest') {
-        posts = await Post.find({ projectId }).limit(5).sort('createdAt').skip(skip);
+        posts = await Post.find({ projectId })
+          .limit(5)
+          .sort('createdAt')
+          .skip(skip);
       }
       if (posts.length) {
         return reply.code(200).send(posts);
       }
       return reply.code(204).send('No posts yet!');
-    } catch(err) {
+    } catch (err) {
       return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
   async updatePost(request, reply) {
-      // Init
-      const { postId } = request.params;
-      const updateParams = request.body;
-      // Act
-      await Post.findOneAndUpdate({_id: postId}, updateParams);
-      const post = await Post.findOne({_id: postId});
-      // Send
+    // Init
+    const { postId } = request.params;
+    const updateParams = request.body;
+    // Act
+    await Post.findOneAndUpdate({ _id: postId }, updateParams);
+    const post = await Post.findOne({ _id: postId });
+    // Send
 
     if (post !== null && post !== undefined) {
       await post.save();
     }
 
-      reply.code(200).send(post);
-    },
-  async getSpacePostList(request, reply) { // add sorting
+    reply.code(200).send(post);
+  },
+  async getSpacePostList(request, reply) {
+    // add sorting
     // Init
     let { spaceId, sort, skip } = request.params;
     skip = Number(skip);
@@ -82,19 +97,24 @@ module.exports = {
       // Act
       let posts;
       if (sort === 'Newest') {
-        posts = await Post.find({spaceId}).limit(5).sort('-createdAt').skip(skip);
+        posts = await Post.find({ spaceId })
+          .limit(5)
+          .sort('-createdAt')
+          .skip(skip);
       } else if (sort === 'Oldest') {
-        posts = await Post.find({spaceId}).limit(5).sort('createdAt').skip(skip);
+        posts = await Post.find({ spaceId })
+          .limit(5)
+          .sort('createdAt')
+          .skip(skip);
       }
       // Send
       if (posts.length) {
         return reply.code(200).send(posts);
       }
       return reply.code(204).send('No posts yet!');
-    } catch(err) {
+    } catch (err) {
       return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
-
   },
   async getSubscribedPosts(request, reply) {
     // Init
@@ -102,31 +122,31 @@ module.exports = {
     skip = Number(skip);
     try {
       const subs = await Subscriptions.find({ profileId }).select('projectId spaceId');
-      const idList = subs.map(x => x.projectId ? x.projectId : x.spaceId);
+      const idList = subs.map(x => (x.projectId ? x.projectId : x.spaceId));
       // // Act
       let posts;
       if (sort === 'Newest') {
         posts = await Post.find({
           // Find documents matching any of these values
-          $or: [
-            {'projectId': {$in: idList}},
-            {'spaceId': {$in: idList}}
-          ],
-        }).limit(5).sort('-createdAt').skip(skip);
+          $or: [{ projectId: { $in: idList } }, { spaceId: { $in: idList } }]
+        })
+          .limit(5)
+          .sort('-createdAt')
+          .skip(skip);
       } else if (sort === 'Oldest') {
         posts = await Post.find({
           // Find documents matching any of these values
-          $or: [
-            {projectId: {$in: idList}},
-            {spaceId: {$in: idList}}
-          ],
-        }).limit(5).sort('createdAt').skip(skip);
+          $or: [{ projectId: { $in: idList } }, { spaceId: { $in: idList } }]
+        })
+          .limit(5)
+          .sort('createdAt')
+          .skip(skip);
       }
       if (posts.length) {
         return reply.code(200).send(posts);
       }
       return reply.code(204).send('No posts yet!');
-    } catch(err) {
+    } catch (err) {
       return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
@@ -138,15 +158,21 @@ module.exports = {
       // Act
       let posts;
       if (sort === 'Newest') {
-        posts = await Post.find({}).limit(5).sort('-createdAt').skip(skip);
+        posts = await Post.find({})
+          .limit(5)
+          .sort('-createdAt')
+          .skip(skip);
       } else if (sort === 'Oldest') {
-        posts = await Post.find({}).limit(5).sort('createdAt').skip(skip);
+        posts = await Post.find({})
+          .limit(5)
+          .sort('createdAt')
+          .skip(skip);
       }
       if (posts.length) {
         return reply.code(200).send(posts);
       }
       return reply.code(204).send('No posts yet!');
-    } catch(err) {
+    } catch (err) {
       return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
@@ -156,24 +182,14 @@ module.exports = {
     const { id } = request.params;
 
     // Act
-    const post = await Post.findOne({_id: id});
+    const post = await Post.findOne({ _id: id });
     // Send
     reply.code(200).send(post);
   },
 
   async createPost(request, reply) {
     // Init
-    const {
-      profileId,
-      projectId,
-      spaceId,
-      content,
-      duration,
-      start,
-      end,
-      isActive,
-      username,
-    } = request.body;
+    const { profileId, projectId, spaceId, content, duration, start, end, isActive, username } = request.body;
 
     const views = 0;
 
@@ -188,7 +204,8 @@ module.exports = {
       start,
       end,
       isActive,
-      username });
+      username
+    });
 
     // Send
     await post.save();
@@ -200,10 +217,10 @@ module.exports = {
     const { postId } = request.params;
 
     // Act
-    await Post.findOneAndDelete({_id: postId});
-    const post = await Post.findOne({_id: postId});
+    await Post.findOneAndDelete({ _id: postId });
+    const post = await Post.findOne({ _id: postId });
 
     // Send
     reply.code(204).send(post);
-  },
-}
+  }
+};

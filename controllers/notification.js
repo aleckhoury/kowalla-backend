@@ -1,5 +1,5 @@
 const Notification = require('../models/notification');
-const NotificationHelper = require('../helpers/notification_helpers');
+const NotificationHelper = require('../helpers/notification');
 const _ = require('lodash');
 
 module.exports = {
@@ -10,10 +10,7 @@ module.exports = {
     // CURRENT-STATE MVP SETUPS
 
     const notifications = await Notification.find({
-      $or: [
-        { $and: [{ ownerProfileId: profileId }, { viewed: false }]},
-        { $and: [{ownerProjectId: { $in: projectIdsArray }}, { viewed: false }]}
-      ]
+      $or: [{ $and: [{ ownerProfileId: profileId }, { viewed: false }] }, { $and: [{ ownerProjectId: { $in: projectIdsArray } }, { viewed: false }] }]
     });
     // for subscriptions
 
@@ -32,7 +29,7 @@ module.exports = {
           // group the subscription notifications by which project is being subscribed to.
           let subscriptionNotifications = _.groupBy(sortedNotifications['new-subscriber'], function(subObj) {
             return subObj.ownerProjectId;
-          })
+          });
 
           //notificationQueue["subscriptions"] = subscriptionNotifications;
 
@@ -57,15 +54,11 @@ module.exports = {
             let reactionsDefined = sortedNotifications.hasOwnProperty('new-reaction');
             let tempPostArray = [];
 
-            if ((commentsDefined) && (reactionsDefined)) {
+            if (commentsDefined && reactionsDefined) {
               tempPostArray = sortedNotifications['new-comment'].concat(sortedNotifications['new-reaction']);
-            }
-
-            else if ((commentsDefined) && (reactionsDefined === false)) {
+            } else if (commentsDefined && reactionsDefined === false) {
               tempPostArray = sortedNotifications['new-comment'];
-            }
-
-            else if ((reactionsDefined) && (commentsDefined === false)) {
+            } else if (reactionsDefined && commentsDefined === false) {
               tempPostArray = sortedNotifications['new-reaction'];
             }
 
@@ -77,9 +70,8 @@ module.exports = {
             notifsArray = notifsArray.concat(postNotifs);
 
             break; // end post-interactions
-          }
-
-          else { // we've already sorted post interactions
+          } else {
+            // we've already sorted post interactions
             break;
           }
         // end post-interactions
@@ -88,38 +80,33 @@ module.exports = {
         // these will come as upvotes on the comment, or direct replies to it
         case 'new-reply':
         case 'new-upvote':
-          if (!commentInteractionsComplete) { // if we DON'T have comments already
+          if (!commentInteractionsComplete) {
+            // if we DON'T have comments already
             commentInteractionsComplete = true;
             let repliesDefined = sortedNotifications.hasOwnProperty('new-reply');
             let upvotesDefined = sortedNotifications.hasOwnProperty('new-upvote');
 
             let tempCommentArray = [];
 
-            if ((repliesDefined) && (upvotesDefined)) {
+            if (repliesDefined && upvotesDefined) {
               tempCommentArray = sortedNotifications['new-reply'].concat(sortedNotifications['new-upvote']);
-            }
-
-            else if ((repliesDefined) && (upvotesDefined === false)) {
+            } else if (repliesDefined && upvotesDefined === false) {
               tempCommentArray = sortedNotifications['new-reply'];
-            }
-
-            else if ((upvotesDefined) && (repliesDefined === false)) {
+            } else if (upvotesDefined && repliesDefined === false) {
               tempCommentArray = sortedNotifications['new-upvote'];
             }
 
             let commentInteractionsArray = _.groupBy(tempCommentArray, function(obj) {
-
               return obj.commentId;
             });
 
-            let commentNotifs = await NotificationHelper.formalizeCommentInteractionNotifs(commentInteractionsArray)
+            let commentNotifs = await NotificationHelper.formalizeCommentInteractionNotifs(commentInteractionsArray);
 
-            notifsArray = notifsArray.concat(commentNotifs)
+            notifsArray = notifsArray.concat(commentNotifs);
 
             break;
-          }
-
-          else { // we already have sorted comment interactions
+          } else {
+            // we already have sorted comment interactions
             break;
           }
         // end comment-interactions
@@ -129,16 +116,16 @@ module.exports = {
       }
     }
 
-    reply.send({notifications: notifsArray});
+    reply.send({ notifications: notifsArray });
   },
 
   async deleteArrayOfNotifs(request, reply) {
     let { notifIds } = request.body;
-    await Notification.deleteMany({ _id: { $in: notifIds }});
+    await Notification.deleteMany({ _id: { $in: notifIds } });
 
-    const notifications = await Notification.find({_id: { $in: notifIds }});
+    const notifications = await Notification.find({ _id: { $in: notifIds } });
 
     // Send
     reply.code(204).send(notifications);
   }
-}
+};

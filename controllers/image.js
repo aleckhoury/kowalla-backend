@@ -1,11 +1,11 @@
-const sharp = require("sharp");
-const fs = require("fs");
-const aws = require("aws-sdk");
-const Config = require("../models/config");
+const sharp = require('sharp');
+const fs = require('fs');
+const aws = require('aws-sdk');
+const Config = require('../models/config');
 
 module.exports = {
   async uploadProfilePic(request, reply) {
-    const { options } = await Config.findOne({ name: "awsKeys" });
+    const { options } = await Config.findOne({ name: 'awsKeys' });
     aws.config.update(options);
     const s3 = new aws.S3();
     const now = Date.now();
@@ -14,8 +14,8 @@ module.exports = {
         .resize({
           width: 180,
           height: 180,
-          fit: "cover",
-          background: "white"
+          fit: 'cover',
+          background: 'white'
         })
         .toBuffer();
 
@@ -24,8 +24,8 @@ module.exports = {
           Bucket: `kowalla-dev/${request.body.picType}/profile-pics`,
           Key: `${now}-${request.file.originalname}`,
           Body: buffer,
-          ContentType: "image/jpeg",
-          ACL: "public-read"
+          ContentType: 'image/jpeg',
+          ACL: 'public-read'
         })
         .promise();
 
@@ -37,7 +37,7 @@ module.exports = {
     }
   },
   async uploadBannerPic(request, reply) {
-    const { options } = await Config.findOne({ name: "awsKeys" });
+    const { options } = await Config.findOne({ name: 'awsKeys' });
     aws.config.update(options);
     const s3 = new aws.S3();
     const now = Date.now();
@@ -46,8 +46,8 @@ module.exports = {
         .resize({
           width: 1000,
           height: 300,
-          fit: "cover",
-          background: "transparent"
+          fit: 'cover',
+          background: 'transparent'
         })
         .toBuffer();
 
@@ -56,8 +56,8 @@ module.exports = {
           Bucket: `kowalla-dev/${request.body.picType}/banner-pics`,
           Key: `${now}-${request.file.originalname}`,
           Body: buffer,
-          ContentType: "image/jpeg",
-          ACL: "public-read"
+          ContentType: 'image/jpeg',
+          ACL: 'public-read'
         })
         .promise();
 
@@ -70,16 +70,16 @@ module.exports = {
     }
   },
   async uploadPostImage(request, reply) {
-    const { options } = await Config.findOne({ name: "awsKeys" });
+    const { options } = await Config.findOne({ name: 'awsKeys' });
     aws.config.update(options);
     const s3 = new aws.S3();
     const now = Date.now();
     try {
       const buffer = await sharp(request.file.path)
         .resize(500, null, {
-          fit: "contain",
-          position: "centre",
-          background: "white"
+          fit: 'contain',
+          position: 'centre',
+          background: 'white'
         })
         .toBuffer();
 
@@ -88,8 +88,8 @@ module.exports = {
           Bucket: `kowalla-dev/${request.body.type}/post-pics`,
           Key: `${now}`,
           Body: buffer,
-          ContentType: "image/jpeg",
-          ACL: "public-read"
+          ContentType: 'image/jpeg',
+          ACL: 'public-read'
         })
         .promise();
 
@@ -101,7 +101,7 @@ module.exports = {
     }
   },
   async deletePostImage(request, reply) {
-    const { options } = await Config.findOne({ name: "awsKeys" });
+    const { options } = await Config.findOne({ name: 'awsKeys' });
     aws.config.update(options);
     const s3 = new aws.S3();
     const { bucket, fileName } = await request.body;
@@ -111,7 +111,7 @@ module.exports = {
       await s3.deleteObject(params, (err, data) => {
         if (err) console.log(err, err.stack);
         // error
-        else reply.code(201).send("Successfully deleted image"); // deleted
+        else reply.code(201).send('Successfully deleted image'); // deleted
       });
     } catch (err) {
       reply.send({ err });

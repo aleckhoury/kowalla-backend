@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const shortid = require("shortid");
-const uniqueValidator = require("mongoose-unique-validator");
+const shortid = require('shortid');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const ProfileSchema = new Schema(
   {
@@ -13,7 +13,7 @@ const ProfileSchema = new Schema(
     profilePicture: String,
     reputation: { type: Number, default: 0 }, // need to implement update
     integrations: { type: Array, default: [] },
-    githubToken: { type: String, default: "" },
+    githubToken: { type: String, default: '' },
     userId: { type: String, unique: true, required: true, uniqueCaseInsensitive: true }
   },
   {
@@ -23,22 +23,22 @@ const ProfileSchema = new Schema(
   }
 );
 
-ProfileSchema.virtual("postCount", {
-  ref: "post",
-  localField: "_id",
-  foreignField: "profileId",
+ProfileSchema.virtual('postCount', {
+  ref: 'post',
+  localField: '_id',
+  foreignField: 'profileId',
   count: true
 });
 
-ProfileSchema.virtual("commentCount", {
-  ref: "comment",
-  localField: "_id",
-  foreignField: "profileId",
+ProfileSchema.virtual('commentCount', {
+  ref: 'comment',
+  localField: '_id',
+  foreignField: 'profileId',
   count: true
 });
 
-ProfileSchema.plugin(uniqueValidator, { message: "This username is already taken." });
+ProfileSchema.plugin(uniqueValidator, { message: 'This username is already taken.' });
 
-const Profile = mongoose.model("profile", ProfileSchema);
+const Profile = mongoose.model('profile', ProfileSchema);
 
 module.exports = Profile;

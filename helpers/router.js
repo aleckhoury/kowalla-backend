@@ -23,7 +23,10 @@ module.exports = {
     const app = Fastify({ logger });
     let mongoose;
 
-    app.register(require('fastify-cors'), { origin: true });
+    app.register(require('fastify-cors'), {
+        origin: true,
+        allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
+        methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'] });
     app.register(compress);
     app.register(require('fastify-multipart'));
 

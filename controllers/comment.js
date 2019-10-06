@@ -1,8 +1,8 @@
 // Dependencies
 
 // Models
-const Comment = require('../models/CommentModel');
-const Post = require('../models/PostModel');
+const Comment = require('../models/comment');
+const Post = require('../models/post');
 const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {

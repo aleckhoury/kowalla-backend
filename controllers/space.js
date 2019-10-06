@@ -1,8 +1,8 @@
 // Dependencies
 
 // Models
-const Space = require('../models/SpaceModel');
-const Profile = require('../models/ProfileModel');
+const Space = require('../models/space');
+const Profile = require('../models/profile');
 
 /*
 1) Create -- first pass done

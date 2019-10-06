@@ -1,6 +1,6 @@
-const SpaceController = require("../controllers/space_controller");
-const PostController = require("../controllers/post_controller");
-const CommentController = require("../controllers/comment_controller");
+const SpaceController = require("../controllers/space");
+const PostController = require("../controllers/post");
+const CommentController = require("../controllers/comment");
 
 module.exports = app => {
   // ##########################################################################

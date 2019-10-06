@@ -1,7 +1,7 @@
 // Dependencies
 
 // Models
-const Update = require('../models/UpdateModel');
+const Update = require('../models/update');
 
 module.exports = {
   async getUpdateList(request, reply) {

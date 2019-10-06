@@ -1,8 +1,8 @@
 // Dependencies
 
 // Models
-const Upvote = require('../models/UpvoteModel');
-const Comment = require('../models/CommentModel');
+const Upvote = require('../models/upvote');
+const Comment = require('../models/comment');
 const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {

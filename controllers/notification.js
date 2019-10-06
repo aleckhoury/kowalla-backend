@@ -1,4 +1,4 @@
-const Notification = require('../models/NotificationModel');
+const Notification = require('../models/notification');
 const NotificationHelper = require('../helpers/notification_helpers');
 const _ = require('lodash');
 

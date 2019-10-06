@@ -1,8 +1,8 @@
-const Project = require('../models/ProjectModel');
-const Post = require('../models/PostModel');
-const Comment = require('../models/CommentModel');
-const Space = require('../models/SpaceModel');
-const Notification = require('../models/NotificationModel');
+const Project = require('../models/project');
+const Post = require('../models/post');
+const Comment = require('../models/comment');
+const Space = require('../models/space');
+const Notification = require('../models/notification');
 const _ = require('lodash');
 
 function checkForTomfoolery(ownerProfileId, sendingProfileId) {

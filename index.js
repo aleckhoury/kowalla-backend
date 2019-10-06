@@ -1,6 +1,6 @@
 const throng = require("throng");
 const { appInit, appListen } = require("./helpers/router");
-const Post = require("./models/PostModel");
+const Post = require("./models/post");
 
 async function run() {
   const { app } = appInit({ logger: true });

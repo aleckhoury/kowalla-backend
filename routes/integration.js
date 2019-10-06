@@ -1,4 +1,4 @@
-const IntegrationController = require("../controllers/integration_controller");
+const IntegrationController = require("../controllers/integration");
 
 module.exports = app => {
   app.get("/integrations", IntegrationController.getIntegrations);

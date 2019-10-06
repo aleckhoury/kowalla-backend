@@ -1,11 +1,11 @@
 // Dependencies
 
 // Models
-const Subscription = require('../models/SubscriptionModel');
-const Project = require('../models/ProjectModel');
-const Space = require('../models/SpaceModel');
-const Profile = require('../models/ProfileModel');
-const Notification = require('../models/NotificationModel');
+const Subscription = require('../models/subscription');
+const Project = require('../models/project');
+const Space = require('../models/space');
+const Profile = require('../models/profile');
+const Notification = require('../models/notification');
 const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {

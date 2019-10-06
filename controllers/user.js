@@ -1,8 +1,8 @@
 // Dependencies
-const User = require("../models/UserModel");
-const Profile = require("../models/ProfileModel");
-const Subscription = require("../models/SubscriptionModel");
-const Project = require("../models/ProjectModel");
+const User = require("../models/user");
+const Profile = require("../models/profile");
+const Subscription = require("../models/subscription");
+const Project = require("../models/project");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Email = require("../helpers/email-helpers");

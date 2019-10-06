@@ -5,7 +5,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 //import SubscriptionModel from './SubscriptionModel';
 
-const Subscription = require('./SubscriptionModel');
+const Subscription = require('./subscription');
 
 const ProjectSchema = new Schema({
   _id: { type: String, default: shortid.generate },

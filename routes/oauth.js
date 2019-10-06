@@ -1,4 +1,4 @@
-const OAuthController = require("../controllers/oauth_controller.js");
+const OAuthController = require("../controllers/oauth.js");
 
 module.exports = app => {
   app.post("/github/signin", OAuthController.authGithubUser);

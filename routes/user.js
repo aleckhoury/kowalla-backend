@@ -1,5 +1,5 @@
-const UserController = require("../controllers/user_controller");
-const ProfileController = require("../controllers/profile_controller");
+const UserController = require("../controllers/user");
+const ProfileController = require("../controllers/profile");
 
 module.exports = app => {
   // app.get('/users', UserController.getUserList);

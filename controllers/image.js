@@ -1,7 +1,7 @@
 const sharp = require("sharp");
 const fs = require("fs");
 const aws = require("aws-sdk");
-const Config = require("../models/ConfigModel");
+const Config = require("../models/config");
 
 module.exports = {
   async uploadProfilePic(request, reply) {

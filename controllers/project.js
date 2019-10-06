@@ -1,10 +1,10 @@
 // Dependencies
 
 // Models
-const Project = require("../models/ProjectModel");
-const Profile = require("../models/ProfileModel");
-const Post = require("../models/PostModel");
-const Reaction = require("../models/ReactionModel");
+const Project = require("../models/project");
+const Profile = require("../models/profile");
+const Post = require("../models/post");
+const Reaction = require("../models/reaction");
 /*
 1) Create -- first pass done
 2) Delete -- first pass done

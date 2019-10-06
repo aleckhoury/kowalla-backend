@@ -5,20 +5,20 @@ const Post = require('../models/post');
 const Subscriptions = require('../models/subscription');
 
 module.exports = {
-  async getActivePostByUser(req, res, next) {
+  async getActivePostByUser(request, reply) {
     // Init
-    const { username } = req.params;
+    const { username } = request.params;
     // Act
     const posts = await Post.findOne({ username, isActive: true });
 
     // Send
-    res.status(200).send(posts);
+    reply.code(200).send(posts);
   },
 
-  async getProfilePostList(req, res, next) {
+  async getProfilePostList(request, reply) {
     // add sorting
     // Init
-    let { profileId, sort, skip } = req.params;
+    let { profileId, sort, skip } = request.params;
     skip = Number(skip);
 
     try {
@@ -36,18 +36,18 @@ module.exports = {
           .skip(skip);
       }
       if (posts.length) {
-        return res.status(200).send(posts);
+        return reply.code(200).send(posts);
       }
-      return res.status(204).send('No posts yet!');
+      return reply.code(204).send('No posts yet!');
     } catch (err) {
-      return res.status(500).send(err, 'An error occurred while fetching posts');
+      return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
 
-  async getProjectPostList(req, res, next) {
+  async getProjectPostList(request, reply) {
     // add sorting
     // Init
-    let { projectId, sort, skip } = req.params;
+    let { projectId, sort, skip } = request.params;
     skip = Number(skip);
 
     try {
@@ -65,17 +65,17 @@ module.exports = {
           .skip(skip);
       }
       if (posts.length) {
-        return res.status(200).send(posts);
+        return reply.code(200).send(posts);
       }
-      return res.status(204).send('No posts yet!');
+      return reply.code(204).send('No posts yet!');
     } catch (err) {
-      return res.status(500).send(err, 'An error occurred while fetching posts');
+      return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
-  async updatePost(req, res, next) {
+  async updatePost(request, reply) {
     // Init
-    const { postId } = req.params;
-    const updateParams = req.body;
+    const { postId } = request.params;
+    const updateParams = request.body;
     // Act
     await Post.findOneAndUpdate({ _id: postId }, updateParams);
     const post = await Post.findOne({ _id: postId });
@@ -85,12 +85,12 @@ module.exports = {
       await post.save();
     }
 
-    res.status(200).send(post);
+    reply.code(200).send(post);
   },
-  async getSpacePostList(req, res, next) {
+  async getSpacePostList(request, reply) {
     // add sorting
     // Init
-    let { spaceId, sort, skip } = req.params;
+    let { spaceId, sort, skip } = request.params;
     skip = Number(skip);
 
     try {
@@ -109,16 +109,16 @@ module.exports = {
       }
       // Send
       if (posts.length) {
-        return res.status(200).send(posts);
+        return reply.code(200).send(posts);
       }
-      return res.status(204).send('No posts yet!');
+      return reply.code(204).send('No posts yet!');
     } catch (err) {
-      return res.status(500).send(err, 'An error occurred while fetching posts');
+      return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
-  async getSubscribedPosts(req, res, next) {
+  async getSubscribedPosts(request, reply) {
     // Init
-    let { profileId, sort, skip } = req.params;
+    let { profileId, sort, skip } = request.params;
     skip = Number(skip);
     try {
       const subs = await Subscriptions.find({ profileId }).select('projectId spaceId');
@@ -143,16 +143,16 @@ module.exports = {
           .skip(skip);
       }
       if (posts.length) {
-        return res.status(200).send(posts);
+        return reply.code(200).send(posts);
       }
-      return res.status(204).send('No posts yet!');
+      return reply.code(204).send('No posts yet!');
     } catch (err) {
-      return res.status(500).send(err, 'An error occurred while fetching posts');
+      return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
-  async getPosts(req, res, next) {
+  async getPosts(request, reply) {
     // Init
-    let { sort, skip } = req.params;
+    let { sort, skip } = request.params;
     skip = Number(skip);
     try {
       // Act
@@ -169,27 +169,27 @@ module.exports = {
           .skip(skip);
       }
       if (posts.length) {
-        return res.status(200).send(posts);
+        return reply.code(200).send(posts);
       }
-      return res.status(204).send('No posts yet!');
+      return reply.code(204).send('No posts yet!');
     } catch (err) {
-      return res.status(500).send(err, 'An error occurred while fetching posts');
+      return reply.code(500).send(err, 'An error occurred while fetching posts');
     }
   },
 
-  async getPost(req, res, next) {
+  async getPost(request, reply) {
     // Init
-    const { id } = req.params;
+    const { id } = request.params;
 
     // Act
     const post = await Post.findOne({ _id: id });
     // Send
-    res.status(200).send(post);
+    reply.code(200).send(post);
   },
 
-  async createPost(req, res, next) {
+  async createPost(request, reply) {
     // Init
-    const { profileId, projectId, spaceId, content, duration, start, end, isActive, username } = req.body;
+    const { profileId, projectId, spaceId, content, duration, start, end, isActive, username } = request.body;
 
     const views = 0;
 
@@ -209,18 +209,18 @@ module.exports = {
 
     // Send
     await post.save();
-    res.status(201).send(post);
+    reply.code(201).send(post);
   },
 
-  async deletePost(req, res, next) {
+  async deletePost(request, reply) {
     // Init
-    const { postId } = req.params;
+    const { postId } = request.params;
 
     // Act
     await Post.findOneAndDelete({ _id: postId });
     const post = await Post.findOne({ _id: postId });
 
     // Send
-    res.status(204).send(post);
+    reply.code(204).send(post);
   }
 };

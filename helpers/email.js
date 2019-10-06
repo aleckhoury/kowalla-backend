@@ -1,4 +1,5 @@
 const mailgun = require('mailgun-js');
+// const template = require('../EmailTemplates/WelcomeEmail.ejs.html');
 const DOMAIN = 'kowalla.co';
 const api_key = 'e2a99e09d23ef862951659cff28d130a-898ca80e-4963c86f';
 const mg = mailgun({ apiKey: api_key, domain: DOMAIN });

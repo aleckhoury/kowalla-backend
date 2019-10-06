@@ -1,11 +1,13 @@
 const multer = require('fastify-multer');
+const express = require('express');
+const path = require('path');
 const ImageController = require('../controllers/image');
 
 module.exports = app => {
   const fileFilter = (req, file, cb) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!allowedTypes.includes(file.mimetype)) {
-      const error = new Error('Wrong file type');
+      const error = new Error('Only images are allowed');
       error.code = 'LIMIT_FILE_TYPES';
       return cb(error, false);
     }

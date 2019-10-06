@@ -6,27 +6,27 @@ const Comment = require('../models/comment');
 const NotificationHelper = require('../helpers/notification');
 
 module.exports = {
-  async getUpvoteList(req, res, next) {
+  async getUpvoteList(request, reply) {
     // Init
-    const { profileId } = req.params;
+    const { profileId } = request.params;
 
     // Act
     const upvotes = await Upvote.find({ profileId });
 
     // Send
-    res.status(200).send({ upvotes });
+    reply.code(200).send({ upvotes });
   },
 
-  async getUpvoteCount(req, res, next) {
-    const { commentId } = req.params;
+  async getUpvoteCount(request, reply) {
+    const { commentId } = request.params;
     const upvoteCount = await Upvote.count({ commentId });
-    res.status(200).send({ count: upvoteCount });
+    reply.code(200).send({ count: upvoteCount });
   },
 
-  async getUpvote(req, res, next) {
+  async getUpvote(request, reply) {
     // gets a single upvote for a comment
     // Init
-    const { profileId, commentId } = req.params;
+    const { profileId, commentId } = request.params;
 
     // Act
     const count = await Upvote.countDocuments({ commentId });
@@ -38,19 +38,19 @@ module.exports = {
       userUpvoted
     };
     // Send
-    res.status(200).send(upvoteRes);
+    reply.code(200).send(upvoteRes);
   },
 
-  async createUpvote(req, res, next) {
+  async createUpvote(request, reply) {
     // Init
-    const { commentId, profileId } = req.body;
+    const { commentId, profileId } = request.body;
 
     // Act
     const upvote = await Upvote.create({ profileId, commentId });
 
     // Send
     upvote.save();
-    res.status(201).send(upvote);
+    reply.code(201).send(upvote);
 
     // Build Notification
 
@@ -65,15 +65,15 @@ module.exports = {
     await NotificationHelper.createNotification('new-upvote', notifObject);
   },
 
-  async deleteUpvote(req, res, next) {
+  async deleteUpvote(request, reply) {
     // Init
-    const { profileId, commentId } = req.params;
+    const { profileId, commentId } = request.params;
 
     // Act
     await Upvote.findOneAndDelete({ profileId, commentId });
     const upvote = await Upvote.findOne({ profileId, commentId });
 
     // Send
-    res.status(204).send(upvote);
+    reply.code(204).send(upvote);
   }
 };

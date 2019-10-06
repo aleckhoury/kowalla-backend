@@ -3,10 +3,10 @@ const NotificationHelper = require('../helpers/notification_helpers');
 const _ = require('lodash');
 
 module.exports = {
-  async getNotificationsList(req, res, next) {
-    const { profileId } = req.params;
+  async getNotificationsList(request, reply) {
+    const { profileId } = request.params;
     // send owned projects and spaces
-    const { projectIdsArray } = req.body; // an array of string owned projects ids
+    const { projectIdsArray } = request.body; // an array of string owned projects ids
     // CURRENT-STATE MVP SETUPS
 
     const notifications = await Notification.find({
@@ -129,16 +129,16 @@ module.exports = {
       }
     }
 
-    res.send({notifications: notifsArray});
+    reply.send({notifications: notifsArray});
   },
 
-  async deleteArrayOfNotifs(req, res, next) {
-    let { notifIds } = req.body;
+  async deleteArrayOfNotifs(request, reply) {
+    let { notifIds } = request.body;
     await Notification.deleteMany({ _id: { $in: notifIds }});
 
     const notifications = await Notification.find({_id: { $in: notifIds }});
 
     // Send
-    res.status(204).send(notifications);
+    reply.code(204).send(notifications);
   }
 }

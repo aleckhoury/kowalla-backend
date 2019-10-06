@@ -9,9 +9,9 @@ const Notification = require('../models/NotificationModel');
 const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
-  async getSubscriptionList(req, res, next) {
+  async getSubscriptionList(request, reply) {
     // Init
-    const { profileId } = req.params;
+    const { profileId } = request.params;
     //const profileObj = await Profile.findOne({_id: profileId});
 
     //onsole.log(profileObj);
@@ -82,45 +82,45 @@ module.exports = {
     };
 
     // Send
-    res.status(200).send({subscriptions: profileItems});
+    reply.code(200).send({subscriptions: profileItems});
   },
 
-  async getSubscription(req, res, next) {
+  async getSubscription(request, reply) {
     // Init
     const {
       profileId,
       type,
       typeId
-    } = req.params;
+    } = request.params;
 
     // Act
     if (type === 'spaces') {
       const subscription = await Subscription.findOne({profileId, spaceId: typeId});
 
       // Send
-      res.status(200).send(subscription);
+      reply.code(200).send(subscription);
     }
 
     else if (type === 'projects') {
       const subscription = await Subscription.findOne({profileId, projectId: typeId});
 
       // Send
-      res.status(200).send(subscription);
+      reply.code(200).send(subscription);
     }
 
 
   },
 
-  async createSubscription(req, res, next) {
+  async createSubscription(request, reply) {
     // Init
     const { // these need to be null'd if they're not being used
       profileId,
-    } = req.params;
+    } = request.params;
 
     const {
       projectId,
       spaceId,
-    } = req.body;
+    } = request.body;
 
     if (projectId === undefined) { // add Space Sub
       // Act
@@ -128,7 +128,7 @@ module.exports = {
 
       // Send
       await subscription.save();
-      res.status(201).send(subscription);
+      reply.code(201).send(subscription);
 
       //await Space.findOneAndUpdate({_id: spaceId}, {$inc: { subscribers: 1}});
       // build the notification
@@ -146,7 +146,7 @@ module.exports = {
 
       // Send
       await subscription.save();
-      res.status(201).send(subscription);
+      reply.code(201).send(subscription);
 
       /*
       profileId: String,
@@ -167,13 +167,13 @@ module.exports = {
     }
   },
 
-  async deleteSubscription(req, res, next) {
+  async deleteSubscription(request, reply) {
     // Init
     const {
       profileId,
       type,
       typeId
-    } = req.params;
+    } = request.params;
 
     // Act
     if (type === 'spaces') {
@@ -181,7 +181,7 @@ module.exports = {
       const subscription = await Subscription.findOne({profileId, spaceId: typeId});
 
       // Send
-      res.status(204).send(subscription);
+      reply.code(204).send(subscription);
     }
 
     else if (type === 'projects') {
@@ -189,7 +189,7 @@ module.exports = {
       const subscription = await Subscription.findOne({profileId, spaceId: typeId});
 
       // Send
-      res.status(204).send(subscription);
+      reply.code(204).send(subscription);
     }
 
 

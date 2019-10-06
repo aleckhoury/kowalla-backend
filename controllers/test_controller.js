@@ -5,12 +5,12 @@
 module.exports = {
 
   // get test
-  test(req, res, next) {
-    res.send({ test: 'plz work' });
+  test(request, reply) {
+    reply.send({ test: 'plz work' });
   },
 
   // test reflection of a posted json message
-  reflect(req, res, next) {
-    res.send(req.body);
+  reflect(request, reply) {
+    reply.send(request.body);
   },
 }

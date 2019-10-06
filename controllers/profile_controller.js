@@ -42,14 +42,14 @@ async function getReputationByProfileId(profileId, username = "") {
   return upvoteModifier * upvoteCount + reactionModifier * reactionCount;
 }
 module.exports = {
-  async getAllSubscriptionOptions(req, res, next) {
+  async getAllSubscriptionOptions(request, reply) {
     const spaces = await Space.find({});
     const projects = await Project.find({});
     const list = spaces.concat(projects);
 
-    res.status(201).send(list);
+    reply.code(201).send(list);
   },
-  async getProfileList(req, res, next) {
+  async getProfileList(request, reply) {
     // Init
     const profiles = await Profile.find({})
       .populate("postCount")
@@ -57,12 +57,12 @@ module.exports = {
       .exec(); // TODO: Add sorting
 
     // Send
-    res.send({ profiles });
+    reply.send({ profiles });
   },
 
-  async createProfile(req, res, next) {
+  async createProfile(request, reply) {
     // Init
-    const profileProps = req.body;
+    const profileProps = request.body;
 
     // Act
     const profile = await Profile.create(profileProps);
@@ -73,11 +73,11 @@ module.exports = {
       .populate("postCount")
       .populate("commentCount")
       .exec(); // TODO: Add sorting
-    res.status(201).send(populatedProfile);
+    reply.code(201).send(populatedProfile);
   },
-  async getProfileByUsername(req, res, next) {
+  async getProfileByUsername(request, reply) {
     // Init
-    const { username } = req.params;
+    const { username } = request.params;
     try {
       // Act
       const reputation = await getReputationByProfileId("", username);
@@ -89,26 +89,26 @@ module.exports = {
         .exec();
 
       // Send
-      res.status(200).send(user);
+      reply.code(200).send(user);
     } catch (err) {
       console.log(err);
     }
   },
-  async getProfileOnLoad(req, res, next) {
+  async getProfileOnLoad(request, reply) {
     // Init
-    const { username } = req.params;
+    const { username } = request.params;
     try {
       // Act
       const user = await Profile.findOne({ username });
       // Send
-      res.status(200).send(user);
+      reply.code(200).send(user);
     } catch (err) {
       console.log(err);
     }
   },
-  async getProfile(req, res, next) {
+  async getProfile(request, reply) {
     // Init
-    const { profileId } = req.params;
+    const { profileId } = request.params;
 
     let reputation = await getReputationByProfileId(profileId);
     await Profile.findOneAndUpdate({ _id: profileId }, { reputation });
@@ -120,13 +120,13 @@ module.exports = {
       .exec();
 
     // Send
-    res.status(200).send(profile);
+    reply.code(200).send(profile);
   },
 
-  async updateProfile(req, res, next) {
+  async updateProfile(request, reply) {
     // Init
-    const { profileId } = req.params;
-    const updateParams = req.body;
+    const { profileId } = request.params;
+    const updateParams = request.body;
     const { username } = updateParams;
 
     // Act
@@ -139,16 +139,16 @@ module.exports = {
         await User.findOneAndUpdate({ _id: profile.userId }, { username: username }, { runValidators: true, context: "query" });
       }
       // Send
-      res.status(200).send(profile);
+      reply.code(200).send(profile);
     } catch (err) {
-      res.status(400).send(err);
+      reply.code(400).send(err);
     }
   },
 
-  async toggleIntegration(req, res, next) {
+  async toggleIntegration(request, reply) {
     // Init
-    const { profileId } = req.params;
-    const { integration } = req.body;
+    const { profileId } = request.params;
+    const { integration } = request.body;
     // Act
     const profile = await Profile.findOne({ _id: profileId });
     const index = profile.integrations.indexOf(integration);
@@ -160,18 +160,18 @@ module.exports = {
     }
     await profile.save();
     // Send
-    return res.status(200).send(profile);
+    return reply.code(200).send(profile);
   },
 
-  async deleteProfile(req, res, next) {
+  async deleteProfile(request, reply) {
     // Init
-    const { profileId } = req.params;
+    const { profileId } = request.params;
 
     // Act
     await Profile.findOneAndDelete({ _id: profileId });
     const profile = await Profile.findOne({ _id: profileId });
 
     // Send
-    res.status(204).send(profile);
+    reply.code(204).send(profile);
   }
 };

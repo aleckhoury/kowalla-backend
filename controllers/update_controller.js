@@ -4,36 +4,36 @@
 const Update = require('../models/UpdateModel');
 
 module.exports = {
-  async getUpdateList(req, res, next) {
+  async getUpdateList(request, reply) {
     // Init
-    const { projectId } = req.params;
+    const { projectId } = request.params;
 
     // Act
     const updates = await Update.find({projectId});
 
     // Send
-    res.status(200).send({updates});
+    reply.code(200).send({updates});
   },
 
-  async getUpdate(req, res, next) {
+  async getUpdate(request, reply) {
     // Init
-    const { updateId } = req.params;
+    const { updateId } = request.params;
 
     // Act
     const update = await Update.findOne({_id: updateId});
 
     // Send
-    res.status(200).send(update);
+    reply.code(200).send(update);
   },
 
-  async createUpdate(req, res, next) {
+  async createUpdate(request, reply) {
     // Init
     const {
       profileId,
       content,
-    } = req.body;
+    } = request.body;
 
-    const { projectId } = req.params;
+    const { projectId } = request.params;
 
     const views = 0;
 
@@ -42,18 +42,18 @@ module.exports = {
 
     // Send
     await update.save();
-    res.status(201).send(update);
+    reply.code(201).send(update);
   },
 
-  async deleteUpdate(req, res, next) {
+  async deleteUpdate(request, reply) {
     // Init
-    const { updateId } = req.params;
+    const { updateId } = request.params;
 
     // Act
     await Update.findOneAndDelete({_id: updateId});
     const update = await Update.findOne({_id: updateId});
 
     // Send
-    res.status(204).send(update);
+    reply.code(204).send(update);
   },
 }

@@ -4,30 +4,30 @@
 const Integration = require('../models/IntegrationModel');
 
 module.exports = {
-    async createIntegration(req, res, next) {
+    async createIntegration(request, reply) {
         // Init
         const {
             name,
             description,
-        } = req.body;
+        } = request.body;
         // Act
         const integration = await Integration.create({ name, description });
 
         // Send
         await integration.save();
-        res.status(201).send(integration);
+        reply.code(201).send(integration);
     },
-    async getIntegrations(req, res, next) {
+    async getIntegrations(request, reply) {
         // Init
         try {
             // Act
             let integrations = await Integration.find({});
             if (integrations.length) {
-                return res.status(200).send(integrations);
+                return reply.code(200).send(integrations);
             }
-            return res.status(204).send('No Integrations yet!');
+            return reply.code(204).send('No Integrations yet!');
         } catch(err) {
-            return res.status(500).send(err, 'An error occurred while fetching integrations');
+            return reply.code(500).send(err, 'An error occurred while fetching integrations');
         }
     }
 };

@@ -4,13 +4,13 @@ const aws = require("aws-sdk");
 const Config = require("../models/ConfigModel");
 
 module.exports = {
-  async uploadProfilePic(req, res, next) {
+  async uploadProfilePic(request, reply) {
     const { options } = await Config.findOne({ name: "awsKeys" });
     aws.config.update(options);
     const s3 = new aws.S3();
     const now = Date.now();
     try {
-      const buffer = await sharp(req.file.path)
+      const buffer = await sharp(request.file.path)
         .resize({
           width: 180,
           height: 180,
@@ -21,28 +21,28 @@ module.exports = {
 
       const s3res = await s3
         .upload({
-          Bucket: `kowalla-dev/${req.body.picType}/profile-pics`,
-          Key: `${now}-${req.file.originalname}`,
+          Bucket: `kowalla-dev/${request.body.picType}/profile-pics`,
+          Key: `${now}-${request.file.originalname}`,
           Body: buffer,
           ContentType: "image/jpeg",
           ACL: "public-read"
         })
         .promise();
 
-      fs.unlink(req.file.path, () => {
-        res.json({ file: s3res.Location });
+      fs.unlink(request.file.path, () => {
+        reply.send({ file: s3res.Location });
       });
     } catch (err) {
-      res.status(500).send(err);
+      reply.code(500).send(err);
     }
   },
-  async uploadBannerPic(req, res, next) {
+  async uploadBannerPic(request, reply) {
     const { options } = await Config.findOne({ name: "awsKeys" });
     aws.config.update(options);
     const s3 = new aws.S3();
     const now = Date.now();
     try {
-      const buffer = await sharp(req.file.path)
+      const buffer = await sharp(request.file.path)
         .resize({
           width: 1000,
           height: 300,
@@ -53,29 +53,29 @@ module.exports = {
 
       const s3res = await s3
         .upload({
-          Bucket: `kowalla-dev/${req.body.picType}/banner-pics`,
-          Key: `${now}-${req.file.originalname}`,
+          Bucket: `kowalla-dev/${request.body.picType}/banner-pics`,
+          Key: `${now}-${request.file.originalname}`,
           Body: buffer,
           ContentType: "image/jpeg",
           ACL: "public-read"
         })
         .promise();
 
-      fs.unlink(req.file.path, () => {
-        res.json({ file: s3res.Location });
+      fs.unlink(request.file.path, () => {
+        reply.send({ file: s3res.Location });
       });
     } catch (err) {
       console.log(err);
-      res.status(500).send(err);
+      reply.code(500).send(err);
     }
   },
-  async uploadPostImage(req, res, next) {
+  async uploadPostImage(request, reply) {
     const { options } = await Config.findOne({ name: "awsKeys" });
     aws.config.update(options);
     const s3 = new aws.S3();
     const now = Date.now();
     try {
-      const buffer = await sharp(req.file.path)
+      const buffer = await sharp(request.file.path)
         .resize(500, null, {
           fit: "contain",
           position: "centre",
@@ -85,36 +85,36 @@ module.exports = {
 
       const s3res = await s3
         .upload({
-          Bucket: `kowalla-dev/${req.body.type}/post-pics`,
-          Key: `${now}-${req.file.originalname}`,
+          Bucket: `kowalla-dev/${request.body.type}/post-pics`,
+          Key: `${now}`,
           Body: buffer,
           ContentType: "image/jpeg",
           ACL: "public-read"
         })
         .promise();
 
-      fs.unlink(req.file.path, () => {
-        res.json({ file: s3res.Location });
+      fs.unlink(request.file.path, () => {
+        reply.send({ file: s3res.Location });
       });
     } catch (err) {
-      res.json({ err });
+      reply.send({ err });
     }
   },
-  async deletePostImage(req, res, next) {
+  async deletePostImage(request, reply) {
     const { options } = await Config.findOne({ name: "awsKeys" });
     aws.config.update(options);
     const s3 = new aws.S3();
-    const { bucket, fileName } = await req.body;
+    const { bucket, fileName } = await request.body;
 
     try {
       const params = { Bucket: bucket, Key: fileName };
       await s3.deleteObject(params, (err, data) => {
         if (err) console.log(err, err.stack);
         // error
-        else res.status(201).send("Successfully deleted reaction"); // deleted
+        else reply.code(201).send("Successfully deleted image"); // deleted
       });
     } catch (err) {
-      res.json({ err });
+      reply.send({ err });
     }
   }
 };

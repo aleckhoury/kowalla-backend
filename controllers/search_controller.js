@@ -4,7 +4,7 @@ const Space = require('../models/SpaceModel');
 const Project = require('../models/ProjectModel');
 
 module.exports = {
-  async mvpSearch(req, res, next) {
+  async mvpSearch(request, reply) {
     let profiles = await Profile.find({});
     let spaces = await Space.find({});
     let projects = await Project.find({});
@@ -44,6 +44,6 @@ module.exports = {
       }
     }
 
-    res.send(responseArray)
+    reply.send(responseArray)
   }
 }

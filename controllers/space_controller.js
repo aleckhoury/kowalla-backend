@@ -33,7 +33,7 @@ async function getProfileIdsFromUsernames(usernames) {
 }
 
 module.exports = {
-  async getSpaceList(req, res, next) {
+  async getSpaceList(request, reply) {
       // Init
       spaces = await Space.find({})
         .populate('subscribers')
@@ -41,13 +41,13 @@ module.exports = {
         .exec();
 
       // Send
-      res.send({spaces});
+      reply.send({spaces});
   },
 
-  async getSpaceByName(req, res, next) {
+  async getSpaceByName(request, reply) {
 
     // Init
-    const { spaceName } = req.params;
+    const { spaceName } = request.params;
 
     // Act
     const space = await Space.findOne({name: spaceName})
@@ -56,12 +56,12 @@ module.exports = {
       .exec();
 
     // Send
-    res.status(200).send(space);
+    reply.code(200).send(space);
   },
 
-  async getSpace(req, res, next) {
+  async getSpace(request, reply) {
       // Init
-      const { spaceId } = req.params;
+      const { spaceId } = request.params;
 
       // Act
       const space = await Space.findOne({_id: spaceId})
@@ -70,10 +70,10 @@ module.exports = {
         .exec();
 
       // Send
-      res.status(200).send(space);
+      reply.code(200).send(space);
   },
 
-  async createSpace(req, res, next) {
+  async createSpace(request, reply) {
       // Init
       let {
         name,
@@ -81,7 +81,7 @@ module.exports = {
         headerPicture,
         profilePicture,
         admins,
-      } = req.body;
+      } = request.body;
 
       if (profilePicture === '') {
           let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
@@ -108,16 +108,16 @@ module.exports = {
               .populate('postCount')
               .exec();
 
-          res.status(201).send(populatedSpace);
+          reply.code(201).send(populatedSpace);
       } catch(err) {
-          res.status(400).send(err);
+          reply.code(400).send(err);
       }
   },
 
-  async updateSpace(req, res, next) {
+  async updateSpace(request, reply) {
       // Init
-      const { spaceId } = req.params;
-      const updateParams = req.body;
+      const { spaceId } = request.params;
+      const updateParams = request.body;
 
       try {
           // Act
@@ -128,21 +128,21 @@ module.exports = {
               .exec();
 
           // Send
-          res.status(200).send(space);
+          reply.code(200).send(space);
       } catch(err) {
-          res.status(400).send(err);
+          reply.code(400).send(err);
       }
   },
 
-  async deleteSpace(req, res, next) {
+  async deleteSpace(request, reply) {
       // Init
-      const { spaceId } = req.params;
+      const { spaceId } = request.params;
 
       // Act
       await Space.findOneAndDelete({_id: spaceId});
       const space = await Space.findOne({_id: spaceId});
 
       // Send
-      res.status(204).send(space);
+      reply.code(204).send(space);
   },
 }

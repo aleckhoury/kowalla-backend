@@ -6,48 +6,48 @@ const Post = require('../models/PostModel');
 const NotificationHelper = require('../helpers/notification_helpers');
 
 module.exports = {
-  async getPostCommentList(req, res, next) {
+  async getPostCommentList(request, reply) {
     // Init
-    const { postId } = req.params;
+    const { postId } = request.params;
     // Act
     const comments = await Comment.find({ postId, commentId: ''});
 
     // Send
-    res.status(200).send(comments);
+    reply.code(200).send(comments);
   },
 
-  async getCommentReplyList(req, res, next) {
+  async getCommentReplyList(request, reply) {
     // Init
-    const { commentId, postId } = req.params;
+    const { commentId, postId } = request.params;
     // Act
     const comments = await Comment.find({commentId, postId});
 
     // Send
-    res.status(200).send(comments);
+    reply.code(200).send(comments);
   },
 
-  async getPostComment(req, res, next) {
+  async getPostComment(request, reply) {
     // Init
     const {
       postId,
       commentId
-    } = req.params;
+    } = request.params;
 
     // Act
     const comment = await Comment.findOne({postId, _id: commentId});
 
     // Send
-    res.status(200).send(comment);
+    reply.code(200).send(comment);
   },
 
-  async createPostComment(req, res, next) {
+  async createPostComment(request, reply) {
     // Init
     const {
       profileId,
       postId,
       commentId,
       content,
-    } = req.body;
+    } = request.body;
 
     const views = 0;
 
@@ -55,7 +55,7 @@ module.exports = {
     const comment = await Comment.create({profileId, content, postId, commentId, views});
     // Send
     await comment.save();
-    res.status(201).send(comment);
+    reply.code(201).send(comment);
 
     let post = await Post.findOne({_id: postId}, "profileId projectId");
 
@@ -84,53 +84,53 @@ module.exports = {
     }
   },
 
-  async deletePostComment(req, res, next) {
+  async deletePostComment(request, reply) {
     // Init
-    const { commentId } = req.params;
+    const { commentId } = request.params;
 
     // Act
     await Comment.findOneAndDelete({_id: commentId});
     const comment = await Comment.findOne({_id: commentId});
 
     // Send
-    res.status(204).send(comment);
+    reply.code(204).send(comment);
   },
 
   // ################################ Updates #################################
-  async getUpdateCommentList(req, res, next) {
+  async getUpdateCommentList(request, reply) {
     // Init
-    const { updateId } = req.params;
+    const { updateId } = request.params;
 
     // Act
     const comments = await Comment.find({updateId});
 
     // Send
-    res.status(200).send({comments});
+    reply.code(200).send({comments});
   },
 
-  async getUpdateComment(req, res, next) {
+  async getUpdateComment(request, reply) {
     // Init
     const {
       updateId,
       commentId
-    } = req.params;
+    } = request.params;
 
     // Act
     const comment = await Comment.findOne({updateId, _id: commentId});
 
     // Send
-    res.status(200).send(comment);
+    reply.code(200).send(comment);
   },
 
-  async createUpdateComment(req, res, next) {
+  async createUpdateComment(request, reply) {
     // Init
     const {
       profileId,
       commentId,
       content,
-    } = req.body;
+    } = request.body;
 
-    const { updateId } = req.params;
+    const { updateId } = request.params;
     const views = 0;
 
     // Act
@@ -138,19 +138,19 @@ module.exports = {
 
     // Send
     await comment.save();
-    res.status(201).send(comment);
+    reply.code(201).send(comment);
   },
 
-  async deleteUpdateComment(req, res, next) {
+  async deleteUpdateComment(request, reply) {
     // Init
-    const { commentId } = req.params;
+    const { commentId } = request.params;
 
     // Act
     await Comment.findOneAndDelete({_id: commentId});
     const comment = await Comment.findOne({_id: commentId});
 
     // Send
-    res.status(204).send(comment);
+    reply.code(204).send(comment);
   },
 
 }

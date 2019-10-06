@@ -11,12 +11,12 @@ const Subscription = require('../models/SubscriptionModel');
 let data;
 // Models
 module.exports = {
-    async authGithubUser(req, res, next) {
+    async authGithubUser(request, reply) {
         // Init
-        const { code } = req.body;
+        const { code } = request.body;
 
         if (!code) {
-            return res.send({
+            return reply.send({
                 success: false,
                 message: 'Error no code'
             })
@@ -66,14 +66,14 @@ module.exports = {
                         await subscription2.save();
                     } else {
                         const token = await jwt.sign({ sub: user._id }, process.env.secret);
-                        return res.status(200).json({
+                        return reply.code(200).send({
                             isNew: false,
                             token,
                             user
                         });
                     }
                     const token = await jwt.sign({ sub: user._id }, process.env.secret);
-                    return res.status(200).json({
+                    return reply.code(200).send({
                         isNew: true,
                         token,
                         user
@@ -84,7 +84,7 @@ module.exports = {
         }
         // Send
     },
-    async authTwitterUser(req, res, next) {
+    async authTwitterUser(request, reply) {
         const { options } = await Config.findOne({name: 'twitterKeys'});
 
         // Initialize
@@ -121,15 +121,15 @@ module.exports = {
                 const keyValue = x.split('=');
                 obj[keyValue[0]] = keyValue[1];
             });
-            return res.status(200).json(obj);
+            return reply.code(200).send(obj);
         } catch(err) {
             console.log(err);
         }
     },
-    async verifyTwitterUser(req, res, next) {
+    async verifyTwitterUser(request, reply) {
         const { options } = await Config.findOne({name: 'twitterKeys'});
 
-        const { oauthToken, verifier } = req.body;
+        const { oauthToken, verifier } = request.body;
 
         // Initialize
         const oauth = OAuth({
@@ -170,12 +170,12 @@ module.exports = {
                 secret: obj.oauth_token_secret,
             };
             const requestData2 = {
-                url: 'https://api.twitter.com/1.1/account/verify_credentials.json',
+                url: 'https://api.twitter.com/1.1/account/verify_credentials.send',
                 method: 'GET',
                 data: { skip_status: true }
             };
             const userInfo = await request
-                .get('https://api.twitter.com/1.1/account/verify_credentials.json')
+                .get('https://api.twitter.com/1.1/account/verify_credentials.send')
                 .query(oauth.authorize(requestData2, token2))
                 .then(async result => {
                     let user = await Profile.findOne({ username: result.body.screen_name })
@@ -205,14 +205,14 @@ module.exports = {
                         await subscription2.save();
                     } else {
                         const token = await jwt.sign({ sub: user._id }, process.env.secret);
-                        return res.status(200).json({
+                        return reply.code(200).send({
                             isNew: false,
                             token,
                             user
                         });
                     }
                     const token = await jwt.sign({ sub: user._id }, process.env.secret);
-                    return res.status(200).json({
+                    return reply.code(200).send({
                         isNew: true,
                         token,
                         user

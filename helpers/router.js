@@ -22,10 +22,10 @@ module.exports = {
   appInit({ logger = { level: 'warn' }, mongoUrl = '' } = {}) {
     const app = Fastify({ logger });
     let mongoose;
-    app.register(require('fastify-cors'), {
-        origin: 'https://www.kowalla.co',
+    // app.register(require('fastify-cors'), {
+    //     origin: 'https://www.kowalla.co',
         // allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
-        methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'] });
+        // methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'] });
     app.register(compress);
     app.register(require('fastify-multipart'));
 

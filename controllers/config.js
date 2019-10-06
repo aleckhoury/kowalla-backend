@@ -4,10 +4,10 @@
 const Config = require('../models/config');
 
 module.exports = {
-  async createConfig(req, res, next) {
+  async createConfig(request, reply) {
     // Init
-    const { name } = req.body;
-    const { accessKeyId, secretAccessKey } = req.body.options;
+    const { name } = request.body;
+    const { accessKeyId, secretAccessKey } = request.body.options;
 
     // Act
     const config = await Config.create({
@@ -20,6 +20,6 @@ module.exports = {
 
     // Send
     await config.save();
-    res.status(201).send(config);
+    reply.code(201).send(config);
   }
 };

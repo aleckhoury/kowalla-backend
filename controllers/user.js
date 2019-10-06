@@ -10,28 +10,28 @@ const Email = require('../helpers/email');
 // Models
 
 module.exports = {
-  async createUser(req, res, next) {
+  async createUser(request, reply) {
     let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
     let item = items[Math.floor(Math.random() * items.length)];
-    let projCheck = await Project.find({ projectName: req.body.username });
+    let projCheck = await Project.find({ projectName: request.body.username });
     if (projCheck.length) {
       throw 'This username is already taken';
     }
-    await bcrypt.hash(req.body.password, 10, async function(err, hash) {
+    await bcrypt.hash(request.body.password, 10, async function(err, hash) {
       try {
         let newUser = await User.create({
-          email: req.body.email,
-          username: req.body.username,
+          email: request.body.email,
+          username: request.body.username,
           password: hash
         });
         await newUser.save();
         let profile = await Profile.create({
-          firstName: req.body.username,
+          firstName: request.body.username,
           lastName: '',
-          username: req.body.username,
+          username: request.body.username,
           integrations: ['Embed Video'],
           description: '',
-          profilePicture: `https://ui-avatars.com/api/?name=${req.body.username}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`,
+          profilePicture: `https://ui-avatars.com/api/?name=${request.body.username}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`,
           userId: newUser._id
         });
         const subscription = await Subscription.create({
@@ -50,8 +50,8 @@ module.exports = {
           _doc: { _id, username, password },
           ...userWithoutPassword
         } = await newUser;
-        await Email.sendWelcomeEmail(req.body.username, req.body.email);
-        return res.status(200).json({
+        await Email.sendWelcomeEmail(request.body.username, request.body.email);
+        return reply.code(200).send({
           data: {
             _id,
             username,
@@ -60,55 +60,54 @@ module.exports = {
         });
       } catch (err) {
         console.log(err);
-        return res.status(400).jsonp({
+        return reply.code(400).send({
           status: 'error',
           message: 'This username or email is already taken.'
         });
       }
     });
   },
-  async authUser(req, res, next) {
-    const globalRes = res;
+  async authUser(request, reply) {
     let user;
     try {
-      if (req.body.usernameOrEmail === '.*') {
+      if (request.body.usernameOrEmail === '.*') {
         throw 'Invalid username';
       }
-      if (req.body.usernameOrEmail.includes('@')) {
+      if (request.body.usernameOrEmail.includes('@')) {
         user = await User.findOne({
-          email: req.body.usernameOrEmail
+          email: request.body.usernameOrEmail
         });
       } else {
         user = await User.findOne({
-          username: req.body.usernameOrEmail
+          username: request.body.usernameOrEmail
         });
       }
       if (!user) {
-        return globalRes.status(400).jsonp({
+        return reply.code(400).send({
           status: 'error',
           message: 'Invalid username'
         });
       }
-      await bcrypt.compare(req.body.password, user.password, function(err, res) {
+      await bcrypt.compare(request.body.password, user.password, function(err, res) {
         if (res) {
           const token = jwt.sign({ sub: user._id }, process.env.secret);
           const {
             _doc: { _id, username, password },
             ...userWithoutPassword
           } = user;
-          return globalRes.status(200).json({
+          return reply.code(200).send({
             username,
             token
           });
         } else {
-          return globalRes.status(400).jsonp({
+          return reply.code(400).send({
             status: 'error',
             message: 'Incorrect Password'
           });
         }
       });
     } catch (err) {
-      return globalRes.status(400).jsonp({
+      return reply.code(400).send({
         status: 'error',
         message: err
       });

@@ -6,47 +6,47 @@ const Post = require('../models/post');
 const NotificationHelper = require('../helpers/notification');
 
 module.exports = {
-  async getReactionList(req, res, next) {
+  async getReactionList(request, reply) {
     // Init
-    const { postId } = req.params;
+    const { postId } = request.params;
 
     // Act
     const reactions = await Reaction.find({ postId });
 
     // Send
-    res.status(200).send(reactions);
+    reply.code(200).send(reactions);
   },
 
-  async getReaction(req, res, next) {
+  async getReaction(request, reply) {
     // Init
-    const { profileId, type, typeId } = req.params;
+    const { profileId, type, typeId } = request.params;
 
     // Act
     if (type === 'posts') {
       const reaction = await Reaction.findOne({ profileId, postId: typeId });
 
       // Send
-      res.status(200).send(reaction);
+      reply.code(200).send(reaction);
     } else if (type === 'updates') {
       const reaction = await Reaction.findOne({ profileId, updateId: postId });
 
       // Send
-      res.status(200).send(reaction);
+      reply.code(200).send(reaction);
     }
   },
 
-  async createReaction(req, res, next) {
+  async createReaction(request, reply) {
     // Init
-    const { profileId } = req.params;
+    const { profileId } = request.params;
 
-    const { emoji, postId } = req.body;
+    const { emoji, postId } = request.body;
 
     // Act
     const reaction = await Reaction.create({ profileId, postId, emoji });
 
     // Send
     await reaction.save();
-    res.status(201).send(reaction);
+    reply.code(201).send(reaction);
 
     // Build notification
 
@@ -62,17 +62,17 @@ module.exports = {
     await NotificationHelper.createNotification('new-reaction', notifObject);
   },
 
-  async deleteReaction(req, res, next) {
+  async deleteReaction(request, reply) {
     // Init
-    const { profileId, postId } = req.params;
+    const { profileId, postId } = request.params;
 
-    const { emoji } = req.body;
+    const { emoji } = request.body;
 
     // Act
     await Reaction.findOneAndDelete({ profileId, postId, emoji });
     // const reaction = await Reaction.findOne({profileId, postId, emoji});
 
     // Send
-    res.status(201).send('Successfully deleted reaction');
+    reply.code(201).send('Successfully deleted reaction');
   }
 };

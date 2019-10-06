@@ -26,6 +26,7 @@ module.exports = {
 
     app.register(cors);
     app.register(compress);
+    app.register(require('fastify-multipart'));
 
     app.register(async () => {
       mongoose = await mongooseConnect(mongoUrl);

@@ -77,9 +77,9 @@ module.exports = {
   },
 
   // Create
-  async createProject(req, res, next) {
+  async createProject(request, reply) {
     // Init
-    let { name, projectName, description, profilePicture, headerPicture, admins } = req.body;
+    let { name, projectName, description, profilePicture, headerPicture, admins } = request.body;
 
     if (profilePicture === '') {
       let items = ['bd56e1', 'efbbcc', '0a2049', 'db9dee'];
@@ -107,16 +107,16 @@ module.exports = {
         .populate('postCount')
         .exec();
 
-      res.status(201).send(populatedProject);
+      reply.code(201).send(populatedProject);
     } catch (err) {
-      res.status(400).send(err);
+      reply.code(400).send(err);
     }
   },
 
   // Read
-  async getProjectByName(req, res, next) {
+  async getProjectByName(request, reply) {
     // Init
-    const { projectName } = req.params;
+    const { projectName } = request.params;
 
     // Act
     let reputation = await getReputation('', projectName);
@@ -128,9 +128,9 @@ module.exports = {
       .exec();
   },
 
-  async getProject(req, res, next) {
+  async getProject(request, reply) {
     // Init
-    const { id } = req.params;
+    const { id } = request.params;
 
     // Act
     let reputation = await getReputation(id);
@@ -143,10 +143,10 @@ module.exports = {
   },
 
   // Update
-  async updateProject(req, res, next) {
+  async updateProject(request, reply) {
     // Init
-    const { id } = req.params;
-    const updateParams = req.body;
+    const { id } = request.params;
+    const updateParams = request.body;
 
     try {
       // Act
@@ -160,23 +160,23 @@ module.exports = {
         .exec();
 
       // Send
-      res.status(200).send(project);
+      reply.code(200).send(project);
       await project.save();
     } catch (err) {
-      res.status(400).send(err);
+      reply.code(400).send(err);
     }
   },
 
   // Delete
-  async deleteProject(req, res, next) {
+  async deleteProject(request, reply) {
     // Init
-    const { id } = req.params;
+    const { id } = request.params;
 
     // Act
     await Project.findOneAndDelete({ _id: id });
     const project = await Project.findOne({ _id: id });
 
     // Send
-    res.status(204).send(project);
+    reply.code(204).send(project);
   }
 };

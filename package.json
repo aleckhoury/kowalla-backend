@@ -31,7 +31,6 @@
     "aws-sdk": "2.534.0",
     "bcryptjs": "2.4.3",
     "compression": "1.7.4",
-    "cors": "^2.8.5",
     "crypto": "1.0.1",
     "fastify": "2.9.0",
     "fastify-compress": "0.11.0",

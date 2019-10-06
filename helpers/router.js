@@ -15,6 +15,7 @@ const searchRoutes = require('../routes/search');
 const oAuthRoutes = require('../routes/oauth');
 const integrationRoutes = require('../routes/integration');
 
+const cors = require('fastify-cors');
 const compress = require('fastify-compress');
 
 module.exports = {
@@ -22,10 +23,8 @@ module.exports = {
   appInit({ logger = { level: 'warn' }, mongoUrl = '' } = {}) {
     const app = Fastify({ logger });
     let mongoose;
-    // app.register(require('fastify-cors'), {
-    //     origin: 'https://www.kowalla.co',
-        // allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
-        // methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'] });
+
+    app.register(cors);
     app.register(compress);
     app.register(require('fastify-multipart'));
 

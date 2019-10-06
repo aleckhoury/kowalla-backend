@@ -1,34 +1,26 @@
-const throng = require("throng");
-const { appInit } = require("./helpers/express");
-const Post = require("./models/PostModel");
-const { mongooseConnect } = require("./helpers/mongoose");
+const throng = require('throng');
+const { appInit, appListen } = require('./helpers/router');
+const Post = require('./models/post');
 
-const port = process.env.PORT || 8080;
-const workers = process.env.WEB_CONCURRENCY || 1;
-throng({ workers, lifetime: Infinity }, async () => {
-  await mongooseConnect();
+async function run() {
+  const mongoUrl = process.env.NODE_ENV === 'production' ? process.env.MONGO_URI_PRD : process.env.MONGO_URI_SND
+  const { app } = appInit({ logger: true, mongoUrl });
+  await appListen({ app });
 
-  const app = appInit();
-  const listener = app.listen(port, () => {
-    console.log("API SERVER");
-    console.log(`Running on port ${port}`);
-    console.log("Enter Ctrl + C to stop");
-  });
-
-  let io = require("socket.io")(listener);
+  let io = require('socket.io')(app.server);
   let userList = new Set();
-  io.on("connection", client => {
-    client.on("join", data => {
+  io.on('connection', client => {
+    client.on('join', data => {
       const newUser = { socketId: client.id, ...data };
       userList.add(newUser);
-      io.sockets.emit("updateUsers", [...userList]);
+      io.sockets.emit('updateUsers', [...userList]);
     });
-    client.on("checkUsers", coworkerCount => {
+    client.on('checkUsers', coworkerCount => {
       if (coworkerCount.length !== userList.size) {
-        io.sockets.emit("updateUsers", [...userList]);
+        io.sockets.emit('updateUsers', [...userList]);
       }
     });
-    client.on("manual-disconnect", async () => {
+    client.on('manual-disconnect', async () => {
       let user;
       await userList.forEach(x => {
         if (x.socketId === client.id) {
@@ -36,11 +28,8 @@ throng({ workers, lifetime: Infinity }, async () => {
           userList.delete(x);
         }
       });
-      io.sockets.emit("updateUsers", [...userList]);
-      if (
-        !userList.size ||
-        ![...userList].some(x => x.username === user.username)
-      ) {
+      io.sockets.emit('updateUsers', [...userList]);
+      if (!userList.size || ![...userList].some(x => x.username === user.username)) {
         const post = await Post.findOne({
           username: user.username,
           isActive: true
@@ -55,10 +44,10 @@ throng({ workers, lifetime: Infinity }, async () => {
             duration: end.getTime() - post.start.getTime()
           }
         );
-        io.sockets.emit("confirmManualDisconnect");
+        io.sockets.emit('confirmManualDisconnect');
       }
     });
-    client.on("disconnect", async () => {
+    client.on('disconnect', async () => {
       let isActive = false;
       let user;
       await userList.forEach(x => {
@@ -69,9 +58,9 @@ throng({ workers, lifetime: Infinity }, async () => {
         }
       });
       if (isActive) {
-        io.sockets.emit("updateUsers", [...userList]);
+        io.sockets.emit('updateUsers', [...userList]);
         setTimeout(async () => {
-          io.sockets.emit("checkForUser", user.username);
+          io.sockets.emit('checkForUser', user.username);
           setTimeout(async () => {
             if (![...userList].some(x => x.username === user.username)) {
               const post = await Post.findOne({
@@ -94,4 +83,8 @@ throng({ workers, lifetime: Infinity }, async () => {
       }
     });
   });
-});
+}
+
+const workers = process.env.WEB_CONCURRENCY || 1;
+if (workers === 1) run();
+else throng({ workers, lifetime: Infinity }, run);

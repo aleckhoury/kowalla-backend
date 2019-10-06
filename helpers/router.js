@@ -15,7 +15,6 @@ const searchRoutes = require('../routes/search');
 const oAuthRoutes = require('../routes/oauth');
 const integrationRoutes = require('../routes/integration');
 
-const cors = require('fastify-cors');
 const compress = require('fastify-compress');
 
 module.exports = {
@@ -24,7 +23,7 @@ module.exports = {
     const app = Fastify({ logger });
     let mongoose;
 
-    app.register(cors);
+    app.register(require('fastify-cors'), { origin: 'https://kowalla.co'});
     app.register(compress);
     app.register(require('fastify-multipart'));
 

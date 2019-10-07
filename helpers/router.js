@@ -57,7 +57,7 @@ module.exports = {
 
   async appListen({ app, port = process.env.PORT || 8080 }) {
     try {
-      const address = await app.listen(port);
+      const address = await app.listen(port, '0.0.0.0');
       app.log.info(`server listening on ${address}`);
       return address;
     } catch (err) {

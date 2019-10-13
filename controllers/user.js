@@ -3,6 +3,7 @@ const User = require('../models/user');
 const Profile = require('../models/profile');
 const Subscription = require('../models/subscription');
 const Project = require('../models/project');
+const Invite = require('../models/invite');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Email = require('../helpers/email');
@@ -42,6 +43,13 @@ module.exports = {
           profileId: profile._id,
           projectId: 'nLw0dX1O5'
         });
+        if (request.body.inviteProfile) {
+          const inviterProfile = await Profile.findOne({ username: request.body.inviteProfile });
+          await Invite.create({
+            profileId: inviterProfile._id,
+            invitedProfileId: profile._id,
+          })
+        }
         await profile.save();
         await subscription.save();
         await subscription2.save();

@@ -14,7 +14,6 @@ module.exports = {
     const { profileId } = request.params;
     //const profileObj = await Profile.findOne({_id: profileId});
 
-    //onsole.log(profileObj);
     // Act
 
     let owned = [];
@@ -94,6 +93,29 @@ module.exports = {
       // Send
       reply.code(200).send(subscription);
     }
+  },
+
+  async getDefaultSubs(request, reply) {
+
+    let kowalla = await Project.findOne({ _id: 'nLw0dX1O5' }).populate('subscribers');
+    let all = await Space.findOne({ _id: 'fugmXEmwr' }).populate('subscribers');
+
+    const subscription = [{
+      _id: 'nLw0dX1O5',
+      name: 'kowalla',
+      isProject: true,
+      pictureUrl: 'https://kowalla-dev.s3.amazonaws.com/project/profile-pics/1567970197968-icon.png',
+      numSubs: kowalla.subscribers,
+    },
+    {
+      _id: 'fugmXEmwr',
+      name: 'all',
+      isProject: false,
+      pictureUrl: 'https://kowalla-dev.s3.us-east-2.amazonaws.com/space/profile-pics/1567689060098-icon.png',
+      numSubs: all.subscribers,
+    }];
+      // Send
+      reply.code(200).send(subscription);
   },
 
   async createSubscription(request, reply) {

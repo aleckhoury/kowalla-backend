@@ -22,7 +22,7 @@ module.exports = {
       const s3res = await s3
         .upload({
           Bucket: `kowalla-dev/${request.body.picType}/profile-pics`,
-          Key: `${now}-${request.file.originalname}`,
+          Key: `${now}`,
           Body: buffer,
           ContentType: 'image/jpeg',
           ACL: 'public-read'
@@ -54,7 +54,7 @@ module.exports = {
       const s3res = await s3
         .upload({
           Bucket: `kowalla-dev/${request.body.picType}/banner-pics`,
-          Key: `${now}-${request.file.originalname}`,
+          Key: `${now}`,
           Body: buffer,
           ContentType: 'image/jpeg',
           ACL: 'public-read'

@@ -1,9 +1,8 @@
 // Dependencies
-const request = require('superagent');
+const superRequest = require('superagent');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const OAuth = require('oauth-1.0a');
-// const request = require('request');
 const Config = require('../models/config');
 const Profile = require('../models/profile');
 const User = require('../models/user');
@@ -24,7 +23,7 @@ module.exports = {
     const { options } = await Config.findOne({ name: 'githubKeys' });
     // Post
     try {
-      await request
+      await superRequest
         .post('https://github.com/login/oauth/access_token')
         .send({
           client_id: options.client_id,
@@ -35,7 +34,7 @@ module.exports = {
         .then(result => {
           data = result.body;
         });
-      await request
+      await superRequest
         .get('https://api.github.com/user')
         .set('Authorization', `token ${data.access_token}`)
         .then(async result => {
@@ -115,7 +114,7 @@ module.exports = {
     };
 
     try {
-      const accessBiz = await request
+      const accessBiz = await superRequest
         .post('https://api.twitter.com/oauth/request_token')
         .type('form')
         .send(oauth.authorize(request_data, token));
@@ -162,7 +161,7 @@ module.exports = {
     };
 
     try {
-      const accessBiz = await request
+      const accessBiz = await superRequest
         .post('https://api.twitter.com/oauth/access_token')
         .type('form')
         .send(oauth.authorize(request_data, token));
@@ -177,12 +176,12 @@ module.exports = {
         secret: obj.oauth_token_secret
       };
       const requestData2 = {
-        url: 'https://api.twitter.com/1.1/account/verify_credentials.send',
+        url: 'https://api.twitter.com/1.1/account/verify_credentials.json',
         method: 'GET',
         data: { skip_status: true }
       };
-      const userInfo = await request
-        .get('https://api.twitter.com/1.1/account/verify_credentials.send')
+      const userInfo = await superRequest
+        .get('https://api.twitter.com/1.1/account/verify_credentials.json')
         .query(oauth.authorize(requestData2, token2))
         .then(async result => {
           let user = await Profile.findOne({ username: result.body.screen_name })

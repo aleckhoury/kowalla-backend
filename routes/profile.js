@@ -19,6 +19,7 @@ module.exports = app => {
   app.get('/profiles/user/:username/subs', SubscriptionController.getSubscriptionList);
   app.get('/profiles/:profileId/subs', SubscriptionController.getSubscriptionList);
   app.get('/profiles/:profileId/subs/:type/:typeId', SubscriptionController.getSubscription);
+  app.get('/profiles/subs/default', SubscriptionController.getDefaultSubs);
   app.post('/profiles/:profileId/subs', SubscriptionController.createSubscription);
   app.delete('/profiles/:profileId/subs/:type/:typeId', SubscriptionController.deleteSubscription);
 

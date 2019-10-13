@@ -24,7 +24,6 @@ module.exports = {
         '<p>Kowalla</p>'
     };
     mg.messages().send(data, function(error, body) {
-      console.log(body);
     });
   }
 };

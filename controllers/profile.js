@@ -99,7 +99,10 @@ module.exports = {
     const { username } = request.params;
     try {
       // Act
-      const user = await Profile.findOne({ username });
+      const user = await Profile.findOne({ username })
+          .populate('commentCount')
+          .populate('postCount')
+          .exec();
       // Send
       reply.code(200).send(user);
     } catch (err) {

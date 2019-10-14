@@ -44,7 +44,6 @@ module.exports = {
             .populate('postCount')
             .populate('commentCount')
             .exec();
-          if (!Object.keys(user).length) {
           if (!user) {
             const newUser = await User.create({
               username: result.body.login,

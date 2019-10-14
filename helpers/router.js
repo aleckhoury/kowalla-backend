@@ -24,7 +24,7 @@ module.exports = {
     const app = Fastify({ logger });
     let mongoose;
 
-    app.register(cors, { origin: ['https://www.kowalla.co', 'http://localhost:3000'] });
+    app.register(cors, { origin: ['*'] });
     app.register(compress);
     app.register(require('fastify-multipart'));
 

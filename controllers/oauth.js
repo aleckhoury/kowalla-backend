@@ -44,7 +44,7 @@ module.exports = {
             .populate('postCount')
             .populate('commentCount')
             .exec();
-          if (!user) {
+          if (!Object.keys(user).length) {
             const newUser = await User.create({
               username: result.body.login,
               email: result.body.email !== null ? result.body.email : '',
@@ -190,7 +190,7 @@ module.exports = {
             .populate('postCount')
             .populate('commentCount')
             .exec();
-          if (!user) {
+          if (!Object.keys(user).length) {
             const newUser = await User.create({
               username: result.body.screen_name,
               email: '',

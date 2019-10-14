@@ -31,11 +31,13 @@ module.exports = {
           code
         })
         .set('Accept', 'application/json')
+        .set('User-Agent', 'kowalla')
         .then(result => {
           data = result.body;
         });
       await superRequest
         .get('https://api.github.com/user')
+        .set('User-Agent', 'kowalla')
         .set('Authorization', `token ${data.access_token}`)
         .then(async result => {
           let user = await Profile.findOne({ username: result.body.login })

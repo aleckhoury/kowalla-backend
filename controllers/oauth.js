@@ -40,22 +40,17 @@ module.exports = {
         .set('User-Agent', 'kowalla')
         .set('Authorization', `token ${data.access_token}`)
         .then(async result => {
-          console.log(result.body);
-          console.log(result.body.login);
           let user = await Profile.findOne({ username: result.body.login })
             .populate('postCount')
             .populate('commentCount')
             .exec();
-          console.log(user);
           if (!user) {
-            console.log('new user');
             const newUser = await User.create({
               username: result.body.login,
-              email: result.body.email !== null ? result.body.email : '',
+              email: result.body.email !== null ? result.body.email : undefined,
               password: ''
             });
             newUser.save();
-            console.log('new profile')
             user = await Profile.create({
               firstName: result.body.name,
               lastName: '',
@@ -198,7 +193,7 @@ module.exports = {
           if (!user) {
             const newUser = await User.create({
               username: result.body.screen_name,
-              email: '',
+              email: undefined,
               password: ''
             });
             newUser.save();

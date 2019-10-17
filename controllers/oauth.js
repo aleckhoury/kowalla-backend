@@ -40,6 +40,8 @@ module.exports = {
         .set('User-Agent', 'kowalla')
         .set('Authorization', `token ${data.access_token}`)
         .then(async result => {
+          console.log(result.body);
+          console.log(result.body.login);
           let user = await Profile.findOne({ username: result.body.login })
             .populate('postCount')
             .populate('commentCount')

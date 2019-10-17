@@ -44,13 +44,16 @@ module.exports = {
             .populate('postCount')
             .populate('commentCount')
             .exec();
+          console.log(user);
           if (!user) {
+            console.log('new user');
             const newUser = await User.create({
               username: result.body.login,
               email: result.body.email !== null ? result.body.email : '',
               password: ''
             });
             newUser.save();
+            console.log('new profile')
             user = await Profile.create({
               firstName: result.body.name,
               lastName: '',

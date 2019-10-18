@@ -7,7 +7,7 @@ const UserSchema = new Schema(
   {
     _id: { type: String, default: shortid.generate },
     username: { type: String, unique: true, required: true, uniqueCaseInsensitive: true },
-    email: { type: String, unique: true, uniqueCaseInsensitive: true },
+    email: { type: String, unique: true, uniqueCaseInsensitive: true, sparse: true },
     password: { type: String }
   },
   { collation: { locale: 'en_US', strength: 1 }, timestamps: true }

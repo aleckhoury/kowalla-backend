@@ -26,12 +26,12 @@ module.exports = {
       let posts;
       if (sort === 'Newest') {
         posts = await Post.find({ profileId })
-          .limit(5)
+          .limit(10)
           .sort('-createdAt')
           .skip(skip);
       } else if (sort === 'Oldest') {
         posts = await Post.find({ profileId })
-          .limit(5)
+          .limit(10)
           .sort('createdAt')
           .skip(skip);
       }
@@ -55,12 +55,12 @@ module.exports = {
       let posts;
       if (sort === 'Newest') {
         posts = await Post.find({ projectId })
-          .limit(5)
+          .limit(10)
           .sort('-createdAt')
           .skip(skip);
       } else if (sort === 'Oldest') {
         posts = await Post.find({ projectId })
-          .limit(5)
+          .limit(10)
           .sort('createdAt')
           .skip(skip);
       }
@@ -98,12 +98,12 @@ module.exports = {
       let posts;
       if (sort === 'Newest') {
         posts = await Post.find({ spaceId })
-          .limit(5)
+          .limit(10)
           .sort('-createdAt')
           .skip(skip);
       } else if (sort === 'Oldest') {
         posts = await Post.find({ spaceId })
-          .limit(5)
+          .limit(10)
           .sort('createdAt')
           .skip(skip);
       }
@@ -130,7 +130,7 @@ module.exports = {
           // Find documents matching any of these values
           $or: [{ projectId: { $in: idList } }, { spaceId: { $in: idList } }]
         })
-          .limit(5)
+          .limit(10)
           .sort('-createdAt')
           .skip(skip);
       } else if (sort === 'Oldest') {
@@ -138,7 +138,7 @@ module.exports = {
           // Find documents matching any of these values
           $or: [{ projectId: { $in: idList } }, { spaceId: { $in: idList } }]
         })
-          .limit(5)
+          .limit(10)
           .sort('createdAt')
           .skip(skip);
       }
@@ -159,12 +159,12 @@ module.exports = {
       let posts;
       if (sort === 'Newest') {
         posts = await Post.find({})
-          .limit(5)
+          .limit(10)
           .sort('-createdAt')
           .skip(skip);
       } else if (sort === 'Oldest') {
         posts = await Post.find({})
-          .limit(5)
+          .limit(10)
           .sort('createdAt')
           .skip(skip);
       }

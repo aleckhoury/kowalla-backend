@@ -11,7 +11,7 @@ module.exports = {
     const { postId } = request.params;
 
     // Act
-    const reactions = await Reaction.find({ postId });
+    const reactions = await Reaction.find({ postId }, { emoji: 1, profileId: 1 }).lean();
 
     // Send
     reply.code(200).send(reactions);
@@ -23,12 +23,12 @@ module.exports = {
 
     // Act
     if (type === 'posts') {
-      const reaction = await Reaction.findOne({ profileId, postId: typeId });
+      const reaction = await Reaction.findOne({ profileId, postId: typeId }).lean();
 
       // Send
       reply.code(200).send(reaction);
     } else if (type === 'updates') {
-      const reaction = await Reaction.findOne({ profileId, updateId: postId });
+      const reaction = await Reaction.findOne({ profileId, updateId: postId }).lean();
 
       // Send
       reply.code(200).send(reaction);
@@ -36,30 +36,26 @@ module.exports = {
   },
 
   async createReaction(request, reply) {
-    // Init
     const { profileId } = request.params;
-
     const { emoji, postId } = request.body;
 
-    // Act
     const reaction = await Reaction.create({ profileId, postId, emoji });
-
-    // Send
     await reaction.save();
     reply.code(201).send(reaction);
 
-    // Build notification
+    let post = await Post.findOne({ _id: postId }, 'profileId projectId').lean();
 
-    // get the owner of the post we're reacting to
-    let post = await Post.findOne({ _id: postId }, 'profileId projectId');
+    if (profileId !== post.profileId) {
+      let notificationData = {
+        type: 'reaction',
+        postId,
+        profileId: post.profileId,
+        projectId: post.projectId,
+        senderProfileId: profileId,
+      };
 
-    let notifObject = {
-      sendingProfileId: profileId,
-      postId: postId,
-      ownerProfileId: post.profileId === undefined ? undefined : post.profileId,
-      ownerProjectId: post.projectId === undefined ? undefined : post.projectId
-    };
-    await NotificationHelper.createNotification('new-reaction', notifObject);
+      await NotificationHelper.createPostNotification(notificationData);
+    }
   },
 
   async deleteReaction(request, reply) {

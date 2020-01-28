@@ -39,7 +39,7 @@ module.exports = app => {
 
   // Notification Routes
   app.post('/profiles/:profileId/notifications', NotificationController.getNotificationsList);
-  app.delete('/profiles/:profileId/notifications', NotificationController.deleteArrayOfNotifs);
+  app.put('/profiles/:profileId/notifications', NotificationController.readNotifs);
 
   // Integration Routes
   app.put('/profile/:profileId/integrations', ProfileController.toggleIntegration);

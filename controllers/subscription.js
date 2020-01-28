@@ -119,56 +119,34 @@ module.exports = {
   },
 
   async createSubscription(request, reply) {
-    // Init
-    const {
-      // these need to be null'd if they're not being used
-      profileId
-    } = request.params;
 
+    const { profileId } = request.params;
     const { projectId, spaceId } = request.body;
 
     if (projectId === undefined) {
-      // add Space Sub
-      // Act
       const subscription = await Subscription.create({ profileId, spaceId });
-
-      // Send
       await subscription.save();
       reply.code(201).send(subscription);
 
-      //await Space.findOneAndUpdate({_id: spaceId}, {$inc: { subscribers: 1}});
-      // build the notification
-      let notifObject = {
-        sendingProfileId: profileId,
-        ownerSpaceId: spaceId
+      const notificationData = {
+        type: 'space-subscribe',
+        senderProfileId: profileId,
+        spaceId,
       };
+      await NotificationHelper.createSubscribeNotification(notificationData);
 
-      await NotificationHelper.createNotification('new-subscriber', notifObject);
     } else if (spaceId === undefined) {
-      // add Project Sub
-      // Act
-      const subscription = await Subscription.create({ profileId, projectId });
 
-      // Send
+      const subscription = await Subscription.create({ profileId, projectId });
       await subscription.save();
       reply.code(201).send(subscription);
 
-      /*
-      profileId: String,
-      projectId: String,
-      spaceId: String,
-      */
-
-      // build the notification
-      let notifObject = {
-        sendingProfileId: profileId,
-        ownerProjectId: projectId
+      const notificationData = {
+        type: 'project-subscribe',
+        senderProfileId: profileId,
+        projectId,
       };
-
-      await NotificationHelper.createNotification('new-subscriber', notifObject);
-
-      // updates the amount of on the project
-      //await Project.findOneAndUpdate({_id: projectId}, {$inc: {subscribers: 1}});
+      await NotificationHelper.createSubscribeNotification(notificationData);
     }
   },
 

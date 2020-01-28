@@ -9,7 +9,7 @@ module.exports = {
     // Init
     const { username } = request.params;
     // Act
-    const posts = await Post.findOne({ username, isActive: true });
+    const posts = await Post.findOne({ username, isActive: true }).lean();
 
     // Send
     reply.code(200).send(posts);
@@ -28,12 +28,14 @@ module.exports = {
         posts = await Post.find({ profileId })
           .limit(10)
           .sort('-createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       } else if (sort === 'Oldest') {
         posts = await Post.find({ profileId })
           .limit(10)
           .sort('createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       }
       if (posts.length) {
         return reply.code(200).send(posts);
@@ -57,12 +59,14 @@ module.exports = {
         posts = await Post.find({ projectId })
           .limit(10)
           .sort('-createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       } else if (sort === 'Oldest') {
         posts = await Post.find({ projectId })
           .limit(10)
           .sort('createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       }
       if (posts.length) {
         return reply.code(200).send(posts);
@@ -100,12 +104,14 @@ module.exports = {
         posts = await Post.find({ spaceId })
           .limit(10)
           .sort('-createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       } else if (sort === 'Oldest') {
         posts = await Post.find({ spaceId })
           .limit(10)
           .sort('createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       }
       // Send
       if (posts.length) {
@@ -132,7 +138,8 @@ module.exports = {
         })
           .limit(10)
           .sort('-createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       } else if (sort === 'Oldest') {
         posts = await Post.find({
           // Find documents matching any of these values
@@ -140,7 +147,8 @@ module.exports = {
         })
           .limit(10)
           .sort('createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       }
       if (posts.length) {
         return reply.code(200).send(posts);
@@ -161,12 +169,14 @@ module.exports = {
         posts = await Post.find({})
           .limit(10)
           .sort('-createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       } else if (sort === 'Oldest') {
         posts = await Post.find({})
           .limit(10)
           .sort('createdAt')
-          .skip(skip);
+          .skip(skip)
+          .lean();
       }
       if (posts.length) {
         return reply.code(200).send(posts);
@@ -182,7 +192,7 @@ module.exports = {
     const { id } = request.params;
 
     // Act
-    const post = await Post.findOne({ _id: id });
+    const post = await Post.findOne({ _id: id }).lean();
     // Send
     reply.code(200).send(post);
   },

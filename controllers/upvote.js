@@ -55,14 +55,15 @@ module.exports = {
     // Build Notification
 
     // first we need the owner of the comment
-    let comment = await Comment.findOne({ _id: commentId }, 'profileId');
-    let notifObject = {
-      ownerProfileId: comment.profileId,
-      sendingProfileId: profileId,
-      commentId
+    let comment = await Comment.findOne({ _id: commentId }, 'profileId').lean();
+    const notificationData = {
+      type: 'upvote',
+      senderProfileId: profileId,
+      profileId: comment.profileId,
+      commentId,
     };
 
-    await NotificationHelper.createNotification('new-upvote', notifObject);
+    await NotificationHelper.createCommentNotification(notificationData);
   },
 
   async deleteUpvote(request, reply) {

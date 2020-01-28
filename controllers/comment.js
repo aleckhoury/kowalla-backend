@@ -1,6 +1,7 @@
 // Dependencies
 
 // Models
+const Upvote = require('../models/upvote');
 const Comment = require('../models/comment');
 const Post = require('../models/post');
 const NotificationHelper = require('../helpers/notification');
@@ -40,38 +41,42 @@ module.exports = {
   async createPostComment(request, reply) {
     // Init
     const { profileId, postId, commentId, content } = request.body;
-
     const views = 0;
 
-    // Act
     const comment = await Comment.create({ profileId, content, postId, commentId, views });
-    // Send
     await comment.save();
+
+    const upvote = await Upvote.create({ profileId, commentId: comment._id });
+    await upvote.save();
+
     reply.code(201).send(comment);
 
-    let post = await Post.findOne({ _id: postId }, 'profileId projectId');
-
+    let post = await Post.findOne({ _id: postId }, 'profileId projectId').lean();
     // build notification
-    if (commentId === undefined) {
-      // if no commentId, we're a high level post, which is a "new-comment" notif
+    if (profileId !== post.profileId) {
+      console.log(commentId);
+      if (commentId === '') {
+        // if no commentId, we're a high level post, which is a "new-comment" notif
+        let notificationData = {
+          type: 'comment',
+          postId,
+          profileId: post.profileId,
+          projectId: post.projectId,
+          senderProfileId: profileId,
+        };
+        await NotificationHelper.createPostNotification(notificationData);
+      } else {
+        // otherwise, it's a reply to a comment, which is a "new-reply" notif
 
-      let notifObject = {
-        sendingProfileId: profileId,
-        postId: postId,
-        ownerProfileId: post.profileId === undefined ? undefined : post.profileId,
-        ownerProjectId: post.projectId === undefined ? undefined : post.projectId
-      };
-
-      await NotificationHelper.createNotification('new-comment', notifObject);
-    } else {
-      // otherwise, it's a reply to a comment, which is a "new-reply" notif
-      let notifObject = {
-        sendingProfileId: profileId,
-        commentId: commentId,
-        ownerProfileId: post.profileId === undefined ? undefined : post.profileId
-      };
-
-      await NotificationHelper.createNotification('new-reply', notifObject);
+        const notificationData = {
+          type: 'reply',
+          senderProfileId: profileId,
+          profileId: post.profileId,
+          commentId,
+          postId,
+        };
+        await NotificationHelper.createCommentNotification(notificationData);
+      }
     }
   },
 

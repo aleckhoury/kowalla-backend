@@ -19,7 +19,6 @@ async function buildNotifications(n) {
     let link;
     formattedNotifications[i] = { _id: n[i]._id, profilePicture: n[i].sendUserProfilePic, viewed: n[i].viewed };
     const linkStyle = '<span style="font-weight: 700; color: #39C9A0;">';
-    console.log(n[i]);
     switch(n[i].type) {
       case 'reaction':
         if (n[i].projectId) {
@@ -111,7 +110,6 @@ async function buildNotifications(n) {
       case 'reply':
         profile = await Profile.findOne({ _id: n[i].profileId }, 'username').lean();
         post = await Post.findOne({ _id: n[i].postId }, 'projectId spaceId').lean();
-        console.log(post);
         if (post.projectId) {
           project = await Project.findOne({ _id: post.projectId }, 'name').lean();
           link = `/project/${project.name}/posts/${n[i].postId}`
@@ -126,7 +124,6 @@ async function buildNotifications(n) {
         }
         break;
       case 'upvote':
-        console.log(n[i]);
         profile = await Profile.findOne({ _id: n[i].profileId }, 'username').lean();
         const comment = await Comment.findOne({ _id: n[i].commentId }, 'postId').lean();
         post = await Post.findOne({ _id: comment.postId }, 'projectId spaceId').lean();
@@ -156,7 +153,6 @@ module.exports = {
 
   async readNotifs(request, reply) {
     let data = request.body.data;
-    console.log(data);
     await Notification.updateMany({ _id: { $in: data.notifIds } }, { viewed: true });
     // Send
     reply.code(204).send({ success: true });

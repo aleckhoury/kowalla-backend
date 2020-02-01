@@ -54,7 +54,6 @@ module.exports = {
     let post = await Post.findOne({ _id: postId }, 'profileId projectId').lean();
     // build notification
     if (profileId !== post.profileId) {
-      console.log(commentId);
       if (commentId === '') {
         // if no commentId, we're a high level post, which is a "new-comment" notif
         let notificationData = {

@@ -43,8 +43,8 @@ async function getReputationByProfileId(profileId, username = '') {
 }
 module.exports = {
   async getAllSubscriptionOptions(request, reply) {
-    const spaces = await Space.find({});
-    const projects = await Project.find({});
+    const spaces = await Space.find({}).populate('subscribers').sort('subscribers').limit(3);
+    const projects = await Project.find({}).populate('subscribers').sort('subscribers').limit(3);
     const list = spaces.concat(projects);
 
     reply.code(201).send(list);

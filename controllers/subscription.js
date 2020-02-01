@@ -97,25 +97,29 @@ module.exports = {
 
   async getDefaultSubs(request, reply) {
 
-    let kowalla = await Project.findOne({ _id: 'nLw0dX1O5' }).populate('subscribers');
-    let all = await Space.findOne({ _id: 'fugmXEmwr' }).populate('subscribers');
+    function shuffleFisherYates(array, array2) {
+      const final = array.concat(array2);
+      let i = final.length;
+      while (i--) {
+        const ri = Math.floor(Math.random() * (i + 1));
+        [final[i], final[ri]] = [final[ri], final[i]];
+      }
+      return final;
+    }
 
-    const subscription = [{
-      _id: 'nLw0dX1O5',
-      name: 'kowalla',
-      isProject: true,
-      pictureUrl: 'https://kowalla-dev.s3.amazonaws.com/project/profile-pics/1567970197968-icon.png',
-      numSubs: kowalla.subscribers,
-    },
-    {
-      _id: 'fugmXEmwr',
-      name: 'all',
-      isProject: false,
-      pictureUrl: 'https://kowalla-dev.s3.us-east-2.amazonaws.com/space/profile-pics/1567689060098-icon.png',
-      numSubs: all.subscribers,
-    }];
+    const skip = await Project.countDocuments();
+    const skip2 = await Space.countDocuments();
+
+    let random = Math.floor(Math.random() * (skip-1));
+    let random2 = Math.floor(Math.random() * (skip2-1));
+
+    const result = await Project.find({}, 'isProject name projectName profilePicture subscribers').skip(random).limit(3).populate('subscribers').lean();
+    const result2 = await Space.find({}, 'isProject name profilePicture subscribers').skip(random2).limit(3).populate('subscribers').lean();
+
+    const final = shuffleFisherYates(result, result2);
+
       // Send
-      reply.code(200).send(subscription);
+      reply.code(200).send(final);
   },
 
   async createSubscription(request, reply) {

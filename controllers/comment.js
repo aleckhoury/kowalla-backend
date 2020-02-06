@@ -7,6 +7,15 @@ const Post = require('../models/post');
 const NotificationHelper = require('../helpers/notification');
 
 module.exports = {
+  async getCommentCount(request, reply) {
+    // Init
+    const { postId } = request.params;
+    // Act
+    const comments = await Comment.countDocuments({ postId });
+
+    // Send
+    reply.code(200).send(comments);
+  },
   async getPostCommentList(request, reply) {
     // Init
     const { postId } = request.params;

@@ -145,7 +145,7 @@ async function buildNotifications(n) {
 module.exports = {
   async getNotificationsList(request, reply) {
     const { profileId } = request.params;
-    const newNotifications = await Notification.find({ profileId }).sort({ viewed: 1 }).limit(10).lean();
+    const newNotifications = await Notification.find({ profileId }).sort({ viewed: 1, createdAt: -1 }).limit(10).lean();
     const result = await buildNotifications(newNotifications);
 
     reply.send({ result });

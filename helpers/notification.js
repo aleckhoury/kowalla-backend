@@ -168,4 +168,20 @@ module.exports = {
       return newNotification;
     }
   },
+  async newCreationNotification(notificationData) {
+
+    const { type, profileId, projectId, spaceId } = notificationData;
+      const notification = {
+        type,
+        profileId,
+        projectId,
+        spaceId,
+        sendUserProfilePic: 'https://kowalla-dev.s3.amazonaws.com/project/profile-pics/1567970197968-icon.png',
+        viewed: false,
+      };
+      const newNotification = await Notification.create(notification);
+      newNotification.save();
+
+      return newNotification;
+    },
 };

@@ -5,6 +5,7 @@ const Project = require('../models/project');
 const Profile = require('../models/profile');
 const Post = require('../models/post');
 const Reaction = require('../models/reaction');
+const NotificationHelper = require('../helpers/notification');
 /*
 1) Create -- first pass done
 2) Delete -- first pass done
@@ -106,6 +107,13 @@ module.exports = {
         .populate('subscribers')
         .populate('postCount')
         .exec();
+
+      let notificationData = {
+        type: 'new-creation',
+        profileId: adminIds[0],
+        projectId: project._id,
+      };
+      await NotificationHelper.newCreationNotification(notificationData);
 
       reply.code(201).send(populatedProject);
     } catch (err) {

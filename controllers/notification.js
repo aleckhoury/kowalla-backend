@@ -19,7 +19,7 @@ async function buildNotifications(n) {
     let link;
     formattedNotifications[i] = { _id: n[i]._id, profilePicture: n[i].sendUserProfilePic, viewed: n[i].viewed };
     const linkStyle = '<span style="font-weight: 700; color: #39C9A0;">';
-    switch(n[i].type) {
+    switch (n[i].type) {
       case 'reaction':
         if (n[i].projectId) {
           project = await Project.findOne({ _id: n[i].projectId }, 'name').lean();
@@ -31,21 +31,25 @@ async function buildNotifications(n) {
         }
         if (n[i].count === 1) {
           if (n[i].projectId) {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> reacted to your post as ${linkStyle}@${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> reacted to your post as ${linkStyle}@${project.name}</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> reacted to your post in ${linkStyle}#${ space.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> reacted to your post in ${linkStyle}#${space.name}</span>.`;
           }
         } else if (n[i].count === 2) {
           if (n[i].projectId) {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> reacted to your post as ${linkStyle}@${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> reacted to your post as ${linkStyle}@${project.name}</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> reacted to your post in ${linkStyle}#${ space.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> reacted to your post in ${linkStyle}#${space.name}</span>.`;
           }
         } else {
           if (n[i].projectId) {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently reacted to your post as ${linkStyle}@${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently reacted to your post as ${linkStyle}@${
+              project.name
+            }</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently reacted to your post in ${linkStyle}#${ space.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently reacted to your post in ${linkStyle}#${
+              space.name
+            }</span>.`;
           }
         }
         break;
@@ -60,21 +64,25 @@ async function buildNotifications(n) {
         }
         if (n[i].count === 1) {
           if (n[i].projectId) {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> commented on your post as ${linkStyle}@${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> commented on your post as ${linkStyle}@${project.name}</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> commented on your post in ${linkStyle}#${ space.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> commented on your post in ${linkStyle}#${space.name}</span>.`;
           }
         } else if (n[i].count === 2) {
           if (n[i].projectId) {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> commented on your post as ${linkStyle}@${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> commented on your post as ${linkStyle}@${project.name}</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> commented on your post in ${linkStyle}#${ space.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> commented on your post in ${linkStyle}#${space.name}</span>.`;
           }
         } else {
           if (n[i].projectId) {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently commented on your post as ${linkStyle}@${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently commented on your post as ${linkStyle}@${
+              project.name
+            }</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently commented on your post in ${linkStyle}#${ space.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently commented on your post in ${linkStyle}#${
+              space.name
+            }</span>.`;
           }
         }
         break;
@@ -89,21 +97,25 @@ async function buildNotifications(n) {
         }
         if (n[i].count === 1) {
           if (n[i].spaceId) {
-            content = `${linkStyle}#${ space.name }</span> has one new subscription from ${linkStyle}@${n[i].latestSenders[0]}</span>.`;
+            content = `${linkStyle}#${space.name}</span> has one new subscription from ${linkStyle}@${n[i].latestSenders[0]}</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> reacted to your post as ${linkStyle}@${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> reacted to your post as ${linkStyle}@${project.name}</span>.`;
           }
         } else if (n[i].count === 2) {
           if (n[i].spaceId) {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> recently subscribed to ${linkStyle}#${ space.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> recently subscribed to ${linkStyle}#${space.name}</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> recently subscribed to ${linkStyle}#${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span> and ${linkStyle}@${n[i].latestSenders[1]}</span> recently subscribed to ${linkStyle}#${project.name}</span>.`;
           }
         } else {
           if (n[i].spaceId) {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently subscribed to ${linkStyle}#${ space.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently subscribed to ${linkStyle}#${
+              space.name
+            }</span>.`;
           } else {
-            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently subscribed to ${linkStyle}@${ project.name }</span>.`;
+            content = `${linkStyle}@${n[i].latestSenders[0]}</span>, ${linkStyle}@${n[i].latestSenders[1]}</span> and ${n[i].count - 2} others recently subscribed to ${linkStyle}@${
+              project.name
+            }</span>.`;
           }
         }
         break;
@@ -112,10 +124,10 @@ async function buildNotifications(n) {
         post = await Post.findOne({ _id: n[i].postId }, 'projectId spaceId').lean();
         if (post.projectId) {
           project = await Project.findOne({ _id: post.projectId }, 'name').lean();
-          link = `/project/${project.name}/posts/${n[i].postId}`
+          link = `/project/${project.name}/posts/${n[i].postId}`;
         } else if (post.spaceId) {
           space = await Space.findOne({ _id: post.spaceId }, 'name').lean();
-          link = `/space/${space.name}/posts/${n[i].postId}`
+          link = `/space/${space.name}/posts/${n[i].postId}`;
         }
         if (n[i].count === 1) {
           content = `${linkStyle}@${n[i].latestSenders[0]}</span> replied to your comment on ${linkStyle}@${profile.username}</span>'s post.`;
@@ -129,12 +141,23 @@ async function buildNotifications(n) {
         post = await Post.findOne({ _id: comment.postId }, 'projectId spaceId').lean();
         if (post.projectId) {
           project = await Project.findOne({ _id: post.projectId }, 'name').lean();
-          link = `/project/${project.name}/posts/${n[i].postId}`
+          link = `/project/${project.name}/posts/${n[i].postId}`;
         } else if (post.spaceId) {
           space = await Space.findOne({ _id: post.spaceId }, 'name').lean();
-          link = `/space/${space.name}/posts/${n[i].postId}`
+          link = `/space/${space.name}/posts/${n[i].postId}`;
         }
         content = `${n[i].count} ${n[i].count > 1 ? 'people have' : 'person has'} recently upvoted to your comment on ${linkStyle}@${profile.username}</span>'s post.`;
+      case 'new-creation':
+        profile = await Profile.findOne({ _id: n[i].profileId }, 'username').lean();
+        if (n[i].projectId) {
+          project = await Project.findOne({ _id: n[i].projectId }, 'name').lean();
+          link = `/project/${project.name}/edit`;
+          content = `Congrats on creating ${linkStyle}@${project.name}</span>! Click here to add a profile picture and cover photo for your new project!`;
+        } else if (n[i].spaceId) {
+          space = await Space.findOne({ _id: n[i].spaceId }, 'name').lean();
+          link = `/space/${space.name}/edit`;
+          content = `Congrats on creating ${linkStyle}#${space.name}</span>! Click here to add a profile picture and cover photo for your new space!`;
+        }
     }
     formattedNotifications[i].content = content;
     formattedNotifications[i].link = link;
@@ -145,7 +168,10 @@ async function buildNotifications(n) {
 module.exports = {
   async getNotificationsList(request, reply) {
     const { profileId } = request.params;
-    const newNotifications = await Notification.find({ profileId }).sort({ viewed: 1, createdAt: -1 }).limit(10).lean();
+    const newNotifications = await Notification.find({ profileId })
+      .sort({ viewed: 1, createdAt: -1 })
+      .limit(10)
+      .lean();
     const result = await buildNotifications(newNotifications);
 
     reply.send({ result });

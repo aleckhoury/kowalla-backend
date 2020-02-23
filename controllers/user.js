@@ -27,10 +27,10 @@ module.exports = {
         });
         await newUser.save();
         let profile = await Profile.create({
-          firstName: request.body.username,
+          firstName: '',
           lastName: '',
-          username: request.body.username,
-          integrations: ['Embed Video'],
+          username: newUser.username,
+          integrations: [],
           description: '',
           profilePicture: `https://ui-avatars.com/api/?name=${request.body.username}&background=${item}&color=${item === 'efbbcc' ? '0a2049' : 'fff'}&bold=true&size=200&font-size=0.6`,
           userId: newUser._id

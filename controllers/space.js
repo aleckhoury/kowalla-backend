@@ -3,6 +3,7 @@
 // Models
 const Space = require('../models/space');
 const Profile = require('../models/profile');
+const NotificationHelper = require('../helpers/notification');
 
 /*
 1) Create -- first pass done
@@ -100,6 +101,13 @@ module.exports = {
         .populate('subscribers')
         .populate('postCount')
         .exec();
+
+      let notificationData = {
+        type: 'new-creation',
+        profileId: adminIds[0],
+        spaceId: space._id,
+      };
+      await NotificationHelper.newCreationNotification(notificationData);
 
       reply.code(201).send(populatedSpace);
     } catch (err) {
